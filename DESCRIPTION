@@ -1,0 +1,26 @@
+Package: rTRNG
+Title: Parallel random number generation via TRNG and RcppParallel
+Version: 0.0.1
+Authors@R: c(
+    person("Riccardo", "Porecca", , "riccardo.porreca@mirai-solutions.com", "aut"),
+    person("Roland", "Schmid", , "roland.schmid@mirai-solutions.com", c("aut", "cre")),
+    person("Mirai Solutions GmbH", role = "cph",
+                    email = "info@mirai-solutions.com"),
+    person("Heiko", "Bauke", role = c("ctb", "cph"),
+                    comment = "TRNG sources and headers")
+    )
+Description: Embeds sources and headers form Tina's random number generation
+    C++ library. Provides examples of how to use parallel RNG with RcppParallel.
+    Exposes some functionality for easier access, testing and benchmarking into R.
+License: GPL-3
+LazyData: true
+Imports:
+    Rcpp (>= 0.11.6),
+    RcppParallel
+Suggests:
+    testthat
+LinkingTo:
+    Rcpp,
+    RcppParallel
+URL: http://www.mirai-solutions.com , http://miraisolutions.wordpress.com , https://github.com/miraisolutions/rTRNG
+BugReports: https://github.com/miraisolutions/rTRNG/issues

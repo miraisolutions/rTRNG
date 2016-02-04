@@ -1,0 +1,4 @@
+useDynLib(rTRNG)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
+importFrom(RcppParallel, RcppParallelLibs)
