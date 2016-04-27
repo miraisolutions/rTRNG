@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2014, Heiko Bauke
+// Copyright (c) 2000-2015, Heiko Bauke
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "trng/yarn3s.hpp"
+#include <trng/yarn3s.hpp>
 
 namespace trng {
 
@@ -61,9 +61,9 @@ namespace trng {
   }
 
   const yarn3s::parameter_type
-  yarn3s::trng0=parameter_type(2025213985l, 1112953677l, 2038969601l);
+  yarn3s::trng0=parameter_type(2025213985, 1112953677, 2038969601);
   const yarn3s::parameter_type
-  yarn3s::trng1=parameter_type(1287767370l, 1045931779l, 58150106l);
+  yarn3s::trng1=parameter_type(1287767370, 1045931779, 58150106);
   
   // Random number engine concept
   yarn3s::yarn3s(yarn3s::parameter_type P) :
@@ -79,7 +79,7 @@ namespace trng {
   }
 
   void yarn3s::seed(unsigned long s) {
-    long long t=s;
+    int64_t t=s;
     t%=modulus;
     if (t<0)
       t+=modulus;
@@ -87,9 +87,9 @@ namespace trng {
     S.r2=1;
     S.r3=1;
   }
-
+  
   void yarn3s::seed(yarn3s::result_type s1, yarn3s::result_type s2,
-		   yarn3s::result_type s3) {
+		    yarn3s::result_type s3) {
     S.r1=s1%modulus;
     if (S.r1<0)
       S.r1+=modulus;

@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2014, Heiko Bauke
+// Copyright (c) 2000-2015, Heiko Bauke
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "trng/minstd.hpp"
+#include <trng/minstd.hpp>
 
 namespace trng {
 
@@ -60,8 +60,8 @@ namespace trng {
     (*this)=minstd();
   }
 
-  void minstd::seed(minstd::result_type s) {
-    S.r=s%2147483647ul;
+  void minstd::seed(unsigned long s) {
+    S.r=s%2147483647;
     if (S.r==0)
       S.r=1;
   }
@@ -83,4 +83,3 @@ namespace trng {
   }
 
 }
-

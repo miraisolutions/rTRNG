@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2014, Heiko Bauke
+// Copyright (c) 2000-2015, Heiko Bauke
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "trng/mt19937.hpp"
+#include <trng/mt19937.hpp>
 
 namespace trng {
 
@@ -66,7 +66,7 @@ namespace trng {
   // Random number engine concept
   mt19937::mt19937() :
     P(), S() {
-    seed(5489ULL); 
+    seed(5489u); 
   }
 
   mt19937::mt19937(unsigned long s) :
@@ -78,10 +78,10 @@ namespace trng {
     (*this)=mt19937();
   }
 
-  void mt19937::seed(mt19937::result_type s) {
-    S.mt[0]=s & 0xffffffffUL;
+  void mt19937::seed(unsigned long s) {
+    S.mt[0]=s & 0xffffffffU;
     for (S.mti=1; S.mti<mt19937::N; ++S.mti) 
-      S.mt[S.mti]=(1812433253UL * (S.mt[S.mti-1] ^ (S.mt[S.mti-1] >> 30)) + S.mti) & 0xffffffffUL; 
+      S.mt[S.mti]=(1812433253U * (S.mt[S.mti-1] ^ (S.mt[S.mti-1] >> 30)) + S.mti) & 0xffffffffU; 
   }
 
   // Equality comparable concept

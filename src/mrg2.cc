@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2014, Heiko Bauke
+// Copyright (c) 2000-2015, Heiko Bauke
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "trng/mrg2.hpp"
+#include <trng/mrg2.hpp>
 
 namespace trng {
 
@@ -61,9 +61,9 @@ namespace trng {
   }
 
   const mrg2::parameter_type 
-  mrg2::LEcuyer1=parameter_type(1498809829l, 1160990996l);
+  mrg2::LEcuyer1=parameter_type(1498809829, 1160990996);
   const mrg2::parameter_type 
-  mrg2::LEcuyer2=parameter_type(46325l, 1084587l);
+  mrg2::LEcuyer2=parameter_type(46325, 1084587);
   
   // Random number engine concept
   mrg2::mrg2(mrg2::parameter_type P) :

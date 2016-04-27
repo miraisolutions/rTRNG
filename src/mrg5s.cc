@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2014, Heiko Bauke
+// Copyright (c) 2000-2015, Heiko Bauke
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "trng/mrg5s.hpp"
+#include <trng/mrg5s.hpp>
 
 namespace trng {
 
@@ -61,9 +61,9 @@ namespace trng {
   }
 
   const mrg5s::parameter_type
-  mrg5s::trng0=parameter_type(1053223373l, 1530818118l,	1612122482l, 133497989l, 573245311l);
+  mrg5s::trng0=parameter_type(1053223373, 1530818118,	1612122482, 133497989, 573245311);
   const mrg5s::parameter_type
-  mrg5s::trng1=parameter_type(2068619238l, 2138332912l, 671754166l, 1442240992l, 1526958817l);
+  mrg5s::trng1=parameter_type(2068619238, 2138332912, 671754166, 1442240992, 1526958817);
   
   // Random number engine concept
   mrg5s::mrg5s(mrg5s::parameter_type P) :
@@ -79,7 +79,7 @@ namespace trng {
   }
 
   void mrg5s::seed(unsigned long s) {
-    long long t=s;
+    int64_t t=s;
     t%=modulus;
     if (t<0)
       t+=modulus;
