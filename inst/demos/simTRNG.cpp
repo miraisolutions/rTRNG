@@ -2,8 +2,11 @@
 #include <trng/normal_dist.hpp>
 #include <trng/yarn2.hpp>
 
+
 using namespace Rcpp;
 
+
+// [[Rcpp::depends(rTRNG)]]
 
 // [[Rcpp::export]]
 int simTRNG(NumericMatrix ranMat){
@@ -18,7 +21,7 @@ int simTRNG(NumericMatrix ranMat){
 }
 
 // [[Rcpp::export]]
-int simTRNGsub(NumericMatrix ranMat, 
+int simTRNGsub(NumericMatrix ranMat,
                const int startRow, const int endRow,
                const IntegerVector subCols){
   trng::yarn2 r0, r;
@@ -36,3 +39,15 @@ int simTRNGsub(NumericMatrix ranMat,
   return(0);
 }
 
+
+/*** R
+
+# Single-Thread consistent sub-simulation
+X <- (matrix(0.0, 9, 5))
+res <- simTRNG(X)
+subX <- (matrix(0.0, 9, 5))
+res <- simTRNGsub(subX, startRow = 4, endRow = 6, subCols = c(2, 4:5))
+View(cbind.data.frame(X = X, subX = subX), "Consistent sub-simulation")
+print(rbind.data.frame(X = X, subX = subX))
+
+*/

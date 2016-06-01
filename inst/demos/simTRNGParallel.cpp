@@ -1,21 +1,26 @@
-// [[Rcpp::depends(RcppParallel)]]
 #include <Rcpp.h>
 #include <RcppParallel.h>
 #include <trng/normal_dist.hpp>
 #include <trng/yarn2.hpp>
+
+
 using namespace Rcpp;
 using namespace RcppParallel;
+
+
+// [[Rcpp::depends(rTRNG,RcppParallel)]]
+
 
 struct simTRNGWorker : public Worker
 {
   RMatrix<double> ranMat;
   const RVector<int> subCols;
-  
+
   // constructor
-  simTRNGWorker(NumericMatrix ranMat, 
-                const IntegerVector subCols) 
+  simTRNGWorker(NumericMatrix ranMat,
+                const IntegerVector subCols)
     : ranMat(ranMat), subCols(subCols) {}
-  
+
   // operator processing an exclusive range of indices
   void operator()(std::size_t begin, std::size_t end) {
     trng::yarn2 r0, r;
@@ -34,10 +39,30 @@ struct simTRNGWorker : public Worker
 };
 
 // [[Rcpp::export]]
-int simTRNGParallel(NumericMatrix ranMat, 
-               const IntegerVector subCols){
+int simTRNGParallel(NumericMatrix ranMat,
+                    const IntegerVector subCols){
   simTRNGWorker w(ranMat, subCols);
   parallelFor(0, ranMat.nrow(), w);
   return(0);
 }
 
+
+/*** R
+
+# Multi-Thread fair-playing full simulation
+X <- (matrix(0.0, 9, 5))
+res <- simTRNG(X)
+for (nThread in 1:4) {
+  RcppParallel::setThreadOptions(nThread)
+  parX <- (matrix(0.0, 9, 5))
+  res <- simTRNGParallel(parX, subCols = c(1:5))
+  print(paste(nThread, "threads, all.equal?", all.equal(X, parX)))
+}
+X <- (matrix(0.0, 9, 5))
+res <- simTRNG(X)
+parSubX <- (matrix(0.0, 9, 5))
+res <- simTRNGParallel(parSubX, subCols = c(2, 4:5))
+View(cbind.data.frame(X = X, parSubX = parSubX), "Consistent parallel sub-simulation")
+print(rbind.data.frame(X = X, parSubX = parSubX))
+
+*/
