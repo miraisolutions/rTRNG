@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+rTRNG.Rproj
+src/*.o
+src/*.so
+src/*.dll
+src/trng/*.o
+src/trng/*.so
+inst/doc

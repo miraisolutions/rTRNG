@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^man-roxygen$
+^src/.*\.o$
+^src/trng/.*\.o$
