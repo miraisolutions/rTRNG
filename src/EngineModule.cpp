@@ -45,7 +45,7 @@ class_<Engine<R> >(#R)                                          \
   .constructor<std::string>("", &validSTRSXP)                   \
   .method("copy", &Engine<R>::copy, DOCSTRING)                  \
   .method("seed", &Engine<R>::seed, DOCSTRING)                  \
-  .method("str", &Engine<R>::str, DOCSTRING)                    \
+  .method("toString", &Engine<R>::toString, DOCSTRING)          \
   .method("name", &Engine<R>::name, DOCSTRING)                  \
   .method("kind", &Engine<R>::name, DOCSTRING)                  \
   .method("show", &Engine<R>::show, DOCSTRING)                  \

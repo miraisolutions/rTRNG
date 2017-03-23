@@ -3,7 +3,8 @@
 #' @description The functions below allow setting and manipulating the current
 #'   TRNG random number engine (pseudo-random number generator), similarly to
 #'   base-\R \link{Random}. The current engine is then used for generating
-#'   random variates via \ldots.
+#'   random variates via any of the \code{r<dist>.trng} functions (e.g.,
+#'   \code{\link{runif.trng}}).
 #'
 #' @template DetailsTRNG
 #'

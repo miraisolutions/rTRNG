@@ -41,9 +41,9 @@ the underlying TRNG C++ library in different ways and at different levels.
       relevant linker flags in Makevars[.win] via \link[rTRNG]{LdFlags}.
     }
 }
-See the package vignette (\code{vignette("rTRNG-vignette")} for an overview
-and refer to the examples in the documentation for further uses cases. Folder
-\dQuote{inst/demos} contains additional demonstrative examples.
+See the package vignette (\code{vignette("rTRNG-vignette")} [TODO]) for an
+overview and refer to the examples in the documentation for further uses
+cases. Folder \dQuote{inst/demos} contains additional demonstrative examples.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
@@ -53,4 +53,27 @@ Stephan Mertens, \emph{Random Number Generators: A Survival Guide
   for Large Scale Simulations}, 2009,
   \url{http://adsabs.harvard.edu/abs/2009arXiv0905.4238M}
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.mirai-solutions.com}
+  \item \url{https://github.com/miraisolutions/rTRNG}
+  \item Report bugs at \url{https://github.com/miraisolutions/rTRNG/issues}
+}
 
+}
+\author{
+\strong{Maintainer}: Riccardo Porreca \email{riccardo.porreca@mirai-solutions.com}
+
+Authors:
+\itemize{
+  \item Roland Schmid \email{roland.schmid@mirai-solutions.com}
+}
+
+Other contributors:
+\itemize{
+  \item Mirai Solutions GmbH \email{info@mirai-solutions.com} [copyright holder]
+  \item Heiko Bauke (TRNG sources and headers) [contributor, copyright holder]
+}
+
+}

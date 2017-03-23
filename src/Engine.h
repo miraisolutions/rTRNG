@@ -61,7 +61,7 @@ public:
   R* getRNGptr();
   void seed(unsigned long);
   std::string name();
-  std::string str();
+  std::string toString();
   Rcpp::CharacterVector _Random_seed();
   void show();
 

@@ -27,7 +27,6 @@
 #' }
 #'
 #' @section Constructors:
-#'
 #' \describe{
 #'   \item{\code{$new()}}{
 #'   Construct a random engine object using default seed and parameters.
@@ -36,14 +35,14 @@
 #'   Construct a random engine object with the given \code{seed} and default
 #'   parameters.
 #'   }
-#'   \item{\code{$new(str)}}{
+#'   \item{\code{$new(string)}}{
 #'   Construct a random engine object restoring its internal state and
-#'   parameters from a \code{str}ing, falling back to \code{$new()} for empty
-#'   strings.
+#'   parameters from a character \code{string}, falling back to \code{$new()}
+#'   for empty strings. See \code{$toString()} method.
 #'   }
 #' }
-#' @section Methods:
 #'
+#' @section Methods:
 #' \describe{
 #'   \item{\code{$seed(seed)}}{
 #'   Use the scalar integer \code{seed} to set the engine's internal state.
@@ -62,7 +61,7 @@
 #'   referred to as \code{kind} in \pkg{rTRNG} similarly to \link[=Random]{base}
 #'   \R.
 #'   }
-#'   \item{\code{$str()}}{
+#'   \item{\code{$toString()}}{
 #'   Return a character representation of the engine's internal state and
 #'   parameters.
 #'   }
@@ -72,12 +71,13 @@
 #'   }
 #'   \item{\code{$show()}}{
 #'   Specialization of the generic \link[methods]{show}, displaying
-#'   \code{$str()} (truncated to 80 characters).
+#'   \code{$toString()} (truncated to 80 characters).
 #'   }
 #'   \item{\code{$.Random.seed()}}{
 #'   Return a two-element character vector with elements \code{$kind()} and
-#'   \code{$str()}, suitable for use in \link{TRNG.Random.seed} (and by a
-#'   possible function returning an engine object given a .Random.seed).
+#'   \code{$toString()}, suitable for use in \code{\link{TRNG.Random.seed}} (and
+#'   by a possible function returning an engine object given a
+#'   \code{TRNG.Random.seed}).
 #'   }
 #' }
 #'
@@ -103,14 +103,15 @@
 #'     interval, whereas the TRNG C++ implementation follows C++ \code{0}-based
 #'     indexing, thus allowing values in [\code{0}, \code{p-1}].
 #'   \item
-#'     Constructor \code{new(str)} and method \code{str} rely on streaming
-#'     operators \code{>>} and \code{<<} available for all C++ TRNG classes.
+#'     Constructor \code{new(string)} and method \code{toString} rely on
+#'     streaming operators \code{>>} and \code{<<} available for all C++ TRNG
+#'     classes.
 #'   \item
 #'     TRNG C++ random number engine objects are \dQuote{copy-constructible} and
 #'     \dQuote{assignable}, whereas their \R counterparts in \pkg{rTRNG} are
 #'     purely reference-based. In particular, as for any \R
-#'     \link[=ReferenceClasses]{Reference Object}, engines and are not copied
-#'     upon assignment but via the \code{$copy()} method.
+#'     \link[=ReferenceClasses]{Reference Object}, engines are not copied upon
+#'     assignment but via the \code{$copy()} method.
 #' }
 #'
 #' @template EngineDetails

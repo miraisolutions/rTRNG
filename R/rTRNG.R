@@ -37,9 +37,9 @@
 #'       relevant linker flags in Makevars[.win] via \link[rTRNG]{LdFlags}.
 #'     }
 #' }
-#' See the package vignette (\code{vignette("rTRNG-vignette")} for an overview
-#' and refer to the examples in the documentation for further uses cases. Folder
-#' \dQuote{inst/demos} contains additional demonstrative examples.
+#' See the package vignette (\code{vignette("rTRNG-vignette")} [TODO]) for an
+#' overview and refer to the examples in the documentation for further uses
+#' cases. Folder \dQuote{inst/demos} contains additional demonstrative examples.
 #'
 #' @template trngReferences
 #' @references Stephan Mertens, \emph{Random Number Generators: A Survival Guide

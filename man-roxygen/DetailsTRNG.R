@@ -9,4 +9,4 @@
 #' Please consult the TRNG C++ library documentation (see \sQuote{References})
 #' for an introduction to the concepts and details around (parallel) random
 #' number generation and engines, including details about the state size and
-#' period of the corresponding generators.
+#' period of the TRNG generators.

@@ -9,4 +9,3 @@ TRNG.Version()
 \description{
 Return the version of the TRNG C++ library embedded in the \code{rTRNG} package.
 }
-

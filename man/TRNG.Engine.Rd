@@ -48,7 +48,6 @@ and a method \code{m} is invoked as \code{x$method(\dots)}.
 
 \section{Constructors}{
 
-
 \describe{
   \item{\code{$new()}}{
   Construct a random engine object using default seed and parameters.
@@ -57,16 +56,15 @@ and a method \code{m} is invoked as \code{x$method(\dots)}.
   Construct a random engine object with the given \code{seed} and default
   parameters.
   }
-  \item{\code{$new(str)}}{
+  \item{\code{$new(string)}}{
   Construct a random engine object restoring its internal state and
-  parameters from a \code{str}ing, falling back to \code{$new()} for empty
-  strings.
+  parameters from a character \code{string}, falling back to \code{$new()}
+  for empty strings. See \code{$toString()} method.
   }
 }
 }
 
 \section{Methods}{
-
 
 \describe{
   \item{\code{$seed(seed)}}{
@@ -86,7 +84,7 @@ and a method \code{m} is invoked as \code{x$method(\dots)}.
   referred to as \code{kind} in \pkg{rTRNG} similarly to \link[=Random]{base}
   \R.
   }
-  \item{\code{$str()}}{
+  \item{\code{$toString()}}{
   Return a character representation of the engine's internal state and
   parameters.
   }
@@ -96,12 +94,13 @@ and a method \code{m} is invoked as \code{x$method(\dots)}.
   }
   \item{\code{$show()}}{
   Specialization of the generic \link[methods]{show}, displaying
-  \code{$str()} (truncated to 80 characters).
+  \code{$toString()} (truncated to 80 characters).
   }
   \item{\code{$.Random.seed()}}{
   Return a two-element character vector with elements \code{$kind()} and
-  \code{$str()}, suitable for use in \link{TRNG.Random.seed} (and by a
-  possible function returning an engine object given a .Random.seed).
+  \code{$toString()}, suitable for use in \code{\link{TRNG.Random.seed}} (and
+  by a possible function returning an engine object given a
+  \code{TRNG.Random.seed}).
   }
 }
 }
@@ -118,7 +117,7 @@ generate directly a subsequence obtained by decimating the original sequence.
 Please consult the TRNG C++ library documentation (see \sQuote{References})
 for an introduction to the concepts and details around (parallel) random
 number generation and engines, including details about the state size and
-period of the corresponding generators.
+period of the TRNG generators.
 
 
 
@@ -140,14 +139,15 @@ differences/details are worth being mentioned.
     interval, whereas the TRNG C++ implementation follows C++ \code{0}-based
     indexing, thus allowing values in [\code{0}, \code{p-1}].
   \item
-    Constructor \code{new(str)} and method \code{str} rely on streaming
-    operators \code{>>} and \code{<<} available for all C++ TRNG classes.
+    Constructor \code{new(string)} and method \code{toString} rely on
+    streaming operators \code{>>} and \code{<<} available for all C++ TRNG
+    classes.
   \item
     TRNG C++ random number engine objects are \dQuote{copy-constructible} and
     \dQuote{assignable}, whereas their \R counterparts in \pkg{rTRNG} are
     purely reference-based. In particular, as for any \R
-    \link[=ReferenceClasses]{Reference Object}, engines and are not copied
-    upon assignment but via the \code{$copy()} method.
+    \link[=ReferenceClasses]{Reference Object}, engines are not copied upon
+    assignment but via the \code{$copy()} method.
 }
 }
 
@@ -200,6 +200,7 @@ differences/details are worth being mentioned.
   }
 }
 }
+
 \examples{
 ## Class yarn2 used in the examples below can be replaced by any other TRNG
 ## engine class (only of a parallel kind for jump and split examples).
@@ -209,20 +210,20 @@ r <- yarn2$new()
 ## show the internal parameters and state
 r
 ## return internal parameters and state as character string
-r$str()
+r$toString()
 
 ## seed the random number engine
 r$seed(117)
 r
 ## construct with given initial seed
 s <- yarn2$new(117)
-all.equal(s$str(), r$str())
+all.equal(s$toString(), r$toString())
 
 ## construct from string representation
-s <- yarn2$new(r$str()) # implicitly creates a copy
-all.equal(s$str(), r$str())
+s <- yarn2$new(r$toString()) # implicitly creates a copy
+all.equal(s$toString(), r$toString())
 s <- yarn2$new("") # same as yarn2$new()
-all.equal(s$str(), yarn2$new()$str())
+all.equal(s$toString(), yarn2$new()$toString())
 \dontrun{
   ## error if the string is not a valid representation
   s <- yarn2$new("invalid")
@@ -231,8 +232,8 @@ all.equal(s$str(), yarn2$new()$str())
 ## copy vs. reference
 r_ref <- r # reference to the same engine object
 r_cpy <- r$copy() # copy an engine
-all.equal(r_cpy$str(), r$str())
-rbind(c(runif.trng(4, engine = r_ref), runif.trng(6, engine = r_ref)),
+all.equal(r_cpy$toString(), r$toString())
+rbind(c(runif.trng(4, engine = r), runif.trng(6, engine = r_ref)),
       runif.trng(10, engine = r_cpy))
 
 ## jump (and draw from reference)
@@ -271,4 +272,3 @@ Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
 \seealso{
 \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}...
 }
-

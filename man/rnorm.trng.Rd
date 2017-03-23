@@ -39,10 +39,10 @@ Random number generation for the normal distribution
   should be selected carefully. Note that TRNG guarantees the outcome of such
   parallel execution to be equivalent to a purely sequential simulation.
 }
+
 \seealso{
 \code{\link{rnorm}}, \code{\link{TRNG.Engine}},
   \code{\link{TRNG.Random}}.
 
-Other TRNG.distributions: \code{\link{runif.trng}}
+Other TRNG distributions: \code{\link{runif.trng}}
 }
-

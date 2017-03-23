@@ -22,4 +22,3 @@ and from Makevars.win as
 \seealso{
 Demo \dQuote{inst/demos/rTRNGinPkg.R}.
 }
-

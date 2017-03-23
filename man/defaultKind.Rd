@@ -9,4 +9,3 @@ defaultKind()
 \description{
 Return the name of the default TRNG random number engine.
 }
-

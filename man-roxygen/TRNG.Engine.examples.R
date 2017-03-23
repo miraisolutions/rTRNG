@@ -6,20 +6,20 @@ r <- yarn2$new()
 ## show the internal parameters and state
 r
 ## return internal parameters and state as character string
-r$str()
+r$toString()
 
 ## seed the random number engine
 r$seed(117)
 r
 ## construct with given initial seed
 s <- yarn2$new(117)
-all.equal(s$str(), r$str())
+all.equal(s$toString(), r$toString())
 
 ## construct from string representation
-s <- yarn2$new(r$str()) # implicitly creates a copy
-all.equal(s$str(), r$str())
+s <- yarn2$new(r$toString()) # implicitly creates a copy
+all.equal(s$toString(), r$toString())
 s <- yarn2$new("") # same as yarn2$new()
-all.equal(s$str(), yarn2$new()$str())
+all.equal(s$toString(), yarn2$new()$toString())
 \dontrun{
   ## error if the string is not a valid representation
   s <- yarn2$new("invalid")
@@ -28,8 +28,8 @@ all.equal(s$str(), yarn2$new()$str())
 ## copy vs. reference
 r_ref <- r # reference to the same engine object
 r_cpy <- r$copy() # copy an engine
-all.equal(r_cpy$str(), r$str())
-rbind(c(runif.trng(4, engine = r_ref), runif.trng(6, engine = r_ref)),
+all.equal(r_cpy$toString(), r$toString())
+rbind(c(runif.trng(4, engine = r), runif.trng(6, engine = r_ref)),
       runif.trng(10, engine = r_cpy))
 
 ## jump (and draw from reference)

@@ -105,20 +105,20 @@ std::string Engine<R>::name(){
 }
 
 template<typename R>
-std::string Engine<R>::str(){
+std::string Engine<R>::toString(){
   return RNGToString(rng);
 }
 
 template<typename R>
 CharacterVector Engine<R>::_Random_seed(){
   using namespace Rcpp;
-  return CharacterVector::create(name(), str());
+  return CharacterVector::create(name(), toString());
 }
 
 #define MAX_SHOW 80
 template<typename R>
 void Engine<R>::show(){
-  std::string s = str();
+  std::string s = toString();
   if (s.length() > MAX_SHOW) {
     s = s.substr(0, MAX_SHOW-4) + "..." + s.substr(s.length()-1, 1);
   }

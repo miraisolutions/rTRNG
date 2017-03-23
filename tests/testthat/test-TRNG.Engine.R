@@ -20,10 +20,10 @@ test_that("constructor with no arguments works", {
 })
 
 
-test_that("str returns a 1-length character", {
+test_that("toString returns a 1-length character", {
   for (engineClass in engineClasses) {
     e <- engineClass$new()
-    s <- e$str()
+    s <- e$toString()
     expect_is(s, "character", info = as.character(engineClass))
     expect_equal(length(s), 1, info = as.character(engineClass))
   }
@@ -33,9 +33,9 @@ test_that("str returns a 1-length character", {
 test_that("seed changes the internal state", {
   for (engineClass in engineClasses) {
     e <- engineClass$new()
-    preSeed <- e$str()
+    preSeed <- e$toString()
     e$seed(SEED)
-    postSeed <- e$str()
+    postSeed <- e$toString()
     expect_false(preSeed == postSeed, info = as.character(engineClass))
   }
 })
@@ -46,7 +46,7 @@ test_that("constructor with seed argument works", {
     e <- engineClass$new()
     e$seed(SEED)
     f <- engineClass$new(SEED)
-    expect_equal(e$str(), f$str(), info = as.character(engineClass))
+    expect_equal(e$toString(), f$toString(), info = as.character(engineClass))
     expect_equal(rdist.test(SAMPLES, e), rdist.test(SAMPLES, f),
                  info = as.character(engineClass))
   }
@@ -56,8 +56,8 @@ test_that("constructor with seed argument works", {
 test_that("constructor with string argument works", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
-    f <- engineClass$new(e$str())
-    expect_equal(e$str(), f$str(), info = as.character(engineClass))
+    f <- engineClass$new(e$toString())
+    expect_equal(e$toString(), f$toString(), info = as.character(engineClass))
     expect_equal(rdist.test(SAMPLES, e), rdist.test(SAMPLES, f),
                  info = as.character(engineClass))
   }
@@ -68,7 +68,7 @@ test_that("copy detaches the underlying generator", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- e$copy()
-    expect_equal(e$str(), f$str(), info = as.character(engineClass))
+    expect_equal(e$toString(), f$toString(), info = as.character(engineClass))
     expect_equal(rdist.test(SAMPLES, e), rdist.test(SAMPLES, f),
                  info = as.character(engineClass))
   }
@@ -78,9 +78,9 @@ test_that("copy detaches the underlying generator", {
 test_that("state is updated upon draw of random variates", {
   for (engineClass in engineClasses) {
     e <- engineClass$new()
-    preDraw <- e$str()
+    preDraw <- e$toString()
     invisible(rdist.test(SAMPLES, e))
-    postDraw <- e$str()
+    postDraw <- e$toString()
     expect_false(preDraw == postDraw, info = as.character(engineClass))
   }
 })
