@@ -1,7 +1,7 @@
 #' @rdname TRNG.Random
 #' @description \code{TRNGkind} allows to query or set the kind of
 #'   TRNG engine in use. See \sQuote{Random number engines details} for the available engines.
-#' @template kind
+#' @template param-kind
 #' @return \code{TRNGkind} returns the TRNG kind selected before the call,
 #'   invisibly if argument \code{kind} is not NULL.
 #' @export

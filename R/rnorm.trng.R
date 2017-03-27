@@ -1,4 +1,4 @@
-#' @template rdistTemplate
+#' @template template-rdist
 #' @templateVar distTitle Normal
 #' @templateVar distDesc normal
 #' @templateVar rdist rnorm

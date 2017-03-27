@@ -81,7 +81,7 @@
 #'   }
 #' }
 #'
-#' @template DetailsTRNG
+#' @template details-TRNG
 #'
 #' @section Details:
 #'
@@ -114,13 +114,13 @@
 #'     assignment but via the \code{$copy()} method.
 #' }
 #'
-#' @template EngineDetails
+#' @template details-engines
 #'
-#' @template trngReferences
+#' @template references-TRNG
 #'
 #' @seealso \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}...
 #'
-#' @example man-roxygen/TRNG.Engine.examples.R
+#' @example man-roxygen/example-TRNG.Engine.R
 #'
 #' @export lagfib2plus_19937_64
 #' @export lagfib2xor_19937_64

@@ -41,9 +41,10 @@ the underlying TRNG C++ library in different ways and at different levels.
       relevant linker flags in Makevars[.win] via \link[rTRNG]{LdFlags}.
     }
 }
-See the package vignette (\code{vignette("rTRNG-vignette")} [TODO]) for an
-overview and refer to the examples in the documentation for further uses
-cases. Folder \dQuote{inst/demos} contains additional demonstrative examples.
+See the package vignettes (\code{vignette(package = "rTRNG")}) for an
+overview and demos and refer to the examples in the documentation for further
+uses cases. Directory \dQuote{inst/demos} contains additional demonstrative
+examples.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version

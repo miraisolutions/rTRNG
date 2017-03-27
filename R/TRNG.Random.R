@@ -6,7 +6,7 @@
 #'   random variates via any of the \code{r<dist>.trng} functions (e.g.,
 #'   \code{\link{runif.trng}}).
 #'
-#' @template DetailsTRNG
+#' @template details-TRNG
 #'
 #' @section Details:
 #' The current engine is an instance of one \link[=TRNG.Engine]{TRNG engine
@@ -14,7 +14,7 @@
 #' persistent across \R sessions. Function \code{TRNG.Random.seed} can be used
 #' to extract and restore the current engine and its internal state.
 #'
-#' @template EngineDetails
+#' @template details-engines
 #'
-#' @template trngReferences
+#' @template references-TRNG
 NULL

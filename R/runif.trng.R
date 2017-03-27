@@ -1,4 +1,4 @@
-#' @template rdistTemplate
+#' @template template-rdist
 #' @templateVar distTitle Uniform
 #' @templateVar distDesc uniform
 #' @templateVar rdist runif
