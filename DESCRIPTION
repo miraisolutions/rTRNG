@@ -28,7 +28,7 @@ LinkingTo: Rcpp,
 URL: http://www.mirai-solutions.com, https://github.com/miraisolutions/rTRNG
 BugReports: https://github.com/miraisolutions/rTRNG/issues
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
     'LdFlags.R'
     'RcppExports.R'
     'TRNG.Engine.R'
@@ -42,7 +42,7 @@ Collate:
     'currentEngine.R'
     'defaultKind.R'
     'inline.R'
-    'rTRNG.R'
+    'rTRNG-package.R'
     'rnorm.trng.R'
     'runif.trng.R'
     'zzz.R'
