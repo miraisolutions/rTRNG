@@ -1,0 +1,75 @@
+---
+title: "Sub-matrix of Monte Carlo variates"
+author: "Riccardo Porreca, Roland Schmid"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sub-matrix simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+```{r include=FALSE, cache=FALSE}
+source("utils/read_chunk_wrap.R", echo = FALSE, print.eval = FALSE)
+Rcpp::sourceCpp("code/mcMat.cpp", verbose = FALSE, embeddedR = FALSE)
+read_chunk_wrap("code/mcMat.cpp")
+Rcpp::sourceCpp("code/mcMatParallel.cpp", verbose = FALSE, embeddedR = FALSE)
+read_chunk_wrap("code/mcMatParallel.cpp")
+read_chunk_wrap("code/mcMat.R")
+```
+
+
+## Consistent sub-simulaton with Rcpp
+
+We use Rcpp to define a function `mcMatRcpp` performing the full sequential Monte Carlo simulation of `nrow` normal i.i.d. samples of `ncol` variables using the `yarn2` generator.
+```{Rcpp mcMatRcpp, eval=FALSE}
+```
+A second function `mcSubMatRcpp` relies on `jump` and `split` operations to perform only a chunk [`startRow`, `endRow`] of simulations for a subset `subCols` of the variables.
+```{Rcpp mcSubMatRcpp, eval=FALSE}
+```
+The parallel-engine nature of the `yarn2` generator ensures the sub-simulation obtained via `mcSubMatRcpp` is consistent with the full sequential simulation.
+```{r subMatExampleRcpp}
+```
+```{r, echo=FALSE}
+knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
+```
+
+
+## Consistent parallel (sub-)simulaton with RcppParallel
+
+We can embed the body of `mcSubMatRcpp` above into a `RcppParallel::Worker` for performing chunks of Monte Carlo simulations in parallel, simulating (in general) only a subset `subCols` of the variables.
+```{Rcpp mcMatRcppParallel, eval=FALSE}
+```
+The parallel-engine nature of the `yarn2` generator ensures the parallel simulation is playing fair, i.e. is consistent with the sequential simulation.
+```{r fullMatExampleRcppParallel}
+```
+Similarly, we can achieve a consistent parallel simulation of a subset of the variables only.
+```{r subMatExampleRcppParallel}
+```
+```{r, echo=FALSE}
+knitr::kable(cbind.data.frame(M = M, Sp = Sp), row.names = TRUE)
+```
+
+
+## Consistent sub-simulaton in R
+
+We rely on the TRNG engines exposed to R by package rTRNG as reference classes.
+```{r}
+library(rTRNG)
+```
+We define functions `mcMatR` and `mcSubMatR` performing the full sequential Monte Carlo simulation and the sub-simulation, respectively.
+```{r mcMatR}
+```
+```{r mcSubMatR}
+```
+As for the Rcpp case above, the behavior of `mcSubMatR` is consistent with the full sequential simulation.
+```{r subMatExampleR}
+```
+```{r, echo=FALSE}
+knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
+```
