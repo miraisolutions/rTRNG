@@ -15,7 +15,7 @@ The package can easily be installed from our [github repository](https://github.
 excellent [devtools](https://github.com/hadley/devtools) package:
 
 ```
-devtools::install_github("rTRNG", username = "miraisolutions")
+devtools::install_github("miraisolutions/rTRNG")
 ```
 
 For an introduction to the package, refer to the package documentation page via
