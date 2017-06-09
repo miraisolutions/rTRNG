@@ -96,7 +96,7 @@ if (engine.is("Rcpp_" #engine_class)) {                                     \
   return rdist_S4<D,engine_class>(n, dist, engine, parallelGrain);          \
 } else
 
-// Check the R class and dispatch to the correspnding template function
+// Check the R class and dispatch to the corresponding template function
 template<typename D>
 NumericVector rdist_dispatch(const int n, D dist,
                              S4 engine, const long parallelGrain = 0) {
