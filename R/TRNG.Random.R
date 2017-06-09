@@ -17,4 +17,6 @@
 #' @template details-engines
 #'
 #' @template references-TRNG
+#'
+#' @example man-roxygen/example-TRNG.Random.R
 NULL
