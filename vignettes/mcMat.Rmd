@@ -1,5 +1,5 @@
 ---
-title: "Sub-matrix of Monte Carlo variates"
+title: "Flexible and consistent simulation of a matrix of Monte Carlo variates"
 author: "Riccardo Porreca, Roland Schmid"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -22,7 +22,6 @@ Rcpp::sourceCpp("code/mcMatParallel.cpp", verbose = FALSE, embeddedR = FALSE)
 read_chunk_wrap("code/mcMatParallel.cpp")
 read_chunk_wrap("code/mcMat.R")
 ```
-
 
 ## Consistent sub-simulaton with Rcpp
 
