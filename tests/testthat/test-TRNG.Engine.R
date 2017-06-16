@@ -6,7 +6,7 @@ engineClasses <- list(lagfib2plus_19937_64, lagfib2xor_19937_64, lagfib4plus_199
 # library(testthat)
 
 rdist.test <- function(n, engine) {
-  runif.trng(n, engine = engine)
+  runif_trng(n, engine = engine)
 }
 SEED <- 117
 SAMPLES <- 15

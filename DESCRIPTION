@@ -43,7 +43,7 @@ Collate:
     'defaultKind.R'
     'inline.R'
     'rTRNG-package.R'
-    'rnorm.trng.R'
-    'runif.trng.R'
+    'rnorm_trng.R'
+    'runif_trng.R'
     'zzz.R'
 VignetteBuilder: knitr

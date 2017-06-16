@@ -4,7 +4,7 @@
 ## ---- mcMatR
 mcMatR <- function(nrow, ncol) {
   r <- yarn2$new(12345)
-  M <- matrix(rnorm.trng(nrow*ncol, engine = r),
+  M <- matrix(rnorm_trng(nrow*ncol, engine = r),
               nrow = nrow, ncol = ncol, byrow = TRUE)
   M
 }
@@ -22,7 +22,7 @@ mcSubMatR <- function(nrow, ncol,
            function(j) {
              rj = r$copy()
              rj$split(ncol, j)
-             rnorm.trng(nSubCols, engine = rj)
+             rnorm_trng(nSubCols, engine = rj)
            },
            FUN.VALUE = numeric(nSubCols))
   S

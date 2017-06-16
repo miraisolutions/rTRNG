@@ -28,9 +28,9 @@ TRNGjump(5)
 TRNGsplit(3, 2)
 ```
 Random variates from the current engine are then generated using functions
-`r<dist>.trng`, e.g. `runif.trng` for the uniform distribution.
+`r<dist>_trng`, e.g. `runif_trng` for the uniform distribution.
 ```{r}
-x <- runif.trng(10)
+x <- runif_trng(10)
 x
 ```
 
@@ -46,10 +46,10 @@ rng$seed(117)
 rng$jump(5)
 rng$split(3, 2)
 ```
-The engine object is then passed as `engine` argument of any `r<dist>.trng`
+The engine object is then passed as `engine` argument of any `r<dist>_trng`
 function.
 ```{r}
-x <- runif.trng(10, engine = rng)
+x <- runif_trng(10, engine = rng)
 x
 ```
 

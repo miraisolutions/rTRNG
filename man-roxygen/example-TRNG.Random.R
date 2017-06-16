@@ -19,23 +19,23 @@ s <- TRNG.Random.seed()
 s
 
 ## draw 10 random variates using the current engine
-runif.trng(10)
+runif_trng(10)
 
 ## restore the engine and its internal state
 TRNG.Random.seed(s)
 
 ## jump and draw the last 3 variates out of the 10 above
 TRNGjump(7) # jump 7 steps ahead
-runif.trng(3)
+runif_trng(3)
 
 ## restore the internal state, split and draw every 5th element starting from
 ## the 2nd
 TRNG.Random.seed(s)
 TRNGsplit(5, 2)
-runif.trng(2)
+runif_trng(2)
 
-## TRNGseed, TRNGjump and TRNGsplit can be combined with r<dist>.trng in c(...)
+## TRNGseed, TRNGjump and TRNGsplit can be combined with r<dist>_trng in c(...)
 ## as they return NULL
 c(TRNGset.seed(117),
-  TRNGjump(2), runif.trng(2),
-  TRNGsplit(3,2), runif.trng(2))
+  TRNGjump(2), runif_trng(2),
+  TRNGsplit(3,2), runif_trng(2))
