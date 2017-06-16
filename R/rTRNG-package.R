@@ -47,7 +47,7 @@
 #'   for Large Scale Simulations}, 2009,
 #'   \url{http://adsabs.harvard.edu/abs/2009arXiv0905.4238M}
 #'
-#' @useDynLib rTRNG
+#' @useDynLib rTRNG, .registration=TRUE
 #' @import methods
 #' @import Rcpp
 #' @importFrom RcppParallel RcppParallelLibs
