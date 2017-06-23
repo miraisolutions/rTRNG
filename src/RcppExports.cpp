@@ -35,3 +35,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+RcppExport SEXP _rcpp_module_boot_trng();
+
+static const R_CallMethodDef CallEntries[] = {
+    {"rTRNG_C_runif_trng", (DL_FUNC) &rTRNG_C_runif_trng, 5},
+    {"rTRNG_C_rnorm_trng", (DL_FUNC) &rTRNG_C_rnorm_trng, 5},
+    {"_rcpp_module_boot_trng", (DL_FUNC) &_rcpp_module_boot_trng, 0},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_rTRNG(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}
