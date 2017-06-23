@@ -24,13 +24,13 @@ LdFlags <- function() {
 # Return the linker flags required for rTRNG on this platform.
 rTRNGLdFlags <- function() {
   LibPath <- rTRNGLib()
-  # Option 1:
+  # Option 1: => stopped working with recent Rcpp version
   # -l:filename (-l=namespec does not work on linux since it would look for
   # libnamespec.ext, whereas the library is built as rTRNG.ext)
-  flags <- paste("-L", asBuildPath(dirname(LibPath)), " -l:", basename(LibPath), sep = "")
+  # flags <- paste("-L", asBuildPath(dirname(LibPath)), " -l:", basename(LibPath), sep = "")
   # Option 2:
   # directly link against the library providing its full path
-  # flags <- paste(asBuildPath((LibPath)), sep = "")
+  flags <- paste(asBuildPath((LibPath)), sep = "")
   return(flags)
 }
 
