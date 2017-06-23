@@ -53,8 +53,8 @@ and a method \code{m} is invoked as \code{x$method(\dots)}.
   Construct a random engine object using default seed and parameters.
   }
   \item{\code{$new(seed)}}{
-  Construct a random engine object with the given \code{seed} and default
-  parameters.
+  Construct a random engine object with the given integer \code{seed} and
+  default parameters.
   }
   \item{\code{$new(string)}}{
   Construct a random engine object restoring its internal state and
@@ -270,5 +270,5 @@ Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
 4.19, \url{http://numbercrunch.de/trng/trng.pdf}.
 }
 \seealso{
-\code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}...
+\code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}.
 }

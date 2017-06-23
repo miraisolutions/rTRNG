@@ -43,7 +43,7 @@ the underlying TRNG C++ library in different ways and at different levels.
 }
 See the package vignettes (\code{vignette(package = "rTRNG")}) for an
 overview and demos and refer to the examples in the documentation for further
-uses cases. Directory \dQuote{inst/demos} contains additional demonstrative
+use cases. Directory \dQuote{inst/demos} contains additional demonstrative
 examples.
 }
 \references{
