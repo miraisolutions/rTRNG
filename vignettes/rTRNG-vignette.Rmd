@@ -18,7 +18,7 @@ https://rpubs.com/Thell/knitRcpp
 ### TRNG.Random
 
 The TRNG.Random functionality (see `?TRNG.Random`) provides a base-R-like access
-to TRNG random number engines by setting and manipulating the current engine in
+to TRNG random number engines by setting and manipulating the current engine in 
 use.
 ```{r}
 library(rTRNG)
@@ -36,8 +36,8 @@ x
 
 ### TRNG.Engine
 
-Random number engines can be explicitly created and manipulated using reference
-objects from a reference objects number of classes (see `?TRNG.Engine`).
+Random number engines can be explicitly created and manipulated using reference 
+objects from a number of classes (see `?TRNG.Engine`).
 
 ```{r}
 rng <- yarn2$new()
@@ -55,9 +55,9 @@ x
 
 ### sourceCpp
 
-C++ code using directly the C++ TRNG library and header shipped with **rTRNG**
-can easily sourced via `sourceCpp`, with `Rcpp::depends` attribute taking care
-of linking against the library.
+C++ code using the C++ TRNG library and header shipped with **rTRNG** can easily
+be sourced via `sourceCpp`, with the `Rcpp::depends` attribute taking care of 
+linking against the library.
 
 ```{r engine = 'Rcpp'}
 // [[Rcpp::depends(rTRNG)]]

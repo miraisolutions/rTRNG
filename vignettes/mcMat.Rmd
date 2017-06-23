@@ -23,7 +23,7 @@ read_chunk_wrap("code/mcMatParallel.cpp")
 read_chunk_wrap("code/mcMat.R")
 ```
 
-## Consistent sub-simulaton with Rcpp
+## Consistent simulaton with Rcpp
 
 We use Rcpp to define a function `mcMatRcpp` performing the full sequential Monte Carlo simulation of `nrow` normal i.i.d. samples of `ncol` variables using the `yarn2` generator.
 ```{Rcpp mcMatRcpp, eval=FALSE}
@@ -39,9 +39,9 @@ knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 ```
 
 
-## Consistent parallel (sub-)simulaton with RcppParallel
+## Consistent parallel simulaton with RcppParallel
 
-We can embed the body of `mcSubMatRcpp` above into a `RcppParallel::Worker` for performing chunks of Monte Carlo simulations in parallel, simulating (in general) only a subset `subCols` of the variables.
+We can embed the body of `mcSubMatRcpp` above into an `RcppParallel::Worker` for performing chunks of Monte Carlo simulations in parallel, for any subset `subCols` of the variables.
 ```{Rcpp mcMatRcppParallel, eval=FALSE}
 ```
 The parallel-engine nature of the `yarn2` generator ensures the parallel simulation is playing fair, i.e. is consistent with the sequential simulation.
@@ -55,7 +55,7 @@ knitr::kable(cbind.data.frame(M = M, Sp = Sp), row.names = TRUE)
 ```
 
 
-## Consistent sub-simulaton in R
+## Consistent simulaton in R
 
 We rely on the TRNG engines exposed to R by package rTRNG as reference classes.
 ```{r}
