@@ -32,8 +32,8 @@
 #'   Construct a random engine object using default seed and parameters.
 #'   }
 #'   \item{\code{$new(seed)}}{
-#'   Construct a random engine object with the given \code{seed} and default
-#'   parameters.
+#'   Construct a random engine object with the given integer \code{seed} and
+#'   default parameters.
 #'   }
 #'   \item{\code{$new(string)}}{
 #'   Construct a random engine object restoring its internal state and
@@ -118,7 +118,7 @@
 #'
 #' @template references-TRNG
 #'
-#' @seealso \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}...
+#' @seealso \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}.
 #'
 #' @example man-roxygen/example-TRNG.Engine.R
 #'
