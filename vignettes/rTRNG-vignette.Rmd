@@ -23,7 +23,7 @@ use.
 ```{r}
 library(rTRNG)
 TRNGkind("yarn2")
-TRNGset.seed(117)
+TRNGseed(117)
 TRNGjump(5)
 TRNGsplit(3, 2)
 ```

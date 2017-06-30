@@ -9,11 +9,14 @@
 #' @template details-TRNG
 #'
 #' @section Details:
-#' The current engine is an instance of one \link[=TRNG.Engine]{TRNG engine
-#' class} provided by \pkg{rTRNG}. Note that the current engine is not
-#' persistent across \R sessions. Function \code{TRNG.Random.seed} can be used
-#' to extract and restore the current engine and its internal state.
-#'
+#' The current engine is an instance of one \link[=TRNG.Engine]{TRNG engine 
+#' class} provided by \pkg{rTRNG}, which is stored as \code{"TRNGengine"} global
+#' option. If not exlicitly set via \code{TRNGkind}, and engine of the
+#' \link[=defaultKind]{default kind} is implicitly created at the first call to
+#' any \code{TRNG*} or \code{r<dist>_trng} function. Note that the current
+#' engine is not persistent across \R sessions. Function \code{TRNG.Random.seed}
+#' can be used to extract and restore the current engine and its internal state.
+#' 
 #' @template details-engines
 #'
 #' @template references-TRNG

@@ -35,7 +35,7 @@ Collate:
     'TRNG.Engine.R'
     'TRNG.Random.R'
     'TRNGkind.R'
-    'TRNGset.seed.R'
+    'TRNGseed.R'
     'TRNGjump.R'
     'TRNGsplit.R'
     'TRNG.Random.seed.R'

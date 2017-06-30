@@ -3,7 +3,7 @@
 #'   \code{TRNGjump} advances its internal state without generating all
 #'   intermediate steps.
 #' @param steps Number of steps to jump ahead.
-#' @include TRNGset.seed.R
+#' @include TRNGseed.R
 #' @export
 TRNGjump <- function(steps) {
   getCurrentEngine()$jump(steps)

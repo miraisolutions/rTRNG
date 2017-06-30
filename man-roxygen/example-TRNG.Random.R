@@ -12,7 +12,7 @@ TRNGkind("default")
 TRNGkind()
 
 ## seed the current random number engine
-TRNGset.seed(117)
+TRNGseed(117)
 
 ## full representation of the current state of the engine in use
 s <- TRNG.Random.seed()
@@ -36,6 +36,6 @@ runif_trng(2)
 
 ## TRNGseed, TRNGjump and TRNGsplit can be combined with r<dist>_trng in c(...)
 ## as they return NULL
-c(TRNGset.seed(117),
+c(TRNGseed(117),
   TRNGjump(2), runif_trng(2),
   TRNGsplit(3,2), runif_trng(2))
