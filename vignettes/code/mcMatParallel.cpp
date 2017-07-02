@@ -22,7 +22,7 @@ struct MCMatWorker : public Worker
 
   // operator processing an exclusive range of indices
   void operator()(std::size_t begin, std::size_t end) {
-    trng::yarn2 r(12345), rj;
+    trng::yarn2 r(12358), rj;
     trng::normal_dist<> normal(0.0, 1.0);
     r.jump((int)begin*M.ncol());
     for (IntegerVector::const_iterator jSub = subCols.begin();
@@ -38,7 +38,7 @@ struct MCMatWorker : public Worker
 };
 // [[Rcpp::export]]
 NumericMatrix mcMatRcppParallel(const int nrow, const int ncol,
-                       const IntegerVector subCols){
+                       const IntegerVector subCols) {
   NumericMatrix M(nrow, ncol);
   MCMatWorker w(M, subCols);
   parallelFor(0, M.nrow(), w);

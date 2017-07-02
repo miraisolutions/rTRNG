@@ -29,7 +29,7 @@ NumericMatrix mcSubMatRcpp(const int nrow, const int ncol,
                            const int endRow,
                            const IntegerVector subCols) {
   NumericMatrix M(nrow, ncol);
-  trng::yarn2 r(12345), rj;
+  trng::yarn2 r(12358), rj;
   trng::normal_dist<> normal(0.0, 1.0);
   r.jump((startRow-1)*ncol);
   for (IntegerVector::const_iterator jSub = subCols.begin();
