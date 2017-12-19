@@ -1,10 +1,12 @@
+# See 'Documenting packages' in vignette("rd", package = "roxygen2")
+
 #' @title TRNG C++ library functionality exposed to R.
 #
 #' @description
 #'
 #' Tina's Random Number Generator Library (\pkg{TRNG}) is a state of the art C++
 #' pseudo-random number generator library for sequential and parallel Monte
-#' Carlo simulations (\url{http://numbercrunch.de/trng/}). It provides a variety
+#' Carlo simulations (\url{https://numbercrunch.de/trng/}). It provides a variety
 #' of random number engines (pseudo-random number generators) and distributions.
 #' In particular, \emph{parallel} random number engines provided by TRNG support
 #' techniques such as \emph{block-splitting} and \emph{leapfrogging} suitable
@@ -52,19 +54,3 @@
 #' @import Rcpp
 #' @importFrom RcppParallel RcppParallelLibs
 "_PACKAGE"
-
-
-# Some notes:
-#
-# Like for datasets, there isn’t a object that we can document directly. Use
-# "_PACKAGE" to indicate that you are creating the package’s documentation. This
-# will automatically add the corect aliases so that both ?pkgname and
-# package?pkgname will find the package help. This also works if there’s already
-# a function called pkgname().
-#
-# Use @references point to published material about the package that users might
-# find helpful.
-#
-# Package documentation is a good place to list all options() that a package
-# understands and to document their behaviour. Put in a section called “Package
-# options”, as described below.

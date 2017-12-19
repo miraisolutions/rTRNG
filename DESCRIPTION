@@ -24,11 +24,14 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-LinkingTo: Rcpp,
+LinkingTo:
+    Rcpp,
     RcppParallel
+SystemRequirements: GNU make
 URL: http://www.mirai-solutions.com, https://github.com/miraisolutions/rTRNG
 BugReports: https://github.com/miraisolutions/rTRNG/issues
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
 Collate: 
     'LdFlags.R'
     'RcppExports.R'
@@ -47,4 +50,3 @@ Collate:
     'rnorm_trng.R'
     'runif_trng.R'
     'zzz.R'
-VignetteBuilder: knitr

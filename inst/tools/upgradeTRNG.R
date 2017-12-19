@@ -1,9 +1,9 @@
-# source("tools/upgradeTRNG.R")
+# source("inst/tools/upgradeTRNG.R")
 
 upgradeTRNG <- function(version, cleanTmp = TRUE) {
 
   lib.tar.gz <- sprintf("trng-%s.tar.gz", version)
-  libURL <- sprintf("http://numbercrunch.de/trng/%s", lib.tar.gz)
+  libURL <- sprintf("https://numbercrunch.de/trng/%s", lib.tar.gz)
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)
 

@@ -18,7 +18,7 @@ rTRNG.package.skeleton <- function(name = "anRpackage",
                                          "Makevars", "Makevars.win",
                                          # simple Rcpp function using TRNG
                                          if (example_code) "trng_hello_world.cpp"
-                                         ))),
+                                       ))),
     example_code = FALSE,
     author = author, maintainer = maintainer, email = email, license = license
   )
