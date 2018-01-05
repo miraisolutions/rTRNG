@@ -1,6 +1,6 @@
 # rTRNG: R package providing access and examples to TRNG C++ library
 
-[TRNG](http://numbercrunch.de/trng/) (Tina's Random Number Generator) is a state
+[TRNG](https://numbercrunch.de/trng/) (Tina's Random Number Generator) is a state
 of the art C++ pseudo-random number generator library for sequential and
 parallel Monte Carlo simulations. It provides a variety of random number engines
 (pseudo-random number generators) and distributions. In particular, *parallel*

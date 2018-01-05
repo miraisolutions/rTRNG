@@ -1,6 +1,6 @@
 Package: rTRNG
 Title: Parallel Random Number Generation via TRNG
-Version: 0.0.1
+Version: 4.19-1
 Authors@R: c(person("Riccardo", "Porreca", role = c("aut", "cre"),
                     email = "riccardo.porreca@mirai-solutions.com"),
              person("Roland", "Schmid", role = "aut",
