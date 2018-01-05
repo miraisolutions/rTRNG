@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 C_runif_trng <- function(n, min, max, engine, parallelGrain = 0L) {
-    .Call(rTRNG_C_runif_trng, n, min, max, engine, parallelGrain)
+    .Call(`_rTRNG_C_runif_trng`, n, min, max, engine, parallelGrain)
 }
 
 C_rnorm_trng <- function(n, mean, sd, engine, parallelGrain = 0L) {
-    .Call(rTRNG_C_rnorm_trng, n, mean, sd, engine, parallelGrain)
+    .Call(`_rTRNG_C_rnorm_trng`, n, mean, sd, engine, parallelGrain)
 }
 

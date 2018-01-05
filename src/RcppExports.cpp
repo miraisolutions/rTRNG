@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // C_runif_trng
 NumericVector C_runif_trng(const int n, const double min, const double max, S4 engine, const long parallelGrain);
-RcppExport SEXP rTRNG_C_runif_trng(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
+RcppExport SEXP _rTRNG_C_runif_trng(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,7 +22,7 @@ END_RCPP
 }
 // C_rnorm_trng
 NumericVector C_rnorm_trng(const int n, const double mean, const double sd, S4 engine, const long parallelGrain);
-RcppExport SEXP rTRNG_C_rnorm_trng(SEXP nSEXP, SEXP meanSEXP, SEXP sdSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
+RcppExport SEXP _rTRNG_C_rnorm_trng(SEXP nSEXP, SEXP meanSEXP, SEXP sdSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,8 +39,8 @@ END_RCPP
 RcppExport SEXP _rcpp_module_boot_trng();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"rTRNG_C_runif_trng", (DL_FUNC) &rTRNG_C_runif_trng, 5},
-    {"rTRNG_C_rnorm_trng", (DL_FUNC) &rTRNG_C_rnorm_trng, 5},
+    {"_rTRNG_C_runif_trng", (DL_FUNC) &_rTRNG_C_runif_trng, 5},
+    {"_rTRNG_C_rnorm_trng", (DL_FUNC) &_rTRNG_C_rnorm_trng, 5},
     {"_rcpp_module_boot_trng", (DL_FUNC) &_rcpp_module_boot_trng, 0},
     {NULL, NULL, 0}
 };
