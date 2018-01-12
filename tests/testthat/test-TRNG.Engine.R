@@ -1,9 +1,17 @@
 context("TRNG.Engine")
 
-engineClasses <- list(lagfib2plus_19937_64, lagfib2xor_19937_64, lagfib4plus_19937_64, lagfib4xor_19937_64, lcg64, lcg64_shift, mrg2, mrg3, mrg3s, mrg4, mrg5, mrg5s, mt19937, mt19937_64, yarn2, yarn3, yarn3s, yarn4, yarn5, yarn5s)
+engineClasses <- list(
+  lagfib2plus_19937_64, lagfib2xor_19937_64, lagfib4plus_19937_64, lagfib4xor_19937_64,
+  lcg64, lcg64_shift, mrg2, mrg3, mrg3s, mrg4, mrg5, mrg5s, mt19937, mt19937_64,
+  yarn2, yarn3, yarn3s, yarn4, yarn5, yarn5s
+)
 # engineClasses <- list(lcg64)
 # engineClass <- yarn2
 # library(testthat)
+
+# exclude 64-bit engines in case we're not running in 64-bit R
+if (.Machine$sizeof.pointer != 8L)
+  engineClasses <- engineClasses[!grepl("64", engineClasses)]
 
 rdist.test <- function(n, engine) {
   runif_trng(n, engine = engine)
