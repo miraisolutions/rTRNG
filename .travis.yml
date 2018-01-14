@@ -7,8 +7,6 @@ cache: packages
 r:
   - oldrel
   - release
-  - devel 
-### NOTE: WARNING about vignette.rds on R-devel
-### => http://r.789695.n4.nabble.com/R-CMD-build-then-check-fails-on-R-devel-due-to-serialization-version-td4747582.html
+  - devel
 
 warnings_are_errors: true
