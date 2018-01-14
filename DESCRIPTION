@@ -21,7 +21,7 @@ Imports:
     RcppParallel
 Suggests:
     roxygen2,
-    testthat,
+    testthat (>= 2.0.0),
     knitr,
     rmarkdown
 LinkingTo:

@@ -20,6 +20,18 @@ test_that("constructor with no arguments works", {
 })
 
 
+test_that("name and kind return the engine name", {
+  for (engineClass in engineClasses) {
+    engineName <- sub("Rcpp_", "", as.character(engineClass))
+    e <- engineClass$new()
+    expect_identical(e$name(), e$kind(), info = as.character(engineClass))
+    expect_is(e$name(), "character", info = as.character(engineClass))
+    expect_equal(length(e$name()), 1, info = as.character(engineClass))
+    expect_identical(e$name(), !!engineName, info = as.character(engineClass))
+  }
+})
+
+
 test_that("toString returns a 1-length character", {
   for (engineClass in engineClasses) {
     e <- engineClass$new()
@@ -86,7 +98,7 @@ test_that("state is updated upon draw of random variates", {
 })
 
 
-test_that("state correctly persits", {
+test_that("state correctly persists", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- engineClass$new(SEED)
