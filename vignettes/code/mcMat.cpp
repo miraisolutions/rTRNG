@@ -11,7 +11,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericMatrix mcMatRcpp(const int nrow, const int ncol) {
   NumericMatrix M(nrow, ncol);
-  trng::yarn2 r(12345);
+  trng::yarn2 r(12358);
   trng::normal_dist<> normal(0.0, 1.0);
   for (int i = 0; i < nrow; i++) {
     for (int j = 0; j < ncol; j++) {
