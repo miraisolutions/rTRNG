@@ -4,7 +4,7 @@
 ## ---- mcMatR
 mcMatR <- function(nrow, ncol) {
   r <- yarn2$new(12358)
-  M <- matrix(rnorm_trng(nrow*ncol, engine = r),
+  M <- matrix(rnorm_trng(nrow * ncol, engine = r),
               nrow = nrow, ncol = ncol, byrow = TRUE)
   M
 }
@@ -14,8 +14,8 @@ mcMatR <- function(nrow, ncol) {
 mcSubMatR <- function(nrow, ncol,
                       startRow, endRow, subCols) {
   r <- yarn2$new(12358)
-  r$jump((startRow-1)*ncol)
-  nSubCols <- endRow-startRow+1
+  r$jump((startRow - 1)*ncol)
+  nSubCols <- endRow - startRow + 1
   S <- matrix(0.0, nrow, ncol)
   S[startRow:endRow, subCols] <-
     vapply(subCols,

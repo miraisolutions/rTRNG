@@ -31,13 +31,13 @@ NumericMatrix mcSubMatRcpp(const int nrow, const int ncol,
   NumericMatrix M(nrow, ncol);
   trng::yarn2 r(12358), rj;
   trng::normal_dist<> normal(0.0, 1.0);
-  r.jump((startRow-1)*ncol);
+  r.jump((startRow - 1) * ncol);
   for (IntegerVector::const_iterator jSub = subCols.begin();
        jSub < subCols.end(); jSub++) {
-    int j = *jSub-1;
+    int j = *jSub - 1;
     rj = r;
     rj.split(ncol, j);
-    for (int i = startRow-1; i < endRow; i++) {
+    for (int i = startRow - 1; i < endRow; i++) {
       M(i, j) = normal(rj);
     }
   }
