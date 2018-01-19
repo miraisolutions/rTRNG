@@ -19,9 +19,9 @@ Package \pkg{rTRNG} provides the \R users with access to the functionality of
 the underlying TRNG C++ library in different ways and at different levels.
 \itemize{
   \item
-    Base-\R \link{Random}-like usage via \link{TRNG.Random} functions.
-    This is the simplest and more immediate way for \R users to use
-    \pkg{rTRNG}.
+    Base-\R \link{Random}-like usage via \link{TRNG.Random} functions, for
+    selecting and manipulating the current engine. This is the simplest and
+    more immediate way for \R users to use \pkg{rTRNG}.
   \item
     \link[=TRNG.Engine]{Reference Objects} wrapping the underlying C++ TRNG
     random number engines can be created and manipulated in OOP-style. This
@@ -43,8 +43,7 @@ the underlying TRNG C++ library in different ways and at different levels.
 }
 See the package vignettes (\code{vignette(package = "rTRNG")}) for an
 overview and demos and refer to the examples in the documentation for further
-use cases. Directory \dQuote{inst/demos} contains additional demonstrative
-examples.
+use cases.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
