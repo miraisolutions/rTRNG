@@ -234,7 +234,8 @@ namespace trng {
 	name_str << "lagfib2plus_" << std::numeric_limits<result_type>::digits << '_'
 		 << A << '_' << B;
 	int i=0;
-	const char *p=name_str.str().c_str();
+	const std::string str=name_str.str();
+	const char *p=str.c_str();
 	while (p[i]!='\0' and i<63) {
 	  name_c_str[i]=p[i];
 	  ++i;
