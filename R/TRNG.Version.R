@@ -4,5 +4,5 @@
 #'
 #' @export
 TRNG.Version <- function() {
-  return("4.19")
+  return("4.20")
 }
