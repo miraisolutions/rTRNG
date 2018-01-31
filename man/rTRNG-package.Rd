@@ -47,7 +47,6 @@ use cases.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.19, \url{https://numbercrunch.de/trng/trng.pdf}.
 4.20, \url{https://numbercrunch.de/trng/trng.pdf}.
 
 Stephan Mertens, \emph{Random Number Generators: A Survival Guide

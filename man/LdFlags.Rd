@@ -19,6 +19,3 @@ Output the linker flags required to build against \pkg{rTRNG}.
 and from Makevars.win as
 \preformatted{PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")}
 }
-\seealso{
-Demo \dQuote{inst/demos/rTRNGinPkg.R}.
-}
