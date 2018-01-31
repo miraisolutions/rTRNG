@@ -14,9 +14,7 @@
 #' \preformatted{PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")}
 #' @return Returns NULL invisibly. The function is not called for its return
 #'   value rather for the side effect of outputting the flags.
-#' @seealso Demo \dQuote{inst/demos/rTRNGinPkg.R}.
 #' @export
-
 LdFlags <- function() {
   cat(rTRNGLdFlags())
 }
@@ -30,7 +28,7 @@ rTRNGLdFlags <- function() {
   # flags <- paste("-L", asBuildPath(dirname(LibPath)), " -l:", basename(LibPath), sep = "")
   # Option 2:
   # directly link against the library providing its full path
-  flags <- paste(asBuildPath((LibPath)), sep = "")
+  flags <- paste(asBuildPath(LibPath), sep = "")
   return(flags)
 }
 
@@ -40,7 +38,8 @@ rTRNGLib <- function() {
   if (nchar(.Platform$r_arch)) {
     libDir <- paste(libDir, .Platform$r_arch, sep = "/")
   }
-  system.file(paste(libDir, "/rTRNG", .Platform$dynlib.ext, sep = ""), package = "rTRNG")
+  system.file(paste(libDir, "/rTRNG", .Platform$dynlib.ext, sep = ""),
+              package = "rTRNG")
 }
 
 # Helper function to ape the behavior of the R build system when providing paths
@@ -48,7 +47,7 @@ rTRNGLib <- function() {
 asBuildPath <- function(path) {
   if (.Platform$OS.type == "windows") {
     path <- normalizePath(path)
-    if (grepl(' ', path, fixed=TRUE))
+    if (grepl(" ", path, fixed=TRUE))
       path <- utils::shortPathName(path)
     path <- gsub("\\\\", "/", path)
   }
