@@ -14,19 +14,30 @@ knitr::opts_chunk$set(
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 
-
 [![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 
-[TRNG](https://numbercrunch.de/trng/) (Tina's Random Number Generator) is a state
-of the art C++ pseudo-random number generator library for sequential and
+**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
+state of the art C++ pseudo-random number generator library for sequential and
 parallel Monte Carlo simulations. It provides a variety of random number engines
 (pseudo-random number generators) and distributions. In particular, *parallel*
 random number engines provided by TRNG can be manipulated by `jump` and `split`
-operations and hence are suitable to parallel algorithms.
+operations, thus enabling techniques such as _block-splitting_ and
+_leapfrogging_ suitable to parallel algorithms.
 
 Package **rTRNG** provides the R users with access to the functionality of the
 underlying TRNG C++ library, both in R and as part of other projects combining R
 with C++.
+
+An [introduction to
+**rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r) [[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)],
+presented at the useR!2017 conference, and is also available as package vignette
+```{r useR2017}
+vignette("rTRNG.useR2017", "rTRNG")
+```
+For more information and references, you can browse the package documentation
+page via `help("rTRNG-package")`.
+
 
 ## Installation
 
@@ -39,8 +50,84 @@ devtools::install_github("miraisolutions/rTRNG")
 devtools::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
 ```
 
+
+## Examples 
+
+### Use TRNG engines from R
+
+Similarly to base-R (`?Random`), **rTRNG** allows to select and manipulate a
+_current_ TRNG engine of a given _kind_ (e.g. yarn2), and to draw from it using
+any of the provided `r<dist>_trng` functions
+```{r ex-TRNG.Random}
+library(rTRNG)
+TRNGkind("yarn2") 
+TRNGseed(12358)
+runif_trng(15)
+```
+In a similar way, `jump` and `split` operations can be applied to the current
+engine
+```{r ex-jump.split}
+TRNGseed(12358)
+TRNGjump(6) # advance by 6 the internal state
+TRNGsplit(5, 3) # generate une element every 5 staring from the 4th
+runif_trng(2) # compare to the full seqence above
+```
+
+TRNG engines can also be created and manipulated directly as Reference Class
+objects, and passed as `engine` argument to `r<dist>_trng`
+```{r ex-TRNG.Engine}
+rng <- yarn2$new()
+rng$seed(12358)
+rng$jump(6)
+rng$split(5, 3)
+runif_trng(2, engine = rng)
+```
+
+
+### Use TRNG from standalone C++
+
+The TRNG C++ library is made available to standalone C++ code sourced with
+`Rcpp::sourceCpp` thanks to the `Rcpp::depends` attribute
+```{Rcpp ex-Rcpp}
+// [[Rcpp::depends(rTRNG)]]
+#include <Rcpp.h>
+#include <trng/yarn2.hpp>
+#include <trng/uniform_dist.hpp>
+// [[Rcpp::export]]
+Rcpp::NumericVector exampleCpp() {
+  trng::yarn2 rng(12358);
+  rng.jump(6);
+  rng.split(5, 2); // 0-based index
+  Rcpp::NumericVector x(2);
+  trng::uniform_dist<>unif(0, 1);
+  for (unsigned int i = 0; i < 2; i++) {
+    x[i] = unif(rng);
+  }
+  return x;
+}
+/*** R
+exampleCpp()
+*/
+```
+```{r ex-Rcpp-R, echo = FALSE}
+exampleCpp()
+```
+
+
+### Use TRNG from other R packges
+
+Creating an R package with C++ code using the TRNG library is achieved by
+
+* adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
+* importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNC.Version)`
+* setting the relevant linker flags in Makevars[.win] via `TRNG::LdFlags()`
+    * Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+    * Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+
+
 ## Build note
 
-If you try to build the package yourself from source and run `Rcpp::compileAttributes()` during the process, you
-need to use a version of **Rcpp >= 0.12.11.2**. Earlier versions like 0.12.11 will not generate the desired
-`_rcpp_module_boot_trng` symbol in *RcppExports.cpp*.
+If you try to build the package yourself from source and run
+`Rcpp::compileAttributes()` during the process, you need to use a version of
+**Rcpp >= 0.12.11.2**. Earlier versions like 0.12.11 will not generate the
+desired `_rcpp_module_boot_trng` symbol in _RcppExports.cpp_.
