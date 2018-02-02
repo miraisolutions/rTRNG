@@ -1,8 +1,17 @@
 ---
 output: github_document
+################################################################################
+# NOTE: 
+# Make sure you have added an executable pre-commit hook in your local checkout 
+#   .git/hooks/pre-commit
+# to prevent accidental commits of README.Rmd not re-knitted to README.md.
+# If not, you can copy the hook from inst/tools
+#   $ cp inst/tools/pre-commit .git/hooks
+################################################################################
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -29,13 +38,25 @@ Package **rTRNG** provides the R users with access to the functionality of the
 underlying TRNG C++ library, both in R and as part of other projects combining R
 with C++.
 
-An [introduction to
-**rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r) [[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)],
-presented at the useR!2017 conference, and is also available as package vignette
-```{r useR2017}
+An
+[introduction to **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r)
+[[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)]
+was presented at the useR!2017 conference, and is also available as package
+vignette
+```{r check-useR2017, echo=FALSE}
+# make sure a vignette with this name exists, you may have to run
+# devtools::install(build_vignettes = TRUE)
+invisible( # prevents opening the vignette
+  withCallingHandlers(
+    vignette("rTRNG.useR2017", "rTRNG"),
+    warning = function(w) stop(w$message)
+  )
+)
+```
+```{r useR2017, eval = FALSE}
 vignette("rTRNG.useR2017", "rTRNG")
 ```
-For more information and references, you can browse the package documentation
+For more information and references, you can consult the package documentation
 page via `help("rTRNG-package")`.
 
 
@@ -83,7 +104,6 @@ rng$split(5, 3)
 runif_trng(2, engine = rng)
 ```
 
-
 ### Use TRNG from standalone C++
 
 The TRNG C++ library is made available to standalone C++ code sourced with
@@ -113,7 +133,6 @@ exampleCpp()
 exampleCpp()
 ```
 
-
 ### Use TRNG from other R packges
 
 Creating an R package with C++ code using the TRNG library is achieved by
@@ -121,8 +140,8 @@ Creating an R package with C++ code using the TRNG library is achieved by
 * adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
 * importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNC.Version)`
 * setting the relevant linker flags in Makevars[.win] via `TRNG::LdFlags()`
-    * Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-    * Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+* Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+* Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 
 
 ## Build note

@@ -9,13 +9,13 @@ rTRNG: R package providing access and examples to TRNG C++ library
 
 Package **rTRNG** provides the R users with access to the functionality of the underlying TRNG C++ library, both in R and as part of other projects combining R with C++.
 
-An [introduction to **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r) \[[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)\], presented at the useR!2017 conference, and is also available as package vignette
+An [introduction to **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r) \[[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)\] was presented at the useR!2017 conference, and is also available as package vignette
 
 ``` r
 vignette("rTRNG.useR2017", "rTRNG")
 ```
 
-For more information and references, you can browse the package documentation page via `help("rTRNG-package")`.
+For more information and references, you can consult the package documentation page via `help("rTRNG-package")`.
 
 Installation
 ------------
@@ -102,8 +102,8 @@ Creating an R package with C++ code using the TRNG library is achieved by
 -   adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
 -   importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNC.Version)`
 -   setting the relevant linker flags in Makevars\[.win\] via `TRNG::LdFlags()`
-    -   Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-    -   Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+-   Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+-   Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 
 Build note
 ----------
