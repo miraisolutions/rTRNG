@@ -4,3 +4,4 @@
 ^src/.*\.o$
 ^src/trng/.*\.o$
 ^\.travis\.yml$
+^cran-comments\.md$
