@@ -1,10 +1,10 @@
 #' @rdname TRNG.Random
 #' @description \code{TRNG.Random.seed} allows to get a full represention of the
-#'   current state of the engine in use, and to restore the current engine from 
+#'   current state of the engine in use, and to restore the current engine from
 #'   such representation.
 #' @usage
 #' TRNG.Random.seed(engspec)
-#' @param engspec Optional two-element character vector \code{c(kind, state)}, 
+#' @param engspec Optional two-element character vector \code{c(kind, state)},
 #'   where the second element is a character representation of the current
 #'   engine's internal state and parameters.
 #'
@@ -20,7 +20,7 @@ TRNG.Random.seed <- function(engspec) {
   if (missing(engspec)) {
     return(getCurrentEngine()$.Random.seed())
   } else {
-  setCurrentEngine(get(engspec[1])$new(engspec[2]))
+    setCurrentEngine(get(engspec[1])$new(engspec[2]))
     return(invisible(NULL))
   }
 }
