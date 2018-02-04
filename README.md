@@ -51,7 +51,7 @@ In a similar way, `jump` and `split` operations can be applied to the current en
 ``` r
 TRNGseed(12358)
 TRNGjump(6) # advance by 6 the internal state
-TRNGsplit(5, 3) # generate une element every 5 staring from the 4th
+TRNGsplit(5, 3) # generate une element every 5 staring from the 3rd
 runif_trng(2) # compare to the full seqence above
 #> [1] 0.1217994 0.5506924
 ```
