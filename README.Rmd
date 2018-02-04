@@ -140,8 +140,8 @@ Creating an R package with C++ code using the TRNG library is achieved by
 * adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
 * importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNC.Version)`
 * setting the relevant linker flags in Makevars[.win] via `TRNG::LdFlags()`
-* Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-* Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+    * Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+    * Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 
 
 ## Build note
