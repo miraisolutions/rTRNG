@@ -3,7 +3,7 @@
 rTRNG: R package providing access and examples to TRNG C++ library
 ==================================================================
 
-[![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG) <!-- 
+[![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG) <!-- CRAN badge issues with local R CMD check
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 -->
 
