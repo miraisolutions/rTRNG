@@ -1,7 +1,7 @@
-#include <Rcpp.h>
-#include <RcppParallel.h>
 #include <trng/uniform_dist.hpp>
 #include <trng/normal_dist.hpp>
+#include <Rcpp.h>
+#include <RcppParallel.h>
 
 #include "Engine.h" // includes TRNG engine headers
 
@@ -128,15 +128,17 @@ NumericVector rdist_dispatch(const int n, D dist,
 
 
 // [[Rcpp::export]]
-NumericVector C_runif_trng(const int n, const double min, const double max,
-                           S4 engine, const long parallelGrain = 0) {
+NumericVector C_runif_trng(
+    const int n, const double min, const double max,
+    S4 engine, const long parallelGrain = 0) {
   uniform_dist<> dist(min, max);
   return rdist_dispatch(n, dist, engine, parallelGrain);
 }
 
 // [[Rcpp::export]]
-NumericVector C_rnorm_trng(const int n, const double mean, const double sd,
-                           S4 engine, const long parallelGrain = 0) {
+NumericVector C_rnorm_trng(
+    const int n, const double mean, const double sd,
+    S4 engine, const long parallelGrain = 0) {
   normal_dist<> dist(mean, sd);
   return rdist_dispatch(n, dist, engine, parallelGrain);
 }
