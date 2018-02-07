@@ -35,7 +35,7 @@ state of the current engine.}
 
 \item{s}{Index of the desired subsequence between \code{1} and \code{p}.}
 
-\item{engspec}{Optional two-element character vector \code{c(kind, state)}, 
+\item{engspec}{Optional two-element character vector \code{c(kind, state)},
 where the second element is a character representation of the current
 engine's internal state and parameters.}
 }
@@ -73,7 +73,7 @@ If the current engine is of a \emph{parallel} kind,
   element starting from the \code{p}th.
 
 \code{TRNG.Random.seed} allows to get a full represention of the
-  current state of the engine in use, and to restore the current engine from 
+  current state of the engine in use, and to restore the current engine from
   such representation.
 }
 \section{Details}{
