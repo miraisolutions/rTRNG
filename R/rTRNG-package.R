@@ -29,14 +29,15 @@
 #'     and packages using C++.
 #'     \itemize{
 #'     \item
-#'       Standalone C++ code sourced via \link[Rcpp]{sourceCpp} can rely on the
-#'       \link[=dependsAttribute]{Rcpp::depends} attribute to correctly setup
-#'       building against \pkg{rTRNG}.
+#'       Standalone C++ code sourced via \code{\link[Rcpp]{sourceCpp}} can rely
+#'       on the \code{\link[=dependsAttribute]{Rcpp::depends}} attribute to
+#'       correctly setup building against \pkg{rTRNG}.
 #'       \preformatted{// [[Rcpp::depends(rTRNG)]]}
 #'     \item
 #'       Creating an \R package with C++ code using the TRNG library is achived
 #'       by \code{LinkingTo: rTRNG} in the DESCRIPTION file and by setting the
-#'       relevant linker flags in Makevars[.win] via \link[rTRNG]{LdFlags}.
+#'       relevant linker flags in Makevars[.win] via
+#'       \code{\link[rTRNG]{LdFlags}}.
 #'     }
 #' }
 #' See the package vignettes (\code{browseVignettes("rTRNG")}) for an overview
