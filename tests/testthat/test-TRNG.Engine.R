@@ -37,7 +37,7 @@ rdist_test <- function(n, engine) {
 
 test_that("constructor with no arguments works", {
   for (engineClass in engineClasses) {
-    e <- engineClass$new()
+    expect_error(e <- engineClass$new(), NA, info = .name(engineClass))
     expect_is(e, as.character(engineClass), info = .name(engineClass))
   }
 })
