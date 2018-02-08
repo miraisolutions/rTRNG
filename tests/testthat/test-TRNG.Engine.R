@@ -39,6 +39,7 @@ test_that("constructor with no arguments works", {
   for (engineClass in engineClasses) {
     expect_error(e <- engineClass$new(), NA, info = .name(engineClass))
     expect_is(e, as.character(engineClass), info = .name(engineClass))
+    e <- NULL
   }
 })
 

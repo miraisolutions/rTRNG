@@ -27,6 +27,9 @@ test_rdist <- function(rdist, ...) {
   })
 
   test_that(paste(rdist_trng, "parallel genration via 'parallelGrain' works"), {
+    # CRAN policies: If running a package uses multiple threads/cores it must
+    # never use more than two simultaneously
+    RcppParallel::setThreadOptions(numThreads = 2)
     TRNGkind(KIND)
     TRNGseed(SEED)
     x_serial <- rdist_fun(SAMPLES_PAR, ...)
