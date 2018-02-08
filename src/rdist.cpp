@@ -75,7 +75,7 @@ NumericVector rdist_S4(const int n, D dist, S4 engine,
   // Ideally, we would like to use Rcpp::as (constructor from SEXP), but it
   // makes a copy of the underlying rng
   R* rngptr = S4ToEnginePtr<R>(engine)->getRNGptr();
-  return rdist(n, dist, *rngptr);
+  return rdist(n, dist, *rngptr, parallelGrain);
 }
 
 template<typename D, typename R>
