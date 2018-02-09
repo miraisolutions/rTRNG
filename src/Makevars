@@ -5,4 +5,4 @@ PKG_LIBS += $(shell ${R_HOME}/bin/Rscript \
 PKG_CPPFLAGS += -I../inst/include
 
 OBJECTS = $(shell ${R_HOME}/bin/Rscript \
-            -e "cat(sub('cc$$|cpp$$', 'o', list.files('.', '\\\\.(cc|cpp)$$', recursive = TRUE, full.names = TRUE)))")
+            -e "cat(sub('cc$$|cpp$$', 'o', list.files('.', '[.](cc|cpp)$$', recursive = TRUE, full.names = TRUE)))")
