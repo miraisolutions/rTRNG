@@ -7,7 +7,7 @@ rTRNG: R package providing access and examples to TRNG C++ library
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 -->
 
-**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a state of the art C++ pseudo-random number generator library for sequential and parallel Monte Carlo simulations. It provides a variety of random number engines (pseudo-random number generators) and distributions. In particular, *parallel* random number engines provided by TRNG can be manipulated by `jump` and `split` operations, thus enabling techniques such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
+**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a state of the art C++ pseudo-random number generator library for sequential and parallel Monte Carlo simulations. It provides a variety of random number engines (pseudo-random number generators) and distributions. In particular, *parallel* random number engines provided by TRNG can be manipulated by `jump` and `split` operations. These allow to `jump` ahead by an arbitrary number of steps and to `split` a sequence into any desired sub-sequence(s), thus enabling techniques such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
 
 Package **rTRNG** provides the R users with access to the functionality of the underlying TRNG C++ library, both in R and as part of other projects combining R with C++.
 
@@ -16,6 +16,14 @@ An [introduction to **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advan
 ``` r
 vignette("rTRNG.useR2017", "rTRNG")
 ```
+
+The *Sub-matrix simulation* vignette shows **rTRNG** in action for the flexible and consistent (parallel) simulation of a matrix of Monte Carlo variates:
+
+``` r
+vignette("mcMat", "rTRNG")
+```
+
+A full applied example of using **rTRNG** for the simulation of credit defaults was presented at the [R/Finance 2017](http://past.rinfinance.com/agenda/2017/talk/RiccardoPorreca.pdf) conference. The underlying code and data are hosted on [GitHub](https://github.com/miraisolutions/PortfolioRiskMC), as well as the corresponding [R Markdown output](https://rawgit.com/miraisolutions/PortfolioRiskMC/master/RinFinance2017/PortfolioSimAndRiskBig.html).
 
 For more information and references, you can consult the package documentation page via `help("rTRNG-package")`.
 
@@ -53,7 +61,7 @@ The special `jump` and `split` operations can be applied to the current engine i
 ``` r
 TRNGseed(12358)
 TRNGjump(6) # advance by 6 the internal state
-TRNGsplit(5, 3) # generate one element every 5 starting from the 3rd
+TRNGsplit(5, 3) # subsequence: one element every 5 starting from the 3rd
 runif_trng(2)
 #> [1] 0.1217994 0.5506924
 #   => compare to the full sequence above
@@ -68,6 +76,18 @@ rng$jump(6)
 rng$split(5, 3)
 runif_trng(2, engine = rng)
 #> [1] 0.1217994 0.5506924
+```
+
+In addition, parallel generation of random variates can be enabled in `r<dist>_trng` via `RcppParallel` using argument `parallelGrain > 0`:
+
+``` r
+TRNGseed(12358)
+RcppParallel::setThreadOptions(numThreads = 2)
+x_parallel <- rnorm_trng(1e5L, parallelGrain = 100L)
+TRNGseed(12358)
+x_serial <- rnorm_trng(1e5L)
+identical(x_serial, x_parallel)
+#> [1] TRUE
 ```
 
 ### Use TRNG from standalone C++
