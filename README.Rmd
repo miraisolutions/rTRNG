@@ -40,7 +40,7 @@ stop_if_no_vignette <- function(topic, package = "rTRNG") {
 <!-- CRAN badge issues with local R CMD check
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 -->
-
+[![Coverage Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
 **[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
 state of the art C++ pseudo-random number generator library for sequential and

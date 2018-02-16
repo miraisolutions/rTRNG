@@ -5,7 +5,7 @@ rTRNG: R package providing access and examples to TRNG C++ library
 
 [![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG) <!-- CRAN badge issues with local R CMD check
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
--->
+--> [![Coverage Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
 **[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a state of the art C++ pseudo-random number generator library for sequential and parallel Monte Carlo simulations. It provides a variety of random number engines (pseudo-random number generators) and distributions. In particular, *parallel* random number engines provided by TRNG can be manipulated by `jump` and `split` operations. These allow to `jump` ahead by an arbitrary number of steps and to `split` a sequence into any desired sub-sequence(s), thus enabling techniques such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
 
