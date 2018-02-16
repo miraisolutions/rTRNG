@@ -14,22 +14,35 @@ https://rpubs.com/Thell/knitRcpp
 -->
 ## Introduction
 
+**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
+state of the art C++ pseudo-random number generator library for sequential and
+parallel Monte Carlo simulations. It provides a variety of random number engines
+(pseudo-random number generators) and distributions. In particular, *parallel*
+random number engines provided by TRNG can be manipulated by `jump` and `split`
+operations. These allow to `jump` ahead by an arbitrary number of steps and to
+`split` a sequence into any desired sub-sequence(s), thus enabling techniques
+such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
+
+Package **rTRNG** provides the R users with access to the functionality of the
+underlying TRNG C++ library, both in R and as part of other projects combining R
+with C++.
+
 
 ### TRNG.Random
 
 The TRNG.Random functionality (see `?TRNG.Random`) provides a base-R-like access
 to TRNG random number engines by setting and manipulating the current engine in 
 use.
-```{r}
+```{r TRNG.Random}
 library(rTRNG)
 TRNGkind("yarn2")
 TRNGseed(117)
-TRNGjump(5)
-TRNGsplit(3, 2)
+TRNGjump(5) # advance by 5 the internal state
+TRNGsplit(3, 2) # subsequence: one element every 3 starting from the 2nd
 ```
 Random variates from the current engine are then generated using functions
 `r<dist>_trng`, e.g. `runif_trng` for the uniform distribution.
-```{r}
+```{r runif_trng}
 x <- runif_trng(10)
 x
 ```
@@ -37,29 +50,46 @@ x
 ### TRNG.Engine
 
 Random number engines can be explicitly created and manipulated using reference 
-objects from a number of classes (see `?TRNG.Engine`).
+objects from a number of classes (see `?TRNG.Engine`), e.g. `yarn2`.
 
-```{r}
+```{r TRNG.Engine}
 rng <- yarn2$new()
 rng$seed(117)
 # alternative: rng <- yarn2$new(117) 
-rng$jump(5)
-rng$split(3, 2)
+rng$jump(5) 
+rng$split(3, 2) 
 ```
 The engine object is then passed as `engine` argument of any `r<dist>_trng`
 function.
-```{r}
+```{r runif_trng-engine}
 x <- runif_trng(10, engine = rng)
 x
 ```
 
-### sourceCpp
+### Parallel generation
+
+The parallel nature of TRNG random number engines allow multi-threaded
+generation of random variates, with guaranteed equivalence to a
+purely-sequential generation. Parallel generation is available in `r<dist>_trng`
+with argument `parallelGrain > 0` and relies on `RcppParallel`, where the number
+of parallel threads is controlled via `RcppParallel::setThreadOptions`.
+```{r ex-parallelGrain}
+TRNGseed(117)
+RcppParallel::setThreadOptions(numThreads = 2)
+x_parallel <- runif_trng(1e5, parallelGrain = 100)
+TRNGseed(117)
+x_serial <- runif_trng(1e5)
+identical(x_serial, x_parallel)
+```
+
+
+### Standalone C++
 
 C++ code using the C++ TRNG library and header shipped with **rTRNG** can easily
-be sourced via `sourceCpp`, with the `Rcpp::depends` attribute taking care of 
-linking against the library.
+be sourced via `Rcpp::sourceCpp`, with the `Rcpp::depends` attribute taking care
+of linking against the library.
 
-```{r engine = 'Rcpp'}
+```{Rcpp sourceCpp}
 // [[Rcpp::depends(rTRNG)]]
 #include <Rcpp.h>
 #include <trng/yarn2.hpp>
@@ -76,7 +106,7 @@ NumericVector exampleCpp() {
   rng.split(3, 1); // note the C++ 0-based index for the subsequence
   NumericVector x(10);
   uniform_dist<> unif(0, 1);
-  for (int i = 0; i < 10; i++) {
+  for (unsigned int i = 0; i < 10; i++) {
     x[i] = unif(rng);
   }
   return x;
@@ -85,7 +115,7 @@ NumericVector exampleCpp() {
 exampleCpp()
 */
 ```
-```{r, echo=FALSE}
+```{r sourceCpp-R, echo=FALSE}
 exampleCpp()
 ```
 
