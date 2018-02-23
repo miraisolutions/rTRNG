@@ -1,5 +1,5 @@
 Package: rTRNG
-Title: Parallel Random Number Generation via TRNG
+Title: Advanced and Parallel Random Number Generation via TRNG
 Version: 4.20-0.9000
 Authors@R: c(person("Riccardo", "Porreca", role = c("aut", "cre"),
                     email = "riccardo.porreca@mirai-solutions.com"),
@@ -9,7 +9,7 @@ Authors@R: c(person("Riccardo", "Porreca", role = c("aut", "cre"),
                     email = "info@mirai-solutions.com"),
              person("Heiko", "Bauke", role = c("ctb", "cph"),
                     comment = "TRNG sources and headers"))
-Description: 
+Description:
     Embeds sources and headers from Tina's random number generation C++ library.
     Exposes some functionality for easier access, testing and benchmarking into R.
     Provides examples of how to use parallel RNG with RcppParallel.
@@ -35,7 +35,7 @@ URL: http://www.mirai-solutions.com, https://github.com/miraisolutions/rTRNG
 BugReports: https://github.com/miraisolutions/rTRNG/issues
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr, R.rsp
-Collate:
+Collate: 
     'LdFlags.R'
     'RcppExports.R'
     'TRNG.Engine.R'
