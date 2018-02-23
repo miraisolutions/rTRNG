@@ -36,14 +36,12 @@ stop_if_no_vignette <- function(topic, package = "rTRNG") {
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 
-[![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG)
-<!-- CRAN badge issues with local R CMD check
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
--->
+[![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG)
 [![Coverage Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
 **[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
-state of the art C++ pseudo-random number generator library for sequential and
+state-of-the-art C++ pseudo-random number generator library for sequential and
 parallel Monte Carlo simulations. It provides a variety of random number engines
 (pseudo-random number generators) and distributions. In particular, *parallel*
 random number engines provided by TRNG can be manipulated by `jump` and `split`
@@ -170,9 +168,8 @@ exampleCpp()
 
 ### Use TRNG from other R packges
 
-Creating an R package with C++ code using the TRNG library via **rTRNG** is
-achieved by
-
+Creating an R package with C++ code using the TRNG library and headers through
+**rTRNG** is achieved by
 * adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
 * importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
 * setting the relevant linker flags in Makevars[.win] via `rTRNG::LdFlags()`

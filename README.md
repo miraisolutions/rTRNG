@@ -3,11 +3,9 @@
 rTRNG: R package providing access and examples to TRNG C++ library
 ==================================================================
 
-[![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG) <!-- CRAN badge issues with local R CMD check
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
---> [![Coverage Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG) [![Travis-CI Build Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG) [![Coverage Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
-**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a state of the art C++ pseudo-random number generator library for sequential and parallel Monte Carlo simulations. It provides a variety of random number engines (pseudo-random number generators) and distributions. In particular, *parallel* random number engines provided by TRNG can be manipulated by `jump` and `split` operations. These allow to `jump` ahead by an arbitrary number of steps and to `split` a sequence into any desired sub-sequence(s), thus enabling techniques such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
+**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a state-of-the-art C++ pseudo-random number generator library for sequential and parallel Monte Carlo simulations. It provides a variety of random number engines (pseudo-random number generators) and distributions. In particular, *parallel* random number engines provided by TRNG can be manipulated by `jump` and `split` operations. These allow to `jump` ahead by an arbitrary number of steps and to `split` a sequence into any desired sub-sequence(s), thus enabling techniques such as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
 
 Package **rTRNG** provides the R users with access to the functionality of the underlying TRNG C++ library, both in R and as part of other projects combining R with C++.
 
@@ -120,13 +118,7 @@ exampleCpp()
 
 ### Use TRNG from other R packges
 
-Creating an R package with C++ code using the TRNG library via **rTRNG** is achieved by
-
--   adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
--   importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
--   setting the relevant linker flags in Makevars\[.win\] via `rTRNG::LdFlags()`
-    -   Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-    -   Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+Creating an R package with C++ code using the TRNG library and headers through **rTRNG** is achieved by \* adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file \* importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)` \* setting the relevant linker flags in Makevars\[.win\] via `rTRNG::LdFlags()` \* Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")` \* Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 
 Build note
 ----------
