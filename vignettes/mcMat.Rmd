@@ -4,16 +4,17 @@ author: "Riccardo Porreca, Roland Schmid"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Sub-matrix simulation}
+  %\VignetteIndexEntry{Matrix MC simulation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+knitr::opts_chunk$set(collapse = TRUE)
 options(digits = 5) # for kable
 ```
+
 
 ```{r include=FALSE, cache=FALSE}
 source("utils/read_chunk_wrap.R", echo = FALSE, print.eval = FALSE)
@@ -24,11 +25,11 @@ Rcpp::sourceCpp("code/mcMatParallel.cpp", verbose = FALSE, embeddedR = FALSE)
 read_chunk_wrap("code/mcMatParallel.cpp")
 ```
 
-
 Consider the Monte Carlo simulation of a matrix of i.i.d. normal random
 variables. We will show how **rTRNG** can be used to perform a consistent
-(*fair-playing*) simulation of any subset of the variables and simulations.
+(*fair-playing*) simulation of a subset of the variables and simulations.
 
+![](figures/mcMat.png){ width=85% }
 
 ## Consistent simulaton in R
 
@@ -56,8 +57,12 @@ knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 
 ## Consistent simulaton with Rcpp
 
-We now use Rcpp  to define functions `mcMatRcpp` and `mcSubMatRcpp` for the full
-sequential simulation and the sub-simulation, respectively.
+We now use **Rcpp** to define functions `mcMatRcpp` and `mcSubMatRcpp` for the
+full sequential simulation and the sub-simulation, respectively. The
+`Rcpp::depends` attribute makes sure the TRNG library and headers shipped with
+**rTRNG** are available to the C++ code.
+```{Rcpp depends-h-ns, eval=FALSE}
+```
 ```{Rcpp mcMatRcpp, eval=FALSE}
 ```
 ```{Rcpp mcSubMatRcpp, eval=FALSE}

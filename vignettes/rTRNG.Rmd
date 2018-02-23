@@ -1,23 +1,36 @@
 ---
-title: "Using rTRNG"
+title: "Introduction to rTRNG"
 author: "Riccardo Porreca, Roland Schmid"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using rTRNG}
+  %\VignetteIndexEntry{Introduction to rTRNG}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-<!---
-https://rpubs.com/Thell/knitRcpp
--->
-## Introduction
 
-**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
-state of the art C++ pseudo-random number generator library for sequential and
-parallel Monte Carlo simulations. It provides a variety of random number engines
-(pseudo-random number generators) and distributions. In particular, *parallel*
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+
+### Introduction
+
+Monte Carlo simulations provide a powerful computational approach to address a 
+wide variety of problems in several domains, such as physical sciences, 
+engineering, computational biology and finance. The independent-samples and 
+large-scale nature of Monte Carlo simulations make the corresponding computation
+suited for parallel execution, at least in theory. In practice, pseudo-random 
+number generators (RNGs) are intrinsically sequential. This often prevents
+having a parallel Monte Carlo algorithm that is *playing fair*, meaning that
+results are independent of the architecture, parallelization techniques and
+number of parallel processes.
+
+**rTRNG** is an R package for advanced parallel Random Number Generation in
+R. It relies on **[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number
+Generator), a state-of-the-art C++ pseudo-random number generator library for
+sequential and parallel Monte Carlo simulations.  In particular, *parallel*
 random number engines provided by TRNG can be manipulated by `jump` and `split`
 operations. These allow to `jump` ahead by an arbitrary number of steps and to
 `split` a sequence into any desired sub-sequence(s), thus enabling techniques
@@ -47,11 +60,11 @@ x <- runif_trng(10)
 x
 ```
 
+
 ### TRNG.Engine
 
 Random number engines can be explicitly created and manipulated using reference 
 objects from a number of classes (see `?TRNG.Engine`), e.g. `yarn2`.
-
 ```{r TRNG.Engine}
 rng <- yarn2$new()
 rng$seed(117)
@@ -66,10 +79,11 @@ x <- runif_trng(10, engine = rng)
 x
 ```
 
+
 ### Parallel generation
 
-The parallel nature of TRNG random number engines allow multi-threaded
-generation of random variates, with guaranteed equivalence to a
+The parallel nature of TRNG random number engines allows *fair-playing*
+multi-threaded generation of random variates, with guaranteed equivalence to a
 purely-sequential generation. Parallel generation is available in `r<dist>_trng`
 with argument `parallelGrain > 0` and relies on `RcppParallel`, where the number
 of parallel threads is controlled via `RcppParallel::setThreadOptions`.
@@ -85,10 +99,9 @@ identical(x_serial, x_parallel)
 
 ### Standalone C++
 
-C++ code using the C++ TRNG library and header shipped with **rTRNG** can easily
-be sourced via `Rcpp::sourceCpp`, with the `Rcpp::depends` attribute taking care
-of linking against the library.
-
+C++ code using the C++ TRNG library and headers shipped with **rTRNG** can
+easily be sourced via `Rcpp::sourceCpp`, with the `Rcpp::depends` attribute
+taking care of linking against the library.
 ```{Rcpp sourceCpp}
 // [[Rcpp::depends(rTRNG)]]
 #include <Rcpp.h>
@@ -96,7 +109,6 @@ of linking against the library.
 #include <trng/uniform_dist.hpp>
 using namespace Rcpp;
 using namespace trng;
-
 // [[Rcpp::export]]
 NumericVector exampleCpp() {
   yarn2 rng;
@@ -118,4 +130,16 @@ exampleCpp()
 ```{r sourceCpp-R, echo=FALSE}
 exampleCpp()
 ```
+
+
+### R packages
+
+Creating an R package with C++ code using the TRNG library and headers through
+**rTRNG** is achieved by
+
+* adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
+* importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
+* setting the relevant linker flags in Makevars[.win] via `rTRNG::LdFlags()`
+    * Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+    * Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 

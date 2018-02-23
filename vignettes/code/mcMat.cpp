@@ -1,10 +1,9 @@
+// ----- depends-h-ns
+// [[Rcpp::depends(rTRNG)]]
 #include <Rcpp.h>
 #include <trng/normal_dist.hpp>
 #include <trng/yarn2.hpp>
-
 using namespace Rcpp;
-
-// [[Rcpp::depends(rTRNG)]]
 
 
 // ----- mcMatRcpp
