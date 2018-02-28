@@ -15,7 +15,7 @@ An [introduction to **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advan
 vignette("rTRNG.useR2017", "rTRNG")
 ```
 
-The *Sub-matrix simulation* vignette shows **rTRNG** in action for the flexible and consistent (parallel) simulation of a matrix of Monte Carlo variates:
+The *sub-matrix simulation* vignette shows **rTRNG** in action for the flexible and consistent (parallel) simulation of a matrix of Monte Carlo variates:
 
 ``` r
 vignette("mcMat", "rTRNG")
@@ -36,6 +36,12 @@ devtools::install_github("miraisolutions/rTRNG")
 # in order to also build the vignettes, you'll have to run below instead
 devtools::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
 ```
+
+------------------------------------------------------------------------
+
+*Build note*
+
+If you try to build the package yourself from source and run `Rcpp::compileAttributes()` during the process, you need to use a version of **Rcpp &gt;= 0.12.11.2**. Earlier versions like 0.12.11 will not generate the desired `_rcpp_module_boot_trng` symbol in *RcppExports.cpp*.
 
 Examples
 --------
@@ -90,7 +96,7 @@ identical(x_serial, x_parallel)
 
 ### Use TRNG from standalone C++
 
-The TRNG C++ library is made available by **rTRNG** to standalone C++ code sourced with `Rcpp::sourceCpp` thanks to the `Rcpp::depends` attribute:
+The TRNG C++ library is made available by **rTRNG** to standalone C++ code compiled with `Rcpp::sourceCpp` thanks to the `Rcpp::depends` attribute:
 
 ``` cpp
 // [[Rcpp::depends(rTRNG)]]
@@ -116,11 +122,12 @@ exampleCpp()
 #> [1] 0.1217994 0.5506924
 ```
 
-### Use TRNG from other R packges
+### Use TRNG from other R packages
 
-Creating an R package with C++ code using the TRNG library and headers through **rTRNG** is achieved by \* adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file \* importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)` \* setting the relevant linker flags in Makevars\[.win\] via `rTRNG::LdFlags()` \* Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")` \* Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+Creating an R package with C++ code using the TRNG library and headers through **rTRNG** is achieved by
 
-Build note
-----------
-
-If you try to build the package yourself from source and run `Rcpp::compileAttributes()` during the process, you need to use a version of **Rcpp &gt;= 0.12.11.2**. Earlier versions like 0.12.11 will not generate the desired `_rcpp_module_boot_trng` symbol in *RcppExports.cpp*.
+-   adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
+-   importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
+-   setting the relevant linker flags in Makevars\[.win\] via `rTRNG::LdFlags()`
+    -   Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+    -   Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
