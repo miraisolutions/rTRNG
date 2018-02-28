@@ -45,7 +45,7 @@ upgradeTRNG <- function(version, cleanTmp = TRUE) {
   message("Prepend extra line to COPYRIGHTS")
   extraLine <- "** rTRNG includes source code from Tina's Random Number Generator C++ Library **"
   writeLines(c(extraLine, "",
-               readLines(con=TRNG.copyright)),
+               readLines(TRNG.copyright)),
              rTRNG.copyright)
 
   if (cleanTmp) {
@@ -58,8 +58,14 @@ upgradeTRNG <- function(version, cleanTmp = TRUE) {
   version.file <- "TRNG.Version.R"
   message("Update ", version.file, " source file")
   version.code <- sub("(return\\(\")([^\"]+)(\"\\))", paste0("\\1", version, "\\3"),
-                      readLines(con=file.path("R", version.file)))
+                      readLines(file.path("R", version.file)))
   writeLines(version.code, file.path("R", version.file))
+
+  rTRNG.version <- sprintf("%s-0.9000", version)
+  message("Update DESCRIPTION with version ", rTRNG.version)
+  description.text <- sub("(Version: ).*$", paste0("\\1", rTRNG.version),
+                          readLines("DESCRIPTION"))
+  writeLines(description.text, "DESCRIPTION")
 
   invisible()
 
