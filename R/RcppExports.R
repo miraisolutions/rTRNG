@@ -9,3 +9,15 @@ C_rnorm_trng <- function(n, mean, sd, engine, parallelGrain = 0L) {
     .Call(`_rTRNG_C_rnorm_trng`, n, mean, sd, engine, parallelGrain)
 }
 
+C_rlnorm_trng <- function(n, meanlog, sdlog, engine, parallelGrain = 0L) {
+    .Call(`_rTRNG_C_rlnorm_trng`, n, meanlog, sdlog, engine, parallelGrain)
+}
+
+C_rbinom_trng <- function(n, size, prob, engine, parallelGrain = 0L) {
+    .Call(`_rTRNG_C_rbinom_trng`, n, size, prob, engine, parallelGrain)
+}
+
+C_rpois_trng <- function(n, lambda, engine, parallelGrain = 0L) {
+    .Call(`_rTRNG_C_rpois_trng`, n, lambda, engine, parallelGrain)
+}
+

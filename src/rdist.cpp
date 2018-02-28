@@ -1,5 +1,8 @@
 #include <trng/uniform_dist.hpp>
 #include <trng/normal_dist.hpp>
+#include <trng/lognormal_dist.hpp>
+#include <trng/binomial_dist.hpp>
+#include <trng/poisson_dist.hpp>
 #include <Rcpp.h>
 #include <RcppParallel.h>
 
@@ -140,5 +143,29 @@ NumericVector C_rnorm_trng(
     const int n, const double mean, const double sd,
     S4 engine, const long parallelGrain = 0) {
   normal_dist<> dist(mean, sd);
+  return rdist_dispatch(n, dist, engine, parallelGrain);
+}
+
+// [[Rcpp::export]]
+NumericVector C_rlnorm_trng(
+    const int n, const double meanlog, const double sdlog,
+    S4 engine, const long parallelGrain = 0) {
+  lognormal_dist<> dist(meanlog, sdlog);
+  return rdist_dispatch(n, dist, engine, parallelGrain);
+}
+
+// [[Rcpp::export]]
+NumericVector C_rbinom_trng(
+    const int n, const int size, const double prob,
+    S4 engine, const long parallelGrain = 0) {
+  binomial_dist dist(prob, size);
+  return rdist_dispatch(n, dist, engine, parallelGrain);
+}
+
+// [[Rcpp::export]]
+NumericVector C_rpois_trng(
+    const int n, const double lambda,
+    S4 engine, const long parallelGrain = 0) {
+  poisson_dist dist(lambda);
   return rdist_dispatch(n, dist, engine, parallelGrain);
 }

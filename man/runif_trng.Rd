@@ -44,5 +44,7 @@ Random number generation for the uniform distribution
 \code{\link{runif}}, \code{\link{TRNG.Engine}},
   \code{\link{TRNG.Random}}.
 
-Other TRNG distributions: \code{\link{rnorm_trng}}
+Other TRNG distributions: \code{\link{rbinom_trng}},
+  \code{\link{rlnorm_trng}}, \code{\link{rnorm_trng}},
+  \code{\link{rpois_trng}}
 }

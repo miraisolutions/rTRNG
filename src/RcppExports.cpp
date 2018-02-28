@@ -35,12 +35,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_rlnorm_trng
+NumericVector C_rlnorm_trng(const int n, const double meanlog, const double sdlog, S4 engine, const long parallelGrain);
+RcppExport SEXP _rTRNG_C_rlnorm_trng(SEXP nSEXP, SEXP meanlogSEXP, SEXP sdlogSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type meanlog(meanlogSEXP);
+    Rcpp::traits::input_parameter< const double >::type sdlog(sdlogSEXP);
+    Rcpp::traits::input_parameter< S4 >::type engine(engineSEXP);
+    Rcpp::traits::input_parameter< const long >::type parallelGrain(parallelGrainSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rlnorm_trng(n, meanlog, sdlog, engine, parallelGrain));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_rbinom_trng
+NumericVector C_rbinom_trng(const int n, const int size, const double prob, S4 engine, const long parallelGrain);
+RcppExport SEXP _rTRNG_C_rbinom_trng(SEXP nSEXP, SEXP sizeSEXP, SEXP probSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const double >::type prob(probSEXP);
+    Rcpp::traits::input_parameter< S4 >::type engine(engineSEXP);
+    Rcpp::traits::input_parameter< const long >::type parallelGrain(parallelGrainSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rbinom_trng(n, size, prob, engine, parallelGrain));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_rpois_trng
+NumericVector C_rpois_trng(const int n, const double lambda, S4 engine, const long parallelGrain);
+RcppExport SEXP _rTRNG_C_rpois_trng(SEXP nSEXP, SEXP lambdaSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< S4 >::type engine(engineSEXP);
+    Rcpp::traits::input_parameter< const long >::type parallelGrain(parallelGrainSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rpois_trng(n, lambda, engine, parallelGrain));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_trng();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rTRNG_C_runif_trng", (DL_FUNC) &_rTRNG_C_runif_trng, 5},
     {"_rTRNG_C_rnorm_trng", (DL_FUNC) &_rTRNG_C_rnorm_trng, 5},
+    {"_rTRNG_C_rlnorm_trng", (DL_FUNC) &_rTRNG_C_rlnorm_trng, 5},
+    {"_rTRNG_C_rbinom_trng", (DL_FUNC) &_rTRNG_C_rbinom_trng, 5},
+    {"_rTRNG_C_rpois_trng", (DL_FUNC) &_rTRNG_C_rpois_trng, 4},
     {"_rcpp_module_boot_trng", (DL_FUNC) &_rcpp_module_boot_trng, 0},
     {NULL, NULL, 0}
 };

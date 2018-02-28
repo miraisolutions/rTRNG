@@ -48,5 +48,8 @@ test_rdist <- function(rdist, ...) {
 }
 
 
-test_rdist("runif")
-test_rdist("rnorm")
+test_rdist("runif", min = 0, max = 1)
+test_rdist("rnorm", mean = 0, sd = 1)
+test_rdist("rlnorm", meanlog = 0, sdlog = 1)
+test_rdist("rbinom", size = 1L, prob = 0.5)
+test_rdist("rpois", lambda = 4)
