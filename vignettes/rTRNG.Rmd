@@ -100,8 +100,8 @@ identical(x_serial, x_parallel)
 ### Standalone C++
 
 C++ code using the C++ TRNG library and headers shipped with **rTRNG** can
-easily be sourced via `Rcpp::sourceCpp`, with the `Rcpp::depends` attribute
-taking care of linking against the library.
+easily be compiled, specifying the `Rcpp::depends` attribute that allows
+`Rcpp::sourceCpp` to link correcly against the library.
 ```{Rcpp sourceCpp}
 // [[Rcpp::depends(rTRNG)]]
 #include <Rcpp.h>
@@ -137,9 +137,8 @@ exampleCpp()
 Creating an R package with C++ code using the TRNG library and headers through
 **rTRNG** is achieved by
 
-* adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
-* importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
-* setting the relevant linker flags in Makevars[.win] via `rTRNG::LdFlags()`
-    * Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-    * Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
-
+- adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
+- importing one symbol in the NAMESPACE: `importFrom(rTRNG, TRNG.Version)`
+- setting the relevant linker flags in Makevars[.win] via `rTRNG::LdFlags()`
+    - Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+    - Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
