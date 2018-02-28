@@ -13,12 +13,17 @@ rTRNG.package.skeleton <- function(name = "anRpackage",
     name = name, path = path, force = force,
     code_files = code_files,
     environment = new.env(), # needed to prevent 'Rcpp.fake.fun' error
-    cpp_files = c(cpp_files, file.path(demos, "skeletonFiles",
-                                       c(# linker flags via rTRNG::LdFlags()
-                                         "Makevars", "Makevars.win",
-                                         # simple Rcpp function using TRNG
-                                         if (example_code) "trng_hello_world.cpp"
-                                       ))),
+    cpp_files = c(
+      cpp_files,
+      file.path(
+        demos, "skeletonFiles",
+        c(# linker flags via rTRNG::LdFlags()
+          "Makevars", "Makevars.win",
+          # simple Rcpp function using TRNG
+          if (example_code) "trng_hello_world.cpp"
+        )
+      )
+    ),
     example_code = FALSE,
     author = author, maintainer = maintainer, email = email, license = license
   )
@@ -33,7 +38,10 @@ rTRNG.package.skeleton <- function(name = "anRpackage",
   message(" >> added Imports: rTRNG")
   desc$LinkingTo <- paste0(desc$LinkingTo, ", rTRNG")
   message(" >> added LinkingTo: rTRNG")
+  desc$SystemRequirements <- "GNU make"
+  message(" >> added SystemRequirements: GNU make")
   write.dcf(desc, file = file.path(pkg, "DESCRIPTION"), keep.white = TRUE)
+
 
   # import one symbol in the package NAMESPACE to ensure correct loading
   importFrom <- "importFrom(rTRNG, TRNG.Version)"
@@ -50,6 +58,8 @@ pkgName <- "pkgUsingTRNG"
 pkg <- file.path(tempdir(), pkgName)
 
 rTRNG.package.skeleton(pkgName, dirname(pkg))
+
+devtools::check(pkg)
 
 devtools::install(pkg)
 
