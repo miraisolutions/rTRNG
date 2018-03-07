@@ -4,6 +4,7 @@
 #' @templateVar rdist rbinom
 #' @templateVar n n
 #' @templateVar distparam size,prob
+#' @example man-roxygen/example-rbinom_trng.R
 #' @export
 rbinom_trng <- function(n, size, prob,
                         engine = NULL, parallelGrain = 0L) {

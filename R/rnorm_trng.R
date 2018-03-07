@@ -4,6 +4,7 @@
 #' @templateVar rdist rnorm
 #' @templateVar n n
 #' @templateVar distparam mean,sd
+#' @example man-roxygen/example-rnorm_trng.R
 #' @export
 rnorm_trng <- function(n, mean = 0, sd = 1,
                        engine = NULL, parallelGrain = 0L) {

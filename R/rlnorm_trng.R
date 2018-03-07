@@ -4,6 +4,7 @@
 #' @templateVar rdist rlnorm
 #' @templateVar n n
 #' @templateVar distparam meanlog,sdlog
+#' @example man-roxygen/example-rlnorm_trng.R
 #' @export
 rlnorm_trng <- function(n, meanlog = 0, sdlog = 1,
                         engine = NULL, parallelGrain = 0L) {

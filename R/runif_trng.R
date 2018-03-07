@@ -4,6 +4,7 @@
 #' @templateVar rdist runif
 #' @templateVar n n
 #' @templateVar distparam min,max
+#' @example man-roxygen/example-runif_trng.R
 #' @export
 runif_trng <- function(n, min = 0, max = 1,
                        engine = NULL, parallelGrain = 0L) {
