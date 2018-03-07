@@ -50,8 +50,9 @@ test_that("$name and $kind return the engine name", {
     e <- engineClass$new()
     expect_identical(e$name(), e$kind(), info = .name(engineClass))
     expect_is(e$name(), "character", info = .name(engineClass))
-    expect_equal(length(e$name()), 1, info = .name(engineClass))
+    expect_identical(length(e$name()), 1L, info = .name(engineClass))
     expect_identical(e$name(), !!engineName, info = .name(engineClass))
+    e <- NULL
   }
 })
 
@@ -61,7 +62,8 @@ test_that("$toString returns a 1-length character", {
     e <- engineClass$new()
     s <- e$toString()
     expect_is(s, "character", info = .name(engineClass))
-    expect_equal(length(s), 1, info = .name(engineClass))
+    expect_identical(length(s), 1L, info = .name(engineClass))
+    e <- NULL
   }
 })
 
@@ -73,6 +75,7 @@ test_that("$seed changes the internal state", {
     e$seed(SEED)
     postSeed <- e$toString()
     expect_false(preSeed == postSeed, info = .name(engineClass))
+    e <- NULL
   }
 })
 
@@ -82,9 +85,10 @@ test_that("constructor with seed argument works", {
     e <- engineClass$new()
     e$seed(SEED)
     f <- engineClass$new(SEED)
-    expect_equal(e$toString(), f$toString(), info = .name(engineClass))
-    expect_equal(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                 info = .name(engineClass))
+    expect_identical(e$toString(), f$toString(), info = .name(engineClass))
+    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+                     info = .name(engineClass))
+    e <- f <- NULL
   }
 })
 
@@ -93,9 +97,10 @@ test_that("constructor with string argument works", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- engineClass$new(e$toString())
-    expect_equal(e$toString(), f$toString(), info = .name(engineClass))
-    expect_equal(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                 info = .name(engineClass))
+    expect_identical(e$toString(), f$toString(), info = .name(engineClass))
+    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+                     info = .name(engineClass))
+    e <- f <- NULL
   }
 })
 
@@ -106,6 +111,7 @@ test_that("constructor with wrong string argument errors", {
     f <- engineClass$new(e$toString())
     expect_error(engineClass$new("!dummy!"), "failed to restore",
                  info = .name(engineClass))
+    e <- f <- NULL
   }
 })
 
@@ -117,6 +123,7 @@ test_that("the state is updated upon draw of random variates", {
     invisible(rdist_test(SAMPLES, e))
     postDraw <- e$toString()
     expect_false(preDraw == postDraw, info = .name(engineClass))
+    e <- NULL
   }
 })
 
@@ -125,10 +132,11 @@ test_that("the state correctly persists for future draws", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- engineClass$new(SEED)
-    expect_equal(c(rdist_test(ceiling(SAMPLES/2), e),
-                   rdist_test(floor(SAMPLES/2), e)),
-                 rdist_test(SAMPLES, f),
-                 info = .name(engineClass))
+    expect_identical(c(rdist_test(ceiling(SAMPLES/2), e),
+                       rdist_test(floor(SAMPLES/2), e)),
+                     rdist_test(SAMPLES, f),
+                     info = .name(engineClass))
+    e <- f <- NULL
   }
 })
 
@@ -137,9 +145,10 @@ test_that("$copy works and detaches the new engine from the original one", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- e$copy()
-    expect_equal(e$toString(), f$toString(), info = .name(engineClass))
-    expect_equal(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                 info = .name(engineClass))
+    expect_identical(e$toString(), f$toString(), info = .name(engineClass))
+    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+                     info = .name(engineClass))
+    e <- f <- NULL
   }
 })
 
@@ -149,10 +158,11 @@ test_that("assignment is by reference to the same underlying engine", {
     e <- engineClass$new(SEED)
     g <- e
     f <- e$copy()
-    expect_equal(c(rdist_test(ceiling(SAMPLES/2), e),
-                   rdist_test(floor(SAMPLES/2), g)),
-                 rdist_test(SAMPLES, f),
-                 info = .name(engineClass))
+    expect_identical(c(rdist_test(ceiling(SAMPLES/2), e),
+                       rdist_test(floor(SAMPLES/2), g)),
+                     rdist_test(SAMPLES, f),
+                     info = .name(engineClass))
+    e <- f <- g <- NULL
   }
 })
 
@@ -167,10 +177,11 @@ test_that("$jump works for parallel engines", {
                    info = .name(engineClass))
     } else {
       f$jump(steps)
-      expect_equal(rdist_test(SAMPLES, e)[-seq_len(steps)],
-                   rdist_test(SAMPLES-steps, f),
-                   info = .name(engineClass))
+      expect_identical(rdist_test(SAMPLES, e)[-seq_len(steps)],
+                       rdist_test(SAMPLES-steps, f),
+                       info = .name(engineClass))
     }
+    e <- f <- NULL
   }
 })
 
@@ -186,10 +197,11 @@ test_that("$split works for parallel engines", {
                    info = .name(engineClass))
     } else {
       f$split(p, s)
-      expect_equal(rdist_test(SAMPLES, e)[seq(4, SAMPLES, 5)],
-                   rdist_test(SAMPLES/p, f),
-                   info = .name(engineClass))
+      expect_identical(rdist_test(SAMPLES, e)[seq(4, SAMPLES, 5)],
+                       rdist_test(SAMPLES/p, f),
+                       info = .name(engineClass))
     }
+    e <- f <- NULL
   }
 })
 
@@ -201,6 +213,7 @@ test_that("$jump errors for negative argument values", {
       expect_error(e$jump(-1L), "negative",
                    info = .name(engineClass))
     }
+    e <- NULL
   }
 })
 
@@ -219,6 +232,7 @@ test_that("$split errors for out-of-range subsequence indices", {
       expect_error(e$split(-1L, 1L), "negative",
                    info = .name(engineClass))
     }
+    e <- NULL
   }
 })
 
@@ -229,5 +243,6 @@ test_that("$.Random.seed returns the engine name and internal state", {
     expect_identical(e$.Random.seed(),
                      c(e$kind(), e$toString()),
                      info = .name(engineClass))
+    e <- NULL
   }
 })

@@ -55,12 +55,12 @@ subCols <- c(2, 4:5)
 ## ---- fullMatExampleRcppParallel
 M <- mcMatRcpp(rows, cols)
 Mp <- mcMatRcppParallel(rows, cols, seq_len(ncol(M)))
-all.equal(M, Mp)
+identical(M, Mp)
 ## ----
 # Consistent parallel sub-simulation
 ## ---- subMatExampleRcppParallel
 Sp <- mcMatRcppParallel(rows, cols, subCols)
-all.equal(M[, subCols],
+identical(M[, subCols],
           Sp[, subCols])
 # ----
 View(cbind.data.frame(M = M, Sp = Sp),

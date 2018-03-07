@@ -40,7 +40,7 @@ endRow <- 6
 subCols <- c(2, 4:5)
 S <- mcSubMatR(rows, cols,
                startRow, endRow, subCols)
-all.equal(M[startRow:endRow, subCols],
+identical(M[startRow:endRow, subCols],
           S[startRow:endRow, subCols])
 ## ----
 View(cbind.data.frame(M = M, S = S),

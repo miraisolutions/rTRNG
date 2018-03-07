@@ -13,13 +13,13 @@ r$seed(117)
 r
 ## construct with given initial seed
 s <- yarn2$new(117)
-all.equal(s$toString(), r$toString())
+identical(s$toString(), r$toString())
 
 ## construct from string representation
 s <- yarn2$new(r$toString()) # implicitly creates a copy
-all.equal(s$toString(), r$toString())
+identical(s$toString(), r$toString())
 s <- yarn2$new("") # same as yarn2$new()
-all.equal(s$toString(), yarn2$new()$toString())
+identical(s$toString(), yarn2$new()$toString())
 \dontrun{
   ## error if the string is not a valid representation
   s <- yarn2$new("invalid")
@@ -28,7 +28,7 @@ all.equal(s$toString(), yarn2$new()$toString())
 ## copy vs. reference
 r_ref <- r # reference to the same engine object
 r_cpy <- r$copy() # copy an engine
-all.equal(r_cpy$toString(), r$toString())
+identical(r_cpy$toString(), r$toString())
 rbind(c(runif_trng(4, engine = r), runif_trng(6, engine = r_ref)),
       runif_trng(10, engine = r_cpy))
 
@@ -59,3 +59,4 @@ r$name()
 ## use $.Random.seed() to set the current engine (as a copy)
 r$.Random.seed()
 TRNG.Random.seed(r$.Random.seed())
+
