@@ -4,7 +4,7 @@
 #
 #' @description
 #'
-#' Tina's Random Number Generator Library (\pkg{TRNG}) is a state of the art C++
+#' Tina's Random Number Generator Library (\pkg{TRNG}) is a state-of-the-art C++
 #' pseudo-random number generator library for sequential and parallel Monte
 #' Carlo simulations (\url{https://numbercrunch.de/trng/}). It provides a variety
 #' of random number engines (pseudo-random number generators) and distributions.

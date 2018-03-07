@@ -26,8 +26,8 @@ TRNG.Random.seed(engspec)
 "default" for the \pkg{rTRNG} \link[=defaultKind]{default kind}
 (\code{"yarn2"}).}
 
-\item{seed}{Scalar seed, interpreted as integer, determining the internal
-state of the current engine.}
+\item{seed}{Scalar integer seed, determining the internal state of the
+current engine.}
 
 \item{steps}{Number of steps to jump ahead.}
 
@@ -51,7 +51,7 @@ state and parameters restored from \code{state}.
 }
 \description{
 The functions below allow setting and manipulating the current
-  TRNG random number engine (pseudo-random number generator), similarly to
+  TRNG random number engine (pseudo-random number generator), similar to
   base-\R \link{Random}. The current engine is then used for generating
   random variates via any of the \code{r<dist>_trng} functions (e.g.,
   \code{\link{runif_trng}}).
@@ -69,8 +69,8 @@ If the current engine is of a \emph{parallel} kind,
 
 If the current engine is of a \emph{parallel} kind,
   \code{TRNGsplit} updates its internal state and parameters in order to
-  generate a subsequence obtained by decimation, producing every \code{s}th
-  element starting from the \code{p}th.
+  generate directly a subsequence obtained by decimation, producing every
+  \code{s}th element starting from the \code{p}th.
 
 \code{TRNG.Random.seed} allows to get a full represention of the
   current state of the engine in use, and to restore the current engine from
@@ -91,11 +91,11 @@ number generation and engines, including details about the state size and
 period of the TRNG generators.
 
 
-The current engine is an instance of one \link[=TRNG.Engine]{TRNG engine 
-class} provided by \pkg{rTRNG}, which is stored as \code{"TRNGengine"} global
-option. If not exlicitly set via \code{TRNGkind}, and engine of the
-\link[=defaultKind]{default kind} is implicitly created at the first call to
-any \code{TRNG*} or \code{r<dist>_trng} function. Note that the current
+The current engine is an instance of one \link[=TRNG.Engine]{TRNG engine
+class} provided by \pkg{rTRNG}, and is stored as \code{"TRNGengine"} global
+option. If not explicitly set via \code{TRNGkind}, an engine of
+\link[=defaultKind]{default kind} is implicitly created upon the first call
+to any \code{TRNG*} or \code{r<dist>_trng} function. Note that the current
 engine is not persistent across \R sessions. Function \code{TRNG.Random.seed}
 can be used to extract and restore the current engine and its internal state.
 }

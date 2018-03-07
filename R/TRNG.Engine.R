@@ -2,8 +2,8 @@
 #' @description
 #' \link[=ReferenceClasses]{Reference Classes} exposing random number engines
 #' (pseudo-random number generators) in the TRNG C++ library. Engine objects of
-#' a class \code{engineClass} are created as \code{x = engineClass$new(\dots)},
-#' and a method \code{m} is invoked as \code{x$method(\dots)}.
+#' a class \code{engineClass} are created as \code{x <- engineClass$new(\dots)},
+#' and a method \code{m} is invoked as \code{x$m(\dots)}.
 #'
 #' @name TRNG.Engine
 #'
@@ -29,16 +29,16 @@
 #' @section Constructors:
 #' \describe{
 #'   \item{\code{$new()}}{
-#'   Construct a random engine object using default seed and parameters.
+#'   Construct a random engine object using default seed and internal parameters.
 #'   }
 #'   \item{\code{$new(seed)}}{
-#'   Construct a random engine object with the given integer \code{seed} and
-#'   default parameters.
+#'   Construct a random engine object with default internal parameters using the
+#'   provided \code{seed}.
 #'   }
 #'   \item{\code{$new(string)}}{
 #'   Construct a random engine object restoring its internal state and
 #'   parameters from a character \code{string}, falling back to \code{$new()}
-#'   for empty strings. See \code{$toString()} method.
+#'   for empty strings. See method \code{$toString()}.
 #'   }
 #' }
 #'
@@ -52,9 +52,10 @@
 #'   \emph{parallel} engines only.
 #'   }
 #'   \item{\code{$split(p, s)}}{
-#'   Update the internal state and parameters of the engine so that it will
-#'   directly generate the \code{s}th of \code{p} subsequences, with \code{s} in
-#'   [\code{1}, \code{p}]. Applies to \emph{parallel} engines only.
+#'   Update the internal state and parameters of the engine for generating
+#'   directly the \code{s}th of \code{p} subsequences, with \code{s} in
+#'   [\code{1}, \code{p}], producing one element every \code{s} starting from
+#'   the \code{p}th. Applies to \emph{parallel} engines only.
 #'   }
 #'   \item{\code{$name()}, \code{$kind()}}{
 #'   Return the name of the random number engine (e.g., \code{"yarn2"}), also
@@ -87,9 +88,9 @@
 #'
 #' Random number engines from the C++ TRNG library are exposed to \R using
 #' \pkg{\link{Rcpp}} \code{\linkS4class{Module}}s. As a consequence, the
-#' arguments to all Constructors and Methods above are not be passed by name but
-#' by order. Morever, arguments and return values are both defined in terms of
-#' C++ data types. Details can be displayed via the standard
+#' arguments to all Constructors and Methods above are not passed by name but by
+#' order. Morever, arguments and return values are both defined in terms of C++
+#' data types. Details can be displayed via the standard
 #' \link[=ReferenceClasses]{Reference Class} documentation method \code{$help}
 #' (e.g., \code{yarn2$help(split)}).
 #'
@@ -103,12 +104,12 @@
 #'     interval, whereas the TRNG C++ implementation follows C++ \code{0}-based
 #'     indexing, thus allowing values in [\code{0}, \code{p-1}].
 #'   \item
-#'     Constructor \code{new(string)} and method \code{toString} rely on
+#'     Constructor \code{new(string)} and method \code{toString()} rely on
 #'     streaming operators \code{>>} and \code{<<} available for all C++ TRNG
 #'     classes.
 #'   \item
-#'     TRNG C++ random number engine objects are \dQuote{copy-constructible} and
-#'     \dQuote{assignable}, whereas their \R counterparts in \pkg{rTRNG} are
+#'     TRNG C++ random number engine objects are \emph{copy-constructible} and
+#'     \emph{assignable}, whereas their \R counterparts in \pkg{rTRNG} are
 #'     purely reference-based. In particular, as for any \R
 #'     \link[=ReferenceClasses]{Reference Object}, engines are not copied upon
 #'     assignment but via the \code{$copy()} method.

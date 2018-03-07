@@ -37,7 +37,6 @@ runif_trng(10, engine = r_cpy)
 r_ref$jump(7) # jump 7 steps ahead
 runif_trng(3, engine = r) # jump has effect on the original r
 
-
 ## split
 r_cpy <- r$copy()
 runif_trng(10, engine = r)
