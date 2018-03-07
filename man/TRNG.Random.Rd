@@ -197,3 +197,7 @@ c(TRNGseed(117),
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
 4.20, \url{https://numbercrunch.de/trng/trng.pdf}.
 }
+\seealso{
+TRNG distributions:
+\code{\link{rbinom_trng}}, \code{\link{rlnorm_trng}}, \code{\link{rnorm_trng}}, \code{\link{rpois_trng}}, \code{\link{runif_trng}}.
+}

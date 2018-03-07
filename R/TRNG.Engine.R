@@ -2,8 +2,11 @@
 #' @description
 #' \link[=ReferenceClasses]{Reference Classes} exposing random number engines
 #' (pseudo-random number generators) in the TRNG C++ library. Engine objects of
-#' a class \code{engineClass} are created as \code{x <- engineClass$new(\dots)},
-#' and a method \code{m} is invoked as \code{x$m(\dots)}.
+#' a class \code{engineClass} are created as \code{r <- engineClass$new(\dots)},
+#' and a method \code{m} is invoked as \code{x$m(\dots)}. The engine object
+#' \code{r} can be then used for generating random variates via any of the
+#' \code{r<dist>_trng} functions (e.g., \code{\link{runif_trng}}), specifying
+#' the optional argument \code{engine = r}.
 #'
 #' @name TRNG.Engine
 #'
@@ -120,6 +123,8 @@
 #' @template references-TRNG
 #'
 #' @seealso \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}.
+#'
+#' @template seealso-rdist_trng
 #'
 #' @example man-roxygen/example-TRNG.Engine.R
 #'

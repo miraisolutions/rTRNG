@@ -21,5 +21,7 @@
 #'
 #' @template references-TRNG
 #'
+#' @template seealso-rdist_trng
+#'
 #' @example man-roxygen/example-TRNG.Random.R
 NULL
