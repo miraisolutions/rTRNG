@@ -68,6 +68,18 @@ test_that("$toString returns a 1-length character", {
 })
 
 
+test_that("$show and implicit call via print produce an output, truncated to 80 characters", {
+  rx <- "^\\[.{0,78}\\]$"
+  for (engineClass in engineClasses) {
+    e <- engineClass$new()
+    expect_output(e$show(), rx, info = .name(engineClass))
+    expect_output(show(e), rx, info = .name(engineClass))
+    expect_output(print(e), rx, info = .name(engineClass))
+    e <- NULL
+  }
+})
+
+
 test_that("$seed changes the internal state", {
   for (engineClass in engineClasses) {
     e <- engineClass$new()
