@@ -33,6 +33,7 @@ stop_if_no_vignette <- function(topic, package = "rTRNG") {
 }
 ```
 
+<img src="man/figures/rTRNG.svg" align="right" width="15%" height="15%"/>
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 

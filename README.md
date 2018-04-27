@@ -1,5 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<img src="man/figures/rTRNG.svg" align="right" width="15%" height="15%"/>
+
 rTRNG: R package providing access and examples to TRNG C++ library
 ==================================================================
 
