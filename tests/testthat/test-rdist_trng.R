@@ -14,16 +14,20 @@ test_rdist <- function(rdist, ...) {
   test_that(paste(rdist_trng, "returns the correct number of samples"), {
     TRNGkind(KIND)
     TRNGseed(SEED)
-    expect_identical(length(rdist_fun(SAMPLES, ...)),
-                     SAMPLES)
+    expect_identical(
+      length(rdist_fun(SAMPLES, ...)),
+      SAMPLES
+    )
   })
 
   test_that(paste(rdist_trng, "works with explicit 'engine' argument"), {
     TRNGkind(KIND)
     TRNGseed(SEED)
     e <- KIND_CLASS$new(SEED)
-    expect_identical(rdist_fun(SAMPLES, ...),
-                     rdist_fun(SAMPLES, ..., engine = e))
+    expect_identical(
+      rdist_fun(SAMPLES, ...),
+      rdist_fun(SAMPLES, ..., engine = e)
+    )
   })
 
   test_that(paste(rdist_trng, "parallel genration via 'parallelGrain' works"), {
@@ -35,14 +39,18 @@ test_rdist <- function(rdist, ...) {
     x_serial <- rdist_fun(SAMPLES_PAR, ...)
     TRNGseed(SEED)
     x_parallel <- rdist_fun(SAMPLES_PAR, ..., parallelGrain = 50L)
-    expect_identical(x_serial, x_parallel,
-                     info = "TRNG.Random current engine")
+    expect_identical(
+      x_serial, x_parallel,
+      info = "TRNG.Random current engine"
+    )
     e <- KIND_CLASS$new(SEED)
     x_serial <- rdist_fun(SAMPLES_PAR, ..., engine = e)
     e$seed(SEED)
     x_parallel <- rdist_fun(SAMPLES_PAR, ..., engine = e, parallelGrain = 50L)
-    expect_identical(x_serial, x_parallel,
-                     info = "explicit engine")
+    expect_identical(
+      x_serial, x_parallel,
+      info = "explicit engine"
+    )
   })
 
 }

@@ -98,8 +98,10 @@ test_that("constructor with seed argument works", {
     e$seed(SEED)
     f <- engineClass$new(SEED)
     expect_identical(e$toString(), f$toString(), info = .name(engineClass))
-    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                     info = .name(engineClass))
+    expect_identical(
+      rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+      info = .name(engineClass)
+    )
     e <- f <- NULL
   }
 })
@@ -110,8 +112,10 @@ test_that("constructor with string argument works", {
     e <- engineClass$new(SEED)
     f <- engineClass$new(e$toString())
     expect_identical(e$toString(), f$toString(), info = .name(engineClass))
-    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                     info = .name(engineClass))
+    expect_identical(
+      rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+      info = .name(engineClass)
+    )
     e <- f <- NULL
   }
 })
@@ -121,8 +125,10 @@ test_that("constructor with wrong string argument errors", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- engineClass$new(e$toString())
-    expect_error(engineClass$new("!dummy!"), "failed to restore",
-                 info = .name(engineClass))
+    expect_error(
+      engineClass$new("!dummy!"), "failed to restore",
+      info = .name(engineClass)
+    )
     e <- f <- NULL
   }
 })
@@ -144,10 +150,14 @@ test_that("the state correctly persists for future draws", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     f <- engineClass$new(SEED)
-    expect_identical(c(rdist_test(ceiling(SAMPLES/2), e),
-                       rdist_test(floor(SAMPLES/2), e)),
-                     rdist_test(SAMPLES, f),
-                     info = .name(engineClass))
+    expect_identical(
+      c(
+        rdist_test(ceiling(SAMPLES / 2), e),
+        rdist_test(floor(SAMPLES / 2), e)
+      ),
+      rdist_test(SAMPLES, f),
+      info = .name(engineClass)
+    )
     e <- f <- NULL
   }
 })
@@ -158,8 +168,10 @@ test_that("$copy works and detaches the new engine from the original one", {
     e <- engineClass$new(SEED)
     f <- e$copy()
     expect_identical(e$toString(), f$toString(), info = .name(engineClass))
-    expect_identical(rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
-                     info = .name(engineClass))
+    expect_identical(
+      rdist_test(SAMPLES, e), rdist_test(SAMPLES, f),
+      info = .name(engineClass)
+    )
     e <- f <- NULL
   }
 })
@@ -170,10 +182,14 @@ test_that("assignment is by reference to the same underlying engine", {
     e <- engineClass$new(SEED)
     g <- e
     f <- e$copy()
-    expect_identical(c(rdist_test(ceiling(SAMPLES/2), e),
-                       rdist_test(floor(SAMPLES/2), g)),
-                     rdist_test(SAMPLES, f),
-                     info = .name(engineClass))
+    expect_identical(
+      c(
+        rdist_test(ceiling(SAMPLES / 2), e),
+        rdist_test(floor(SAMPLES / 2), g)
+      ),
+      rdist_test(SAMPLES, f),
+      info = .name(engineClass)
+    )
     e <- f <- g <- NULL
   }
 })
@@ -185,13 +201,17 @@ test_that("$jump works for parallel engines", {
     f <- engineClass$new(SEED)
     steps <- 3L
     if (grepl("(lagfib|mt)", engineClass)) {
-      expect_error(f$jump(steps), "jump.*not.*valid",
-                   info = .name(engineClass))
+      expect_error(
+        f$jump(steps), "jump.*not.*valid",
+        info = .name(engineClass)
+      )
     } else {
       f$jump(steps)
-      expect_identical(rdist_test(SAMPLES, e)[-seq_len(steps)],
-                       rdist_test(SAMPLES-steps, f),
-                       info = .name(engineClass))
+      expect_identical(
+        rdist_test(SAMPLES, e)[-seq_len(steps)],
+        rdist_test(SAMPLES - steps, f),
+        info = .name(engineClass)
+      )
     }
     e <- f <- NULL
   }
@@ -205,13 +225,17 @@ test_that("$split works for parallel engines", {
     p <- 5L
     s <- 4L
     if (grepl("(lagfib|mt)", engineClass)) {
-      expect_error(f$split(p, s), "split.*not.*valid",
-                   info = .name(engineClass))
+      expect_error(
+        f$split(p, s), "split.*not.*valid",
+        info = .name(engineClass)
+      )
     } else {
       f$split(p, s)
-      expect_identical(rdist_test(SAMPLES, e)[seq(4, SAMPLES, 5)],
-                       rdist_test(SAMPLES/p, f),
-                       info = .name(engineClass))
+      expect_identical(
+        rdist_test(SAMPLES, e)[seq(4, SAMPLES, 5)],
+        rdist_test(SAMPLES / p, f),
+        info = .name(engineClass)
+      )
     }
     e <- f <- NULL
   }
@@ -222,8 +246,10 @@ test_that("$jump errors for negative argument values", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     if (!grepl("(lagfib|mt)", engineClass)) {
-      expect_error(e$jump(-1L), "negative",
-                   info = .name(engineClass))
+      expect_error(
+        e$jump(-1L), "negative",
+        info = .name(engineClass)
+      )
     }
     e <- NULL
   }
@@ -235,14 +261,22 @@ test_that("$split errors for out-of-range subsequence indices", {
     e <- engineClass$new(SEED)
     p <- 5L
     if (!grepl("(lagfib|mt)", engineClass)) {
-      expect_error(e$split(p, 0L), "invalid",
-                   info = .name(engineClass)) # 1-base indexing
-      expect_error(e$split(p, p+1L), "invalid",
-                   info = .name(engineClass))
-      expect_error(e$split(p, -1L), "negative",
-                   info = .name(engineClass))
-      expect_error(e$split(-1L, 1L), "negative",
-                   info = .name(engineClass))
+      expect_error(
+        e$split(p, 0L), "invalid", # 1-base indexing
+        info = .name(engineClass)
+      )
+      expect_error(
+        e$split(p, p + 1L), "invalid",
+        info = .name(engineClass)
+      )
+      expect_error(
+        e$split(p, -1L), "negative",
+        info = .name(engineClass)
+      )
+      expect_error(
+        e$split(-1L, 1L), "negative",
+        info = .name(engineClass)
+      )
     }
     e <- NULL
   }
@@ -252,9 +286,11 @@ test_that("$split errors for out-of-range subsequence indices", {
 test_that("$.Random.seed returns the engine name and internal state", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
-    expect_identical(e$.Random.seed(),
-                     c(e$kind(), e$toString()),
-                     info = .name(engineClass))
+    expect_identical(
+      e$.Random.seed(),
+      c(e$kind(), e$toString()),
+      info = .name(engineClass)
+    )
     e <- NULL
   }
 })

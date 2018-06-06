@@ -41,13 +41,17 @@ test_that("TRNG.Random.seed restores the current engine with correct kind and st
   engspec <- TRNG.Random.seed()
   x1 <- runif_trng(SAMPLES)
   TRNGkind("default")
-  expect_false(identical(TRNG.Random.seed(),
-                         engspec))
+  expect_false(identical(
+    TRNG.Random.seed(),
+    engspec
+  ))
   y <- runif_trng(SAMPLES)
   expect_false(identical(x1, y))
   TRNG.Random.seed(engspec)
-  expect_identical(TRNG.Random.seed(),
-                   engspec)
+  expect_identical(
+    TRNG.Random.seed(),
+    engspec
+  )
   x2 <- runif_trng(SAMPLES)
   expect_identical(x1, x2)
 })
@@ -63,8 +67,10 @@ test_that("TRNGseed yields the same random variates as the corresponding engine"
   TRNGkind(KIND)
   TRNGseed(SEED)
   e <- KIND_CLASS$new(SEED)
-  expect_identical(runif_trng(SAMPLES),
-                   runif_trng(SAMPLES, engine = e))
+  expect_identical(
+    runif_trng(SAMPLES),
+    runif_trng(SAMPLES, engine = e)
+  )
 })
 
 
@@ -75,8 +81,10 @@ test_that("TRNGjump yields the same random variates as the corresponding engine"
   TRNGjump(steps)
   e <- KIND_CLASS$new(SEED)
   e$jump(steps)
-  expect_identical(runif_trng(SAMPLES),
-                   runif_trng(SAMPLES, engine = e))
+  expect_identical(
+    runif_trng(SAMPLES),
+    runif_trng(SAMPLES, engine = e)
+  )
 })
 
 
@@ -88,8 +96,10 @@ test_that("TRNGsplit yields the same random variates as the corresponding engine
   TRNGsplit(p, s)
   e <- KIND_CLASS$new(SEED)
   e$split(p, s)
-  expect_identical(runif_trng(SAMPLES),
-                   runif_trng(SAMPLES, engine = e))
+  expect_identical(
+    runif_trng(SAMPLES),
+    runif_trng(SAMPLES, engine = e)
+  )
 })
 
 
@@ -122,7 +132,7 @@ test_that("TRNGsplit errors for out-of-range subsequence indices", {
   TRNGseed(SEED)
   p <- 5L
   expect_error(TRNGsplit(p, 0L), "invalid") # 1-base indexing
-  expect_error(TRNGsplit(p, p+1L), "invalid")
+  expect_error(TRNGsplit(p, p + 1L), "invalid")
   expect_error(TRNGsplit(p, -1L), "negative")
   expect_error(TRNGsplit(-1L, 1L), "negative")
 })

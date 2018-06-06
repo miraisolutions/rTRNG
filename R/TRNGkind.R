@@ -14,10 +14,10 @@ TRNGkind <- function(kind = NULL) {
     if (kind == "default") {
       kind <- defaultKind()
     }
-    rng <- withCallingHandlers(get(kind)$new(),
-                               error = function(e) {
-                                 stop("invalid kind '", kind, "'")
-                               })
+    rng <- withCallingHandlers(
+      get(kind)$new(),
+      error = function(e) stop("invalid kind '", kind, "'")
+    )
     setCurrentEngine(rng)
     invisible(initialKind)
   }

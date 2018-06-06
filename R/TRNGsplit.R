@@ -10,4 +10,3 @@
 TRNGsplit <- function(p, s) {
   getCurrentEngine()$split(p, s)
 }
-

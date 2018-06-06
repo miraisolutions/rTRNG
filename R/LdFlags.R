@@ -38,8 +38,10 @@ rTRNGLib <- function() {
   if (nchar(.Platform$r_arch)) {
     libDir <- paste(libDir, .Platform$r_arch, sep = "/")
   }
-  system.file(paste(libDir, "/rTRNG", .Platform$dynlib.ext, sep = ""),
-              package = "rTRNG")
+  system.file(
+    paste(libDir, "/rTRNG", .Platform$dynlib.ext, sep = ""),
+    package = "rTRNG"
+  )
 }
 
 # Helper function to ape the behavior of the R build system when providing paths
@@ -47,8 +49,9 @@ rTRNGLib <- function() {
 asBuildPath <- function(path) {
   if (.Platform$OS.type == "windows") {
     path <- normalizePath(path)
-    if (grepl(" ", path, fixed=TRUE))
+    if (grepl(" ", path, fixed = TRUE)) {
       path <- utils::shortPathName(path)
+    }
     path <- gsub("\\\\", "/", path)
   }
   return(path)
