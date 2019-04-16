@@ -89,11 +89,14 @@ page via `help("rTRNG-package")`.
 The package can be installed from our 
 [github repository](https://github.com/miraisolutions/rTRNG) with:
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("miraisolutions/rTRNG")
+# install.packages("remotes")
+remotes::install_github("miraisolutions/rTRNG")
 # in order to also build the vignettes, you'll have to run below instead
-devtools::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
+remotes::install_github("miraisolutions/rTRNG", build_opts = "")
 ```
+<!--
+NOTE: Argument `build_vignettes` not supported anymore in devtools/remotes (see r-lib/remotes#353). Instead, `build_opts = ""` can be used for a full installation including vignettes.
+-->
 
 ----
 
