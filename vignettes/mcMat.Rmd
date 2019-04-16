@@ -31,7 +31,7 @@ variables. We will show how **rTRNG** can be used to perform a consistent
 
 ![](figures/mcMat.png){ width=85% }
 
-## Consistent simulaton in R
+## Consistent simulation in R
 
 We rely on the TRNG engines exposed to R as reference classes by **rTRNG**.
 ```{r}
@@ -55,7 +55,7 @@ knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 ```
 
 
-## Consistent simulaton with Rcpp
+## Consistent simulation with Rcpp
 
 We now use **Rcpp** to define functions `mcMatRcpp` and `mcSubMatRcpp` for the
 full sequential simulation and the sub-simulation, respectively. The
@@ -76,7 +76,7 @@ knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 ```
 
 
-## Consistent parallel simulaton with RcppParallel
+## Consistent parallel simulation with RcppParallel
 
 The same technique used for generating a sub-set of the simulations can be
 exploited for performing a parallel simulation in C++. We can embed the body of

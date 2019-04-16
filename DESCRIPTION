@@ -33,7 +33,7 @@ LinkingTo:
 SystemRequirements: GNU make
 URL: http://www.mirai-solutions.com, https://github.com/miraisolutions/rTRNG
 BugReports: https://github.com/miraisolutions/rTRNG/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr, R.rsp
 Collate: 
     'LdFlags.R'

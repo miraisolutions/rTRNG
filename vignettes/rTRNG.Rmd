@@ -101,7 +101,7 @@ identical(x_serial, x_parallel)
 
 C++ code using the C++ TRNG library and headers shipped with **rTRNG** can
 easily be compiled, specifying the `Rcpp::depends` attribute that allows
-`Rcpp::sourceCpp` to link correcly against the library.
+`Rcpp::sourceCpp` to link correctly against the library.
 ```{Rcpp sourceCpp}
 // [[Rcpp::depends(rTRNG)]]
 #include <Rcpp.h>

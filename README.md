@@ -56,7 +56,7 @@ documentation page via `help("rTRNG-package")`.
 
 ## Installation
 
-The package can be installed from our [github
+The package can be installed from our [GitHub
 repository](https://github.com/miraisolutions/rTRNG) with:
 
 ``` r

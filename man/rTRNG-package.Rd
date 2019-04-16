@@ -38,7 +38,7 @@ the underlying TRNG C++ library in different ways and at different levels.
       correctly setup building against \pkg{rTRNG}.
       \preformatted{// [[Rcpp::depends(rTRNG)]]}
     \item
-      Creating an \R package with C++ code using the TRNG library is achived
+      Creating an \R package with C++ code using the TRNG library is achieved
       by \code{LinkingTo: rTRNG} in the DESCRIPTION file and by setting the
       relevant linker flags in Makevars[.win] via
       \code{\link[rTRNG]{LdFlags}}.
@@ -60,7 +60,7 @@ Stephan Mertens, \emph{Random Number Generators: A Survival Guide
 Useful links:
 \itemize{
   \item \url{http://www.mirai-solutions.com}
-  \item \url{https://github.com/miraisolutions/rTRNG}
+  \item \url{https://github.com/miraisolutions/rTRNG#readme}
   \item Report bugs at \url{https://github.com/miraisolutions/rTRNG/issues}
 }
 

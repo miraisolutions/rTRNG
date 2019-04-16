@@ -87,7 +87,7 @@ page via `help("rTRNG-package")`.
 ## Installation
 
 The package can be installed from our 
-[github repository](https://github.com/miraisolutions/rTRNG) with:
+[GitHub repository](https://github.com/miraisolutions/rTRNG) with:
 ```{r gh-installation, eval = FALSE}
 # install.packages("remotes")
 remotes::install_github("miraisolutions/rTRNG")

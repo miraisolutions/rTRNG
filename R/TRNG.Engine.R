@@ -92,7 +92,7 @@
 #' Random number engines from the C++ TRNG library are exposed to \R using
 #' \pkg{\link{Rcpp}} \code{\linkS4class{Module}}s. As a consequence, the
 #' arguments to all Constructors and Methods above are not passed by name but by
-#' order. Morever, arguments and return values are both defined in terms of C++
+#' order. Moreover, arguments and return values are both defined in terms of C++
 #' data types. Details can be displayed via the standard
 #' \link[=ReferenceClasses]{Reference Class} documentation method \code{$help}
 #' (e.g., \code{yarn2$help(split)}).

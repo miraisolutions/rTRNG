@@ -36,7 +36,7 @@
 #'       correctly setup building against \pkg{rTRNG}.
 #'       \preformatted{// [[Rcpp::depends(rTRNG)]]}
 #'     \item
-#'       Creating an \R package with C++ code using the TRNG library is achived
+#'       Creating an \R package with C++ code using the TRNG library is achieved
 #'       by \code{LinkingTo: rTRNG} in the DESCRIPTION file and by setting the
 #'       relevant linker flags in Makevars[.win] via
 #'       \code{\link[rTRNG]{LdFlags}}.

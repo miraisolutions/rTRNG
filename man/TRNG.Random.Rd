@@ -72,15 +72,15 @@ If the current engine is of a \emph{parallel} kind,
   generate directly a subsequence obtained by decimation, producing every
   \code{s}th element starting from the \code{p}th.
 
-\code{TRNG.Random.seed} allows to get a full represention of the
-  current state of the engine in use, and to restore the current engine from
-  such representation.
+\code{TRNG.Random.seed} allows to get a full representation of
+  the current state of the engine in use, and to restore the current engine
+  from such representation.
 }
 \section{Details}{
 
 The TRNG C++ library provides a collection of random number engines
 (pseudo-random number generators). In particular, compared to
-\emph{conventional} engines working in a purely sequantial manner,
+\emph{conventional} engines working in a purely sequential manner,
 \emph{parallel} engines can be manipulated via \code{jump} and \code{split}
 operations. Jumping allows to advance the internal state by a number of steps
 without generating all intermediate states, whereas split operations allow to

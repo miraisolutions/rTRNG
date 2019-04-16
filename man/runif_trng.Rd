@@ -64,3 +64,4 @@ Other TRNG distributions: \code{\link{rbinom_trng}},
   \code{\link{rlnorm_trng}}, \code{\link{rnorm_trng}},
   \code{\link{rpois_trng}}
 }
+\concept{TRNG distributions}

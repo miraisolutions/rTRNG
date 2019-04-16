@@ -1,7 +1,7 @@
 #' @section Details:
 #' The TRNG C++ library provides a collection of random number engines
 #' (pseudo-random number generators). In particular, compared to
-#' \emph{conventional} engines working in a purely sequantial manner,
+#' \emph{conventional} engines working in a purely sequential manner,
 #' \emph{parallel} engines can be manipulated via \code{jump} and \code{split}
 #' operations. Jumping allows to advance the internal state by a number of steps
 #' without generating all intermediate states, whereas split operations allow to

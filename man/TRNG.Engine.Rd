@@ -113,7 +113,7 @@ the optional argument \code{engine = r}.
 
 The TRNG C++ library provides a collection of random number engines
 (pseudo-random number generators). In particular, compared to
-\emph{conventional} engines working in a purely sequantial manner,
+\emph{conventional} engines working in a purely sequential manner,
 \emph{parallel} engines can be manipulated via \code{jump} and \code{split}
 operations. Jumping allows to advance the internal state by a number of steps
 without generating all intermediate states, whereas split operations allow to
@@ -128,7 +128,7 @@ period of the TRNG generators.
 Random number engines from the C++ TRNG library are exposed to \R using
 \pkg{\link{Rcpp}} \code{\linkS4class{Module}}s. As a consequence, the
 arguments to all Constructors and Methods above are not passed by name but by
-order. Morever, arguments and return values are both defined in terms of C++
+order. Moreover, arguments and return values are both defined in terms of C++
 data types. Details can be displayed via the standard
 \link[=ReferenceClasses]{Reference Class} documentation method \code{$help}
 (e.g., \code{yarn2$help(split)}).

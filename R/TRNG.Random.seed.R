@@ -1,7 +1,7 @@
 #' @rdname TRNG.Random
-#' @description \code{TRNG.Random.seed} allows to get a full represention of the
-#'   current state of the engine in use, and to restore the current engine from
-#'   such representation.
+#' @description \code{TRNG.Random.seed} allows to get a full representation of
+#'   the current state of the engine in use, and to restore the current engine
+#'   from such representation.
 #' @usage
 #' TRNG.Random.seed(engspec)
 #' @param engspec Optional two-element character vector \code{c(kind, state)},
