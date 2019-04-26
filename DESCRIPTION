@@ -1,40 +1,44 @@
 Package: rTRNG
 Title: Advanced and Parallel Random Number Generation via TRNG
 Version: 4.20-0.9000
-Authors@R: c(person("Riccardo", "Porreca", role = c("aut", "cre"),
-                    email = "riccardo.porreca@mirai-solutions.com"),
-             person("Roland", "Schmid", role = "aut",
-                    email = "roland.schmid@mirai-solutions.com"),
-             person("Mirai Solutions GmbH", role = "cph",
-                    email = "info@mirai-solutions.com"),
-             person("Heiko", "Bauke", role = c("ctb", "cph"),
-                    comment = "TRNG sources and headers"))
-Description:
-    Embeds sources and headers from Tina's Random Number Generator C++ library.
-    Exposes some functionality for easier access, testing and benchmarking into R.
-    Provides examples of how to use parallel RNG with RcppParallel.
+Authors@R: 
+    c(person("Riccardo", "Porreca", role = c("aut", "cre"),
+             email = "riccardo.porreca@mirai-solutions.com"),
+      person("Roland", "Schmid", role = "aut",
+             email = "roland.schmid@mirai-solutions.com"),
+      person("Mirai Solutions GmbH", role = "cph",
+             email = "info@mirai-solutions.com"),
+      person("Heiko", "Bauke", role = c("ctb", "cph"),
+             comment = "TRNG sources and headers"))
+Description: Embeds sources and headers from Tina's Random
+    Number Generator C++ library. Exposes some functionality for easier
+    access, testing and benchmarking into R. Provides examples of how to
+    use parallel RNG with RcppParallel.
 License: GPL-3
-LazyData: true
-NeedsCompilation: yes
+URL: https://github.com/miraisolutions/rTRNG#readme,
+    https://mirai-solutions.ch
+BugReports: https://github.com/miraisolutions/rTRNG/issues
+SystemRequirements: GNU make
 Imports:
     methods,
     Rcpp (>= 0.11.6),
     RcppParallel
 Suggests:
-    roxygen2,
-    testthat (>= 2.0.0),
+    covr,
     knitr,
-    rmarkdown,
     R.rsp,
-    covr
+    rmarkdown,
+    testthat (>= 2.0.0)
 LinkingTo:
     Rcpp,
     RcppParallel
-SystemRequirements: GNU make
-URL: http://www.mirai-solutions.com, https://github.com/miraisolutions/rTRNG
-BugReports: https://github.com/miraisolutions/rTRNG/issues
+VignetteBuilder: 
+    knitr,
+    R.rsp
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: yes
 RoxygenNote: 6.1.1
-VignetteBuilder: knitr, R.rsp
 Collate: 
     'LdFlags.R'
     'RcppExports.R'
