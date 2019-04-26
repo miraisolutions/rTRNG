@@ -59,8 +59,8 @@ Stephan Mertens, \emph{Random Number Generators: A Survival Guide
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://www.mirai-solutions.com}
   \item \url{https://github.com/miraisolutions/rTRNG#readme}
+  \item \url{https://mirai-solutions.ch}
   \item Report bugs at \url{https://github.com/miraisolutions/rTRNG/issues}
 }
 
