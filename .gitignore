@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-rTRNG.Rproj
 src/*.o
 src/*.so
 src/*.dll
