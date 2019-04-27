@@ -1,3 +1,12 @@
+## Resubmission
+
+This is a resubmission. In this version I have:
+* Single-quoted software names 'TRNG' and 'RcppParallel' in both Title and Description fields.
+
+Note that no reference about the methods behind 'TRNG' is available in the form Authors (year) <doi:.....>, to be included in the Description field. The main reference is the PDF manual of 'TRNG', which is listed among the References in the relevant man pages of the package.
+
+
+
 This is a new release.
 
 ## Test environments
