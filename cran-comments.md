@@ -1,3 +1,15 @@
+## Resubmission (2)
+
+This is a second resubmission. Requests and comments were addressed as follows.
+
+* 'TRNG' was added in parentheses after "Tina's Random Number Generator" in the
+Description field for clarification.
+
+* The Description field mentions package vignettes and examples illustrating the methods behind 'TRNG', and includes a reference to the PDF manual or 'TRNG'.
+
+* Note that all relevant exported functionality is covered by extensive examples (in the Rd files) and unit tests, and is described in action in the automatically-built R-markdown vignettes. Exceptions are the simple, zero-argument, constant-return functions defaultKind() and TRNG.Version(). A special case is function LdFlags(), which is meant for usage in Makevars.[win] of other packages, as described in the Rd file similar to other Rcpp packages (e.g. 'RcppParallel'). The effectiveness of the underlying internal function rTRNGLdFlags() is indirectly covered by the R-markdown vignettes using Rcpp::sourceCpp().
+
+
 ## Resubmission
 
 This is a resubmission. In this version I have:
