@@ -1,5 +1,5 @@
 Package: rTRNG
-Title: Advanced and Parallel Random Number Generation via TRNG
+Title: Advanced and Parallel Random Number Generation via 'TRNG'
 Version: 4.20-1
 Authors@R: 
     c(person("Riccardo", "Porreca", role = c("aut", "cre"),
@@ -13,7 +13,7 @@ Authors@R:
 Description: Embeds sources and headers from Tina's Random
     Number Generator C++ library. Exposes some functionality for easier
     access, testing and benchmarking into R. Provides examples of how to
-    use parallel RNG with RcppParallel.
+    use parallel RNG with 'RcppParallel'.
 License: GPL-3
 URL: https://github.com/miraisolutions/rTRNG#readme,
     https://mirai-solutions.ch
