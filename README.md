@@ -21,23 +21,23 @@ to `jump` ahead by an arbitrary number of steps and to `split` a
 sequence into any desired sub-sequence(s), thus enabling techniques such
 as *block-splitting* and *leapfrogging* suitable to parallel algorithms.
 
-Package **rTRNG** provides the R users with access to the functionality
-of the underlying TRNG C++ library, both in R and as part of other
-projects combining R with C++.
+Package **rTRNG** provides the R user with access to the functionality
+of the underlying TRNG C++ library, both in R directly or more typically
+as part of other projects combining R with C++.
 
 An [introduction to
 **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r)
 \[[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)\]
-was presented at the useR\!2017 conference, and is also available as
-package vignette:
+was given at the useR\!2017 conference, and is also available as package
+vignette:
 
 ``` r
 vignette("rTRNG.useR2017", "rTRNG")
 ```
 
-The *sub-matrix simulation* vignette shows **rTRNG** in action for the
-flexible and consistent (parallel) simulation of a matrix of Monte Carlo
-variates:
+The *sub-matrix simulation* vignette shows **rTRNG** in action for a
+flexible *and* consistent (parallel) simulation of a matrix of Monte
+Carlo variates:
 
 ``` r
 vignette("mcMat", "rTRNG")
@@ -47,8 +47,8 @@ A full applied example of using **rTRNG** for the simulation of credit
 defaults was presented at the
 [R/Finance 2017](http://past.rinfinance.com/agenda/2017/talk/RiccardoPorreca.pdf)
 conference. The underlying code and data are hosted on
-[GitHub](https://github.com/miraisolutions/PortfolioRiskMC), as well as
-the corresponding [R Markdown
+[GitHub](https://github.com/miraisolutions/PortfolioRiskMC), as is the
+corresponding [R Markdown
 output](https://rawgit.com/miraisolutions/PortfolioRiskMC/master/RinFinance2017/PortfolioSimAndRiskBig.html).
 
 For more information and references, you can consult the package
