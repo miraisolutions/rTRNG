@@ -56,7 +56,13 @@ documentation page via `help("rTRNG-package")`.
 
 ## Installation
 
-The package can be installed from our [GitHub
+You can install the package from CRAN:
+
+``` r
+install.packages("rTRNG")
+```
+
+The development version of **rTRNG** can be installed from our [GitHub
 repository](https://github.com/miraisolutions/rTRNG) with:
 
 ``` r

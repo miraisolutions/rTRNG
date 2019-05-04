@@ -86,9 +86,14 @@ page via `help("rTRNG-package")`.
 
 ## Installation
 
-The package can be installed from our 
+You can install the package from CRAN:
+```{r cran-install, eval = FALSE}
+install.packages("rTRNG")
+```
+
+The development version of **rTRNG** can be installed from our 
 [GitHub repository](https://github.com/miraisolutions/rTRNG) with:
-```{r gh-installation, eval = FALSE}
+```{r gh-install, eval = FALSE}
 # install.packages("remotes")
 remotes::install_github("miraisolutions/rTRNG")
 # in order to also build the vignettes, you'll have to run below instead
