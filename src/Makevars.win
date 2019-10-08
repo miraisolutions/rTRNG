@@ -5,6 +5,8 @@ PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" \
               -e "RcppParallel::RcppParallelLibs()")
 
 PKG_CPPFLAGS += -I../inst/include
+# path for the direct includes in TRNG sources from version 4.22
+PKG_CPPFLAGS += -I../inst/include/trng
 
 OBJECTS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" \
             -e "cat(sub('cc$$|cpp$$', 'o', list.files('.', '[.](cc|cpp)$$', recursive = TRUE, full.names = TRUE)))")
