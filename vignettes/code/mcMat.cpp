@@ -1,5 +1,7 @@
 // ----- depends-h-ns
 // [[Rcpp::depends(rTRNG)]]
+// TRNG >= 4.22 requires C++11
+// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
 #include <trng/normal_dist.hpp>
 #include <trng/yarn2.hpp>

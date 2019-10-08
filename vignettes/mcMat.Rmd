@@ -60,7 +60,9 @@ knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 We now use **Rcpp** to define functions `mcMatRcpp` and `mcSubMatRcpp` for the
 full sequential simulation and the sub-simulation, respectively. The
 `Rcpp::depends` attribute makes sure the TRNG library and headers shipped with
-**rTRNG** are available to the C++ code.
+**rTRNG** are available to the C++ code. Moreover, `Rcpp::plugins(cpp11)`
+enforces the C++11 standard required by TRNG >= 4.22.
+
 ```{Rcpp depends-h-ns, eval=FALSE}
 ```
 ```{Rcpp mcMatRcpp, eval=FALSE}

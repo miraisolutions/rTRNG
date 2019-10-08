@@ -145,10 +145,13 @@ identical(x_serial, x_parallel)
 
 The TRNG C++ library is made available by **rTRNG** to standalone C++
 code compiled with `Rcpp::sourceCpp` thanks to the `Rcpp::depends`
-attribute:
+attribute, with `Rcpp::plugins(cpp11)` enforcing the C++11 standard
+required by TRNG \>= 4.22:
 
 ``` cpp
 // [[Rcpp::depends(rTRNG)]]
+// TRNG >= 4.22 requires C++11
+// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
 #include <trng/yarn2.hpp>
 #include <trng/uniform_dist.hpp>
@@ -180,6 +183,8 @@ through **rTRNG** is achieved by
     file
   - importing one symbol in the NAMESPACE: `importFrom(rTRNG,
     TRNG.Version)`
+  - enforcing compilation using C++11 in Makevars\[.win\] via `CXX_STD =
+    CXX11`
   - setting the relevant linker flags in Makevars\[.win\] via
     `rTRNG::LdFlags()`
       - Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e

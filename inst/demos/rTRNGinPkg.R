@@ -17,7 +17,8 @@ rTRNG.package.skeleton <- function(name = "anRpackage",
       cpp_files,
       file.path(
         demos, "skeletonFiles",
-        c(# linker flags via rTRNG::LdFlags()
+        c(
+          # CXX11 and linker flags via rTRNG::LdFlags()
           "Makevars", "Makevars.win",
           # simple Rcpp function using TRNG
           if (example_code) "trng_hello_world.cpp"
