@@ -3,9 +3,10 @@
 ^man-roxygen$
 ^src/.*\.o$
 ^src/trng/.*\.o$
-^\.travis\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
-^cran-comments\.md$
+^\.travis\.yml$
 ^codecov\.yml$
+^appveyor\.yml$
+^cran-comments\.md$
 LICENSE
