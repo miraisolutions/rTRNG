@@ -1,4 +1,4 @@
-# rTRNG 4.20-1.9000
+# rTRNG 4.22-0.9000
 
 ## Maintenance release
 
