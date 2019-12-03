@@ -5,11 +5,14 @@
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
-[![Travis-CI Build
-Status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
+[![CRAN
+status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
+[![Travis build
+status](https://travis-ci.org/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRNG)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/miraisolutions/rTRNG?branch=master&svg=true)](https://ci.appveyor.com/project/riccardoporreca/rtrng)
+[![Codecov
+status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
 **[TRNG](https://numbercrunch.de/trng/)** (Tina’s Random Number
 Generator) is a state-of-the-art C++ pseudo-random number generator
@@ -145,10 +148,13 @@ identical(x_serial, x_parallel)
 
 The TRNG C++ library is made available by **rTRNG** to standalone C++
 code compiled with `Rcpp::sourceCpp` thanks to the `Rcpp::depends`
-attribute:
+attribute, with `Rcpp::plugins(cpp11)` enforcing the C++11 standard
+required by TRNG \>= 4.22:
 
 ``` cpp
 // [[Rcpp::depends(rTRNG)]]
+// TRNG >= 4.22 requires C++11
+// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
 #include <trng/yarn2.hpp>
 #include <trng/uniform_dist.hpp>
@@ -180,6 +186,8 @@ through **rTRNG** is achieved by
     file
   - importing one symbol in the NAMESPACE: `importFrom(rTRNG,
     TRNG.Version)`
+  - enforcing compilation using C++11 in Makevars\[.win\] via `CXX_STD =
+    CXX11`
   - setting the relevant linker flags in Makevars\[.win\] via
     `rTRNG::LdFlags()`
       - Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e
