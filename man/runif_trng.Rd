@@ -60,8 +60,10 @@ identical(x_serial, x_parallel)
 \code{\link{runif}}, \code{\link{TRNG.Engine}},
   \code{\link{TRNG.Random}}.
 
-Other TRNG distributions: \code{\link{rbinom_trng}},
-  \code{\link{rlnorm_trng}}, \code{\link{rnorm_trng}},
-  \code{\link{rpois_trng}}
+Other TRNG distributions: 
+\code{\link{rbinom_trng}()},
+\code{\link{rlnorm_trng}()},
+\code{\link{rnorm_trng}()},
+\code{\link{rpois_trng}()}
 }
 \concept{TRNG distributions}

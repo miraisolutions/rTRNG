@@ -4,8 +4,7 @@
 \alias{rlnorm_trng}
 \title{Log-normal random numbers via TRNG.}
 \usage{
-rlnorm_trng(n, meanlog = 0, sdlog = 1, engine = NULL,
-  parallelGrain = 0L)
+rlnorm_trng(n, meanlog = 0, sdlog = 1, engine = NULL, parallelGrain = 0L)
 }
 \arguments{
 \item{n}{Number of observations.}
@@ -61,8 +60,10 @@ identical(x_serial, x_parallel)
 \code{\link{rlnorm}}, \code{\link{TRNG.Engine}},
   \code{\link{TRNG.Random}}.
 
-Other TRNG distributions: \code{\link{rbinom_trng}},
-  \code{\link{rnorm_trng}}, \code{\link{rpois_trng}},
-  \code{\link{runif_trng}}
+Other TRNG distributions: 
+\code{\link{rbinom_trng}()},
+\code{\link{rnorm_trng}()},
+\code{\link{rpois_trng}()},
+\code{\link{runif_trng}()}
 }
 \concept{TRNG distributions}

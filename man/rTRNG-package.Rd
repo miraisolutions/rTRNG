@@ -35,7 +35,7 @@ the underlying TRNG C++ library in different ways and at different levels.
     \item
       Standalone C++ code sourced via \code{\link[Rcpp]{sourceCpp}} can rely
       on the \code{\link[=dependsAttribute]{Rcpp::depends}} attribute to
-      correctly setup building against \pkg{rTRNG}, with
+      correctly set up building against \pkg{rTRNG}, with
       \code{Rcpp::plugins(cpp11)} enforcing the C++11 standard required by
       TRNG >= 4.22:
       \preformatted{
