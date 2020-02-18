@@ -72,12 +72,8 @@ repository](https://github.com/miraisolutions/rTRNG) with:
 # install.packages("remotes")
 remotes::install_github("miraisolutions/rTRNG")
 # in order to also build the vignettes, you'll have to run below instead
-remotes::install_github("miraisolutions/rTRNG", build_opts = "")
+remotes::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
 ```
-
-<!--
-NOTE: Argument `build_vignettes` not supported anymore in devtools/remotes (see r-lib/remotes#353). Instead, `build_opts = ""` can be used for a full installation including vignettes.
--->
 
 -----
 
@@ -102,9 +98,9 @@ library(rTRNG)
 TRNGkind("yarn2") 
 TRNGseed(12358)
 runif_trng(15)
-#>  [1] 0.580259813 0.339434026 0.221393682 0.369402388 0.542678773
-#>  [6] 0.002851459 0.123996486 0.346813776 0.121799416 0.947124450
-#> [11] 0.336516569 0.128926181 0.380379891 0.550692382 0.436002654
+#>  [1] 0.58025981 0.33943403 0.22139368 0.36940239 0.54267877
+#>  [6] 0.00285146 0.12399649 0.34681378 0.12179942 0.94712445
+#> [11] 0.33651657 0.12892618 0.38037989 0.55069238 0.43600265
 ```
 
 The special `jump` and `split` operations can be applied to the current
@@ -115,7 +111,7 @@ TRNGseed(12358)
 TRNGjump(6) # advance by 6 the internal state
 TRNGsplit(5, 3) # subsequence: one element every 5 starting from the 3rd
 runif_trng(2)
-#> [1] 0.1217994 0.5506924
+#> [1] 0.121799 0.550692
 #   => compare to the full sequence above
 ```
 
@@ -128,7 +124,7 @@ rng$seed(12358)
 rng$jump(6)
 rng$split(5, 3)
 runif_trng(2, engine = rng)
-#> [1] 0.1217994 0.5506924
+#> [1] 0.121799 0.550692
 ```
 
 In addition, parallel generation of random variates can be enabled in
@@ -174,7 +170,7 @@ Rcpp::NumericVector exampleCpp() {
 
 ``` r
 exampleCpp()
-#> [1] 0.1217994 0.5506924
+#> [1] 0.121799 0.550692
 ```
 
 ### Use TRNG from other R packages

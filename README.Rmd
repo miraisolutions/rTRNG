@@ -17,7 +17,8 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "README-",
+  R.options = list(digits = 6, width = 60) # fit 5 elements per row
 )
 ```
 ```{r, check-vignette, include = FALSE}
@@ -98,11 +99,8 @@ The development version of **rTRNG** can be installed from our
 # install.packages("remotes")
 remotes::install_github("miraisolutions/rTRNG")
 # in order to also build the vignettes, you'll have to run below instead
-remotes::install_github("miraisolutions/rTRNG", build_opts = "")
+remotes::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
 ```
-<!--
-NOTE: Argument `build_vignettes` not supported anymore in devtools/remotes (see r-lib/remotes#353). Instead, `build_opts = ""` can be used for a full installation including vignettes.
--->
 
 ----
 
