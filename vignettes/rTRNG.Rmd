@@ -12,6 +12,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+linking_ok <- rTRNG::check_rTRNG_linking()
 ```
 
 
@@ -105,7 +106,7 @@ easily be compiled, specifying the `Rcpp::depends` attribute that allows
 `Rcpp::plugins(cpp11)` is needed to enforce the C++11 standard required by TRNG
 >= 4.22.
 
-```{Rcpp sourceCpp}
+```{Rcpp sourceCpp, eval=linking_ok}
 // [[Rcpp::depends(rTRNG)]]
 // TRNG >= 4.22 requires C++11
 // [[Rcpp::plugins(cpp11)]]
@@ -132,7 +133,7 @@ NumericVector exampleCpp() {
 exampleCpp()
 */
 ```
-```{r sourceCpp-R, echo=FALSE}
+```{r sourceCpp-R, echo=FALSE, eval=linking_ok}
 exampleCpp()
 ```
 

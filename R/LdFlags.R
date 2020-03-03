@@ -56,3 +56,34 @@ asBuildPath <- function(path) {
   }
   return(path)
 }
+
+sourceCpp_minimal_code <- '
+// [[Rcpp::depends(rTRNG)]]
+// [[Rcpp::plugins(cpp11)]]
+#include <Rcpp.h>
+#include <trng/yarn2.hpp>
+// [[Rcpp::export]]
+void exampleCpp() {
+  trng::yarn2 rng;
+}
+'
+
+#' Check rTRNG linking.
+#'
+#' Check whether C++ code using the TRNG library can be built and linked against
+#' \pkg{rTRNG} on the current system.
+#'
+#' @inheritParams base::try
+#'
+#' @return A scalar logical with the result of the check. If \code{FALSE}, using
+#'   the TRNG library from C++ code sourced via \code{\link[Rcpp]{sourceCpp}} or
+#'   part of an \R package is not expected to work.
+#'
+#' @export
+check_rTRNG_linking <- function(silent = FALSE) {
+  check <- try(
+    silent = silent,
+    Rcpp::sourceCpp(code = sourceCpp_minimal_code)
+  )
+  !inherits(check, "try-error")
+}

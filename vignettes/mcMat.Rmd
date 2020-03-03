@@ -13,16 +13,19 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 options(digits = 5) # for kable
+linking_ok <- rTRNG::check_rTRNG_linking()
 ```
 
 
 ```{r include=FALSE, cache=FALSE}
 source("utils/read_chunk_wrap.R", echo = FALSE, print.eval = FALSE)
 read_chunk_wrap("code/mcMat.R")
-Rcpp::sourceCpp("code/mcMat.cpp", verbose = FALSE, embeddedR = FALSE)
 read_chunk_wrap("code/mcMat.cpp")
-Rcpp::sourceCpp("code/mcMatParallel.cpp", verbose = FALSE, embeddedR = FALSE)
 read_chunk_wrap("code/mcMatParallel.cpp")
+if (linking_ok) {
+  Rcpp::sourceCpp("code/mcMat.cpp", verbose = FALSE, embeddedR = FALSE)
+  Rcpp::sourceCpp("code/mcMatParallel.cpp", verbose = FALSE, embeddedR = FALSE)
+}
 ```
 
 Consider the Monte Carlo simulation of a matrix of i.i.d. normal random
@@ -71,9 +74,9 @@ enforces the C++11 standard required by TRNG >= 4.22.
 ```
 As seen above for the R case, consistency of the simulation obtained via
 `mcSubMatRcpp` with the full sequential simulation is guaranteed.
-```{r subMatExampleRcpp}
+```{r subMatExampleRcpp, eval=linking_ok}
 ```
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=linking_ok}
 knitr::kable(cbind.data.frame(M = M, S = S), row.names = TRUE)
 ```
 
@@ -88,12 +91,12 @@ Monte Carlo simulations in parallel, for any subset `subCols` of the variables.
 ```
 The parallel nature of the `yarn2` generator ensures the parallel simulation is
 playing fair, i.e. is consistent with the sequential simulation.
-```{r fullMatExampleRcppParallel}
+```{r fullMatExampleRcppParallel, eval=linking_ok}
 ```
 Similarly, we can achieve a consistent parallel simulation of a subset of the
 variables only.
-```{r subMatExampleRcppParallel}
+```{r subMatExampleRcppParallel, eval=linking_ok}
 ```
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=linking_ok}
 knitr::kable(cbind.data.frame(M = M, Sp = Sp), row.names = TRUE)
 ```
