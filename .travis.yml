@@ -1,14 +1,34 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 cache: packages
-
-matrix:
-  include:
-  - r: devel
-  - r: release
-    after_success:
-    - Rscript -e 'covr::codecov()'
-  - r: oldrel
-
 warnings_are_errors: true
+
+r:
+- devel
+- release
+- oldrel
+
+os:
+- linux
+- osx
+
+# Vanilla macOS machine: remove preinstalled homebrew installation
+disable_homebrew: true
+
+jobs:
+  exclude:
+  # macOS binary packages not available for r-devel
+  - r: devel
+    os: osx
+
+# Code coverage
+after_success:
+  - >-
+    if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$TRAVIS_R_VERSION_STRING" = "release" ]; then
+      echo Code coverage...
+      Rscript -e 'covr::codecov()'
+    else
+      echo Skip code coverage
+    fi
+
