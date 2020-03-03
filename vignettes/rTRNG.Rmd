@@ -149,3 +149,15 @@ Creating an R package with C++ code using the TRNG library and headers through
 - setting the relevant linker flags in Makevars[.win] via `rTRNG::LdFlags()`
     - Makevars: `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
     - Makevars.win: `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+
+
+### Note about C++ code on macOS
+
+C++ code using the TRNG library (sourced via `Rcpp::sourceCpp` or part of an R
+package) might fail on certain systems due issues with building and linking
+against **rTRNG**. This is typically the case for  **macOS**, and can be in
+general checked by running
+
+```{r check-linking, eval=FALSE}
+rTRNG::check_rTRNG_linking()
+```
