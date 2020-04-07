@@ -17,7 +17,7 @@ linking_ok <- rTRNG::check_rTRNG_linking()
 ```
 
 
-```{r include=FALSE, cache=FALSE}
+```{r code, include=FALSE, cache=FALSE}
 source("utils/read_chunk_wrap.R", echo = FALSE, print.eval = FALSE)
 read_chunk_wrap("code/mcMat.R")
 read_chunk_wrap("code/mcMat.cpp")
