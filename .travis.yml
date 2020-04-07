@@ -9,22 +9,29 @@ r:
 - release
 - oldrel
 
+# TeXLive issues for osx images
+# https://travis-ci.community/t/latex-error-file-inconsolata-sty-not-found-only-on-osx-when-building-r-package/3261/4
 os:
 - linux
-- osx
+# - osx
 
-# Newer default osx images have issues with TeXLive
-# https://travis-ci.community/t/latex-error-file-inconsolata-sty-not-found-only-on-osx-when-building-r-package/3261/4
 osx_image: xcode9.2
 
 # Vanilla macOS machine: remove preinstalled homebrew installation
 disable_homebrew: true
 
 jobs:
-  exclude:
-  # macOS binary packages not available for r-devel
-  - r: devel
+#  exclude:
+#  # macOS binary packages not available for r-devel
+#  - r: devel
+#    os: osx
+  include:
+  - r: release
     os: osx
+    r_check_args: --no-manual
+  - r: oldrel
+    os: osx
+    r_check_args: --no-manual
 
 # Code coverage
 after_success:
