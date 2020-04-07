@@ -37,7 +37,7 @@ after_success:
   - >-
     if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$TRAVIS_R_VERSION_STRING" = "release" ]; then
       echo Code coverage...
-      Rscript -e 'covr::codecov()'
+      Rscript -e 'covr::codecov(type = "all")'
     else
       echo Skip code coverage
     fi
