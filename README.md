@@ -194,9 +194,9 @@ through **rTRNG** is achieved by
 ### Note about C++ code on macOS
 
 C++ code using the TRNG library (sourced via `Rcpp::sourceCpp` or part
-of an R package) might fail on certain systems due issues with building
-and linking against **rTRNG**. This is typically the case for **macOS**,
-and can be in general checked by running
+of an R package) might fail on certain systems due to issues with
+building and linking against **rTRNG**. This is typically the case for
+**macOS**, and can generally be checked by running
 
 ``` r
 rTRNG::check_rTRNG_linking()
