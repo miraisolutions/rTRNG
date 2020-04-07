@@ -11,11 +11,10 @@ r:
 
 # TeXLive issues for osx images
 # https://travis-ci.community/t/latex-error-file-inconsolata-sty-not-found-only-on-osx-when-building-r-package/3261/4
+
 os:
 - linux
 # - osx
-
-osx_image: xcode9.2
 
 # Vanilla macOS machine: remove preinstalled homebrew installation
 disable_homebrew: true
