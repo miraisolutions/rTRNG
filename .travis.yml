@@ -13,6 +13,10 @@ os:
 - linux
 - osx
 
+# The default osx image (xcode9.4) has issues with TeXLive 2020 being just released
+# https://travis-ci.community/t/latex-error-file-inconsolata-sty-not-found-only-on-osx-when-building-r-package/3261/4
+osx_image: xcode9.3
+
 # Vanilla macOS machine: remove preinstalled homebrew installation
 disable_homebrew: true
 
