@@ -1,14 +1,44 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 cache: packages
-
-matrix:
-  include:
-  - r: devel
-  - r: release
-    after_success:
-    - Rscript -e 'covr::codecov()'
-  - r: oldrel
-
 warnings_are_errors: true
+
+r:
+- devel
+- release
+- oldrel
+
+# TeXLive issues for osx images
+# https://travis-ci.community/t/latex-error-file-inconsolata-sty-not-found-only-on-osx-when-building-r-package/3261/4
+
+os:
+- linux
+# - osx
+
+# Vanilla macOS machine: remove preinstalled homebrew installation
+disable_homebrew: true
+
+jobs:
+#  exclude:
+#  # macOS binary packages not available for r-devel
+#  - r: devel
+#    os: osx
+  include:
+  - r: release
+    os: osx
+    r_check_args: --no-manual
+  - r: oldrel
+    os: osx
+    r_check_args: --no-manual
+
+# Code coverage
+after_success:
+  - >-
+    if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$TRAVIS_R_VERSION_STRING" = "release" ]; then
+      echo Code coverage...
+      Rscript -e 'covr::codecov(type = "all")'
+    else
+      echo Skip code coverage
+    fi
+

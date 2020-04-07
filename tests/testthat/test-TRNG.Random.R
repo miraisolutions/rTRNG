@@ -131,8 +131,8 @@ test_that("TRNGsplit errors for out-of-range subsequence indices", {
   TRNGkind(KIND)
   TRNGseed(SEED)
   p <- 5L
-  expect_error(TRNGsplit(p, 0L), "invalid") # 1-base indexing
-  expect_error(TRNGsplit(p, p + 1L), "invalid")
+  expect_error(TRNGsplit(p, 0L), class = "std::invalid_argument") # 1-base indexing
+  expect_error(TRNGsplit(p, p + 1L), class = "std::invalid_argument")
   expect_error(TRNGsplit(p, -1L), "negative")
   expect_error(TRNGsplit(-1L, 1L), "negative")
 })

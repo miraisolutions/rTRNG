@@ -47,6 +47,13 @@ the underlying TRNG C++ library in different ways and at different levels.
       \code{importFrom(rTRNG, TRNG.Version)} in the NAMESPACE file, and
       setting relevant linker flags (via \code{\link[rTRNG]{LdFlags}}) and
       C++11 compilation (\code{CXX_STD = CXX11}) in Makevars[.win].
+    \item
+      Note that C++ code using the TRNG library (sourced via
+      \code{Rcpp::sourceCpp} or part of an \R package) might fail on certain
+      systems due to issues with building and linking against \pkg{rTRNG}.
+      This is typically the case for macOS, and can generally be checked
+      using
+      \code{\link[rTRNG]{check_rTRNG_linking}}.
     }
 }
 See the package vignettes (\code{browseVignettes("rTRNG")}) for an overview
