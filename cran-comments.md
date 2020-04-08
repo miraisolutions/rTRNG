@@ -1,8 +1,10 @@
 ## Test environments
 
-* local ubuntu 18.04, R 3.6.2
+* local ubuntu 18.04, R 3.6.3
 * ubuntu 16.04 (on travis-ci), R-oldrel 3.5.3, R-release 3.6.2, R-devel
-* win-builder R-oldrelease 3.5.3, R-release 3.6.2, R-devel
+* macOS (on travis-ci), R-oldrel 3.5.3, R-release 3.6.2
+* macOS (on r-hub), R 3.6.3
+* win-builder R-oldrelease 3.5.3, R-release 3.6.3, R-devel
 
 ## R CMD check results
 
