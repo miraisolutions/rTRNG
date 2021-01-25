@@ -1,6 +1,8 @@
+# rTRNG (development version)
+
 # rTRNG 4.22-1
 
-## Maintenance release
+## Maintenance release (GitHub only)
 
 - Underlying TRNG C++ library upgraded to version 4.22 (#6). This mainly includes: Fixing numerical convergence problems in the inverse of the incomplete Beta function; Removing support for C++ language standards older than C++11.
 - Documentation and examples updated to include enforcing the C++11 standard required by the updated TRNG C++ library.
