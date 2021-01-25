@@ -5,8 +5,8 @@
 ^src/trng/.*\.o$
 ^README\.Rmd$
 ^README-.*\.png$
-^\.travis\.yml$
 ^codecov\.yml$
 ^appveyor\.yml$
 ^cran-comments\.md$
 LICENSE
+^\.github$
