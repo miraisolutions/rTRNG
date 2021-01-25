@@ -262,11 +262,11 @@ test_that("$split errors for out-of-range subsequence indices", {
     p <- 5L
     if (!grepl("(lagfib|mt)", engineClass)) {
       expect_error(
-        e$split(p, 0L), class = "std::invalid_argument", # 1-base indexing
+        e$split(p, 0L), class = expected_invalid_argument_class, # 1-base indexing
         info = .name(engineClass)
       )
       expect_error(
-        e$split(p, p + 1L), class = "std::invalid_argument",
+        e$split(p, p + 1L), class = expected_invalid_argument_class,
         info = .name(engineClass)
       )
       expect_error(
