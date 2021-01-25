@@ -79,3 +79,10 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Test coverage
+        if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
+        run: |
+          remotes::install_cran("covr")
+          covr::codecov(type = "all")
+        shell: Rscript {0}
