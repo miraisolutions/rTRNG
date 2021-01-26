@@ -9,7 +9,7 @@
 status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 [![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
 [![Codecov
-status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
+coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://codecov.io/gh/miraisolutions/rTRNG?branch=master)
 
 **[TRNG](https://numbercrunch.de/trng/)** (Tina’s Random Number
 Generator) is a state-of-the-art C++ pseudo-random number generator
