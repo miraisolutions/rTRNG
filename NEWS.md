@@ -1,5 +1,8 @@
 # rTRNG (development version)
 
+- Continuous integration is now based on GitHub Actions and covers R-release, R-oldrel and R-devel on Ubuntu, macOS and Windows (#14).
+- Unit tests for "invalid argument" errors are now robust to systems where the error class does not propagate correctly to R, such as R 3.6.3 on macOS (#15).
+
 # rTRNG 4.22-1
 
 ## Maintenance release (GitHub only)
