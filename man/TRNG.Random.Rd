@@ -195,7 +195,7 @@ c(TRNGseed(117),
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.23, \url{https://numbercrunch.de/trng/trng.pdf}.
+4.23.1 (patched in rTRNG), \url{https://numbercrunch.de/trng/trng.pdf}.
 }
 \seealso{
 TRNG distributions:
