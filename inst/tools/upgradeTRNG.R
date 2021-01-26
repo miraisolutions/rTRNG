@@ -1,9 +1,16 @@
-# source("inst/tools/upgradeTRNG.R")
-# upgradeTRNG(version = "4.23")
-# # off-line:
-# upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+if (FALSE) {
+  source("inst/tools/upgradeTRNG.R")
+  upgradeTRNG(version = "4.23")
+  # with patch, packported from trng4 @22cc3b6:
+  patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
+  system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
+  upgradeTRNG(version = "4.23", patch = patch_file)
+  # off-line:
+  upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+}
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
+                        patch = NULL,
                         cleanTmp = TRUE) {
 
   pre_4.22 <- package_version(version) < package_version("4.22")
@@ -13,7 +20,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     gh_base_url <- "https://github.com/rabauke/trng4/archive"
     libURL <- sprintf("%s/v%s.tar.gz", gh_base_url, version)
   } else {
-  libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
+    libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
   }
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)
@@ -28,6 +35,19 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     src.dir
   )
   stopifnot(dir.exists(lib.src.path))
+  version_info <- version
+  if (!is.null(patch)) {
+    message("Apply patch ", patch)
+    patch_file <- normalizePath(patch)
+    stopifnot(
+      0 == system(paste("cd", dirname(lib.src.path),  "&& git apply -v", patch_file))
+    )
+    # add a patch component to the version, and include an explicit information
+    # in `TRNG.Version()` about this being a version patched inside rTRNG
+    version <- paste(version, "1", sep = ".")
+    version_info <- paste(version, "(patched in rTRNG)")
+    message("  >> using patch version: ", version_info)
+  }
 
   .message <- function(msg, dir, files) {
     message(
@@ -78,7 +98,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   message("Update ", version.file, " source file")
   version.code <- sub(
     "(return\\(\")([^\"]+)(\"\\))",
-    paste0("\\1", version, "\\3"),
+    paste0("\\1", version_info, "\\3"),
     readLines(version.file)
   )
   writeLines(version.code, version.file)
