@@ -110,7 +110,9 @@ namespace trng {
           std::basic_istream<char_t, traits_t> &in, const delim_c &d) {
         char c;
         in.get(c);
-        if (c != d.c)
+        // avoid comparison if there were parsing issues with other delim or EOF
+        // (and make sure the failbit is set)
+        if (in.fail() || in.eof() || c != d.c)
           in.setstate(std::ios::failbit);
         return in;
       }

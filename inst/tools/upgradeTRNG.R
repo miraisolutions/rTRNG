@@ -1,9 +1,12 @@
 # source("inst/tools/upgradeTRNG.R")
 # upgradeTRNG(version = "4.23")
+# # with patch:
+# upgradeTRNG(version = "4.23", patch = "inst/tools/patch-delim_c-valgrind.patch")
 # # off-line:
 # upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
+                        patch = NULL,
                         cleanTmp = TRUE) {
 
   pre_4.22 <- package_version(version) < package_version("4.22")
@@ -28,6 +31,15 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     src.dir
   )
   stopifnot(dir.exists(lib.src.path))
+  version_info <- version
+  if (!is.null(patch)) {
+    message("Apply patch ", patch)
+    patch_file <- normalizePath(patch)
+    system(paste("cd", lib.src.path,  "&& git apply", patch_file))
+    version <- paste(version, "1", sep = ".")
+    version_info <- paste(version, "(patched in rTRNG)")
+    message("  >> using patch version: ", version_info)
+  }
 
   .message <- function(msg, dir, files) {
     message(
@@ -78,7 +90,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   message("Update ", version.file, " source file")
   version.code <- sub(
     "(return\\(\")([^\"]+)(\"\\))",
-    paste0("\\1", version, "\\3"),
+    paste0("\\1", version_info, "\\3"),
     readLines(version.file)
   )
   writeLines(version.code, version.file)
