@@ -1,6 +1,6 @@
 Package: rTRNG
 Title: Advanced and Parallel Random Number Generation via 'TRNG'
-Version: 4.22-1.9000
+Version: 4.23-0.9000
 Authors@R: 
     c(person("Riccardo", "Porreca", role = c("aut", "cre"),
              email = "riccardo.porreca@mirai-solutions.com"),
@@ -41,7 +41,7 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Collate: 
     'LdFlags.R'
     'RcppExports.R'

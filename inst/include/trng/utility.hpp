@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2019, Heiko Bauke
+// Copyright (c) 2000-2020, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,9 @@
 
 #define TRNG_UTILITY_HPP
 
+#include <trng/cuda.hpp>
+#include <trng/limits.hpp>
+#include <trng/uniformxx.hpp>
 #include <cassert>
 #include <cstdio>
 #include <istream>
@@ -43,9 +46,7 @@
 #include <cstring>
 #include <vector>
 #include <iterator>
-#include <trng/cuda.hpp>
-#include <trng/limits.hpp>
-#include <trng/uniformxx.hpp>
+#include <type_traits>
 #include <ciso646>
 
 namespace trng {
@@ -53,19 +54,19 @@ namespace trng {
   namespace utility {
 
     template<typename T>
-    TRNG_CUDA_ENABLE inline const T &min(const T &a, const T &b) {
+    TRNG_CUDA_ENABLE const T &min(const T &a, const T &b) {
       return a <= b ? a : b;
     }
 
     template<typename T>
-    TRNG_CUDA_ENABLE inline const T &max(const T &a, const T &b) {
+    TRNG_CUDA_ENABLE const T &max(const T &a, const T &b) {
       return a >= b ? a : b;
     }
 
     // ---------------------------------------------------------------
 
     template<typename T>
-    TRNG_CUDA_ENABLE inline void swap(T &a, T &b) {
+    TRNG_CUDA_ENABLE void swap(T &a, T &b) {
       T c(b);
       b = a;
       a = c;
@@ -74,7 +75,7 @@ namespace trng {
     // ---------------------------------------------------------------
 
     template<typename T>
-    inline void throw_this(const T &x) {
+    void throw_this(const T &x) {
       throw x;
     }
 
@@ -89,7 +90,7 @@ namespace trng {
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_str &d) {
         char c;
-        std::size_t len(std::strlen(d.str)), i(0);
+        std::size_t len{std::strlen(d.str)}, i{0};
         while (i < len and !(in.get(c) and c != d.str[i])) {
           ++i;
         }
@@ -103,7 +104,7 @@ namespace trng {
       const char c;
 
     public:
-      explicit delim_c(char c_) : c(c_) {}
+      explicit delim_c(char c_) : c{c_} {}
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_c &d) {
@@ -127,7 +128,7 @@ namespace trng {
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const ignore_spaces_cl &) {
         while (true) {
-          int c(in.peek());
+          const int c(in.peek());
           if (c == EOF or !(c == ' ' or c == '\t' or c == '\n'))
             break;
           in.get();
@@ -165,7 +166,7 @@ namespace trng {
     template<typename T, typename char_t, typename traits_t>
     std::basic_ostream<char_t, traits_t> &operator<<(std::basic_ostream<char_t, traits_t> &out,
                                                      const io_range<T> &IO_range) {
-      T pos(IO_range.first);
+      T pos{IO_range.first};
       while (out and pos != IO_range.last) {
         out << (*pos);
         ++pos;
@@ -178,7 +179,7 @@ namespace trng {
     template<typename T, typename char_t, typename traits_t>
     std::basic_istream<char_t, traits_t> &operator>>(std::basic_istream<char_t, traits_t> &in,
                                                      const io_range<T> &IO_range) {
-      T pos(IO_range.first);
+      T pos{IO_range.first};
       while (in and pos != IO_range.last) {
         in >> (*pos);
         ++pos;
@@ -189,50 +190,40 @@ namespace trng {
     }
 
     template<typename T>
-    inline io_range<T> make_io_range(T first, T last, const char *delim_str = nullptr) {
+    io_range<T> make_io_range(T first, T last, const char *delim_str = nullptr) {
       return io_range<T>(first, last, delim_str);
     }
-
-    // ---------------------------------------------------------------
-
-    template<unsigned int x>
-    struct ceil2 {
-      enum { result = 2 * ceil2<(x + 1) / 2>::result };
-    };
-
-    template<>
-    struct ceil2<0> {
-      enum { result = 0 };
-    };
-
-    template<>
-    struct ceil2<1> {
-      enum { result = 1 };
-    };
-
-    template<unsigned int x>
-    struct mask {
-      enum { result = ceil2<x + 1>::result - 1 };
-    };
 
     // -----------------------------------------------------------------
 
     // random number
     template<typename iter>
-    inline int discrete(double x, iter first, iter last) {
-      typedef typename std::iterator_traits<iter>::difference_type difference_type;
+    std::size_t discrete(double x, iter first, iter last) {
+      using difference_type = typename std::iterator_traits<iter>::difference_type;
       if (x < (*first))
         return 0;
-      difference_type i1(0), i2(last - first - 1);
+      difference_type i1{0}, i2{last - first - 1};
       while (i2 - i1 > difference_type(1)) {
-        difference_type i3((i2 + i1) / 2);
+        const difference_type i3{(i2 + i1) / 2};
         if (x <= first[i3])
           i2 = i3;
         else
           i1 = i3;
       }
-      return i2;
+      return static_cast<std::size_t>(i2);
     }
+
+    // -----------------------------------------------------------------
+
+    template<typename T1, typename T2, typename... Ts>
+    struct is_same
+        : std::integral_constant<bool, is_same<T1, T2>::value && is_same<T2, Ts...>::value> {};
+
+    template<typename T1, typename T2>
+    struct is_same<T1, T2> : std::false_type {};
+
+    template<typename T>
+    struct is_same<T, T> : std::true_type {};
 
   }  // namespace utility
 

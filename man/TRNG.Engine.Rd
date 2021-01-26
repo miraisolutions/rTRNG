@@ -271,7 +271,7 @@ TRNG.Random.seed(r$.Random.seed())
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.22, \url{https://numbercrunch.de/trng/trng.pdf}.
+4.23, \url{https://numbercrunch.de/trng/trng.pdf}.
 }
 \seealso{
 \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}.
