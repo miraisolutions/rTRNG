@@ -6,7 +6,6 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^codecov\.yml$
-^appveyor\.yml$
 ^cran-comments\.md$
 LICENSE
 ^\.github$
