@@ -7,10 +7,7 @@
 
 [![CRAN
 status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
-[![Travis build
-status](https://travis-ci.com/miraisolutions/rTRNG.svg?branch=master)](https://travis-ci.com/miraisolutions/rTRNG)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/miraisolutions/rTRNG?branch=master&svg=true)](https://ci.appveyor.com/project/riccardoporreca/rtrng)
+[![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
 [![Codecov
 status](https://img.shields.io/codecov/c/github/miraisolutions/rTRNG/master.svg)](https://codecov.io/github/miraisolutions/rTRNG?branch=master)
 
