@@ -89,9 +89,9 @@ namespace trng {
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_str &d) {
-        char c;
+        char c{0};
         std::size_t len{std::strlen(d.str)}, i{0};
-        while (i < len and !(in.get(c) and c != d.str[i])) {
+        while (i < len and not(in.get(c) and c != d.str[i])) {
           ++i;
         }
         if (i < len)
@@ -108,11 +108,8 @@ namespace trng {
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_c &d) {
-        char c;
-        in.get(c);
-        // avoid comparison if there were parsing issues with other delim or EOF
-        // (and make sure the failbit is set)
-        if (in.fail() || in.eof() || c != d.c)
+        char c{0};
+        if (not in.get(c).good() or c != d.c)
           in.setstate(std::ios::failbit);
         return in;
       }
@@ -129,9 +126,9 @@ namespace trng {
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const ignore_spaces_cl &) {
-        while (true) {
+        while (in.good()) {
           const int c(in.peek());
-          if (c == EOF or !(c == ' ' or c == '\t' or c == '\n'))
+          if (c == traits_t::eof() or not(c == ' ' or c == '\t' or c == '\n'))
             break;
           in.get();
         }

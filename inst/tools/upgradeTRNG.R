@@ -1,9 +1,13 @@
-# source("inst/tools/upgradeTRNG.R")
-# upgradeTRNG(version = "4.23")
-# # with patch:
-# upgradeTRNG(version = "4.23", patch = "inst/tools/patch-delim_c-valgrind.patch")
-# # off-line:
-# upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+if (FALSE) {
+  source("inst/tools/upgradeTRNG.R")
+  upgradeTRNG(version = "4.23")
+  # with patch, packported from trng4 @22cc3b6:
+  patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
+  system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
+  upgradeTRNG(version = "4.23", patch = patch_file)
+  # off-line:
+  upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+}
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
                         patch = NULL,
@@ -16,7 +20,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     gh_base_url <- "https://github.com/rabauke/trng4/archive"
     libURL <- sprintf("%s/v%s.tar.gz", gh_base_url, version)
   } else {
-  libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
+    libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
   }
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)
@@ -35,7 +39,9 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   if (!is.null(patch)) {
     message("Apply patch ", patch)
     patch_file <- normalizePath(patch)
-    system(paste("cd", lib.src.path,  "&& git apply", patch_file))
+    stopifnot(
+      0 == system(paste("cd", dirname(lib.src.path),  "&& git apply -v", patch_file))
+    )
     version <- paste(version, "1", sep = ".")
     version_info <- paste(version, "(patched in rTRNG)")
     message("  >> using patch version: ", version_info)
