@@ -8,3 +8,4 @@ src/*.dll
 src/trng/*.o
 src/trng/*.so
 inst/doc
+valgrind-check
