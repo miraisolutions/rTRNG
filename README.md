@@ -8,6 +8,7 @@
 [![CRAN
 status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 [![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
+[![valgrind](https://github.com/miraisolutions/rTRNG/workflows/valgrind/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3Avalgrind)
 [![Codecov
 coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://codecov.io/gh/miraisolutions/rTRNG?branch=master)
 
