@@ -1,6 +1,6 @@
 if (FALSE) {
   source("inst/tools/upgradeTRNG.R")
-  upgradeTRNG(version = "4.23.1")
+  upgradeTRNG(version = "4.23.1", year = "2021")
   # with patch, packported from trng4 @22cc3b6:
   patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
   system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
@@ -10,6 +10,7 @@ if (FALSE) {
 }
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
+                        year = "0000",
                         patch = NULL,
                         cleanTmp = TRUE) {
 
@@ -17,10 +18,12 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   gh_only <- package_version(version) >= package_version("4.23")
   lib.tar.gz <- sprintf("trng-%s.tar.gz", version)
   if (gh_only) {
-    gh_base_url <- "https://github.com/rabauke/trng4/archive"
-    libURL <- sprintf("%s/v%s.tar.gz", gh_base_url, version)
+    gh_base_url <- "https://github.com/rabauke/trng4"
+    libURL <- sprintf("%s/archive/v%s.tar.gz", gh_base_url, version)
+    docURL <- sprintf("%s/tree/v%s/doc/trng.pdf", gh_base_url, version)
   } else {
     libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
+    docURL <- "https://numbercrunch.de/trng/trng.pdf"
   }
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)
@@ -107,7 +110,22 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   message("Update DESCRIPTION with version ", rTRNG.version)
   description.text <- sub("(Version: ).*$", paste0("\\1", rTRNG.version),
                           readLines("DESCRIPTION"))
+  message("Update DESCRIPTION with documentation year ", year)
+  description.text <- sub("Bauke \\(\\d{4}\\)$",
+                          sprintf("Bauke (%s)", year),
+                          description.text)
+  message("Update DESCRIPTION with documentation URL <", docURL, ">")
+  description.text <- sub("<.*/trng[.]pdf>",
+                          sprintf("<%s>", docURL),
+                          description.text)
   writeLines(description.text, "DESCRIPTION")
+
+  message("Update TRNG reference URL <", docURL, ">")
+  reference.text <- sub("url\\{.*trng[.]pdf\\}",
+                        sprintf("url{%s}", docURL),
+                        readLines("man-roxygen/references-TRNG.R"))
+  writeLines(reference.text, "man-roxygen/references-TRNG.R")
+
 
   invisible()
 

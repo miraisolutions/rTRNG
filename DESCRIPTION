@@ -15,8 +15,8 @@ Description: Embeds sources and headers from Tina's Random
     easier access, testing and benchmarking into R. Provides examples of
     how to use parallel RNG with 'RcppParallel'. The methods and
     techniques behind 'TRNG' are illustrated in the package vignettes and
-    examples. Full documentation is available in Bauke (2018)
-    <https://numbercrunch.de/trng/trng.pdf>.
+    examples. Full documentation is available in Bauke (2021)
+    <https://github.com/rabauke/trng4/tree/v4.23.1/doc/trng.pdf>.
 License: GPL-3
 URL: https://github.com/miraisolutions/rTRNG#readme,
     https://mirai-solutions.ch
