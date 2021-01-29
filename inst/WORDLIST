@@ -1,14 +1,17 @@
 benchmarking
+Codecov
 congruential
 constructible
 cpp
 delinearization
 Germain
 GmbH
+macOS
 Makevars
 Mersenne
 Mertens
 Mirai
+oldrel
 OOP
 parallelization
 Rcpp
@@ -17,4 +20,5 @@ RcppParallel
 th
 TRNG
 useR
+valgrind
 variates
