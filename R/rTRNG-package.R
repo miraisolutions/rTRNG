@@ -61,7 +61,7 @@
 #' @template references-TRNG
 #' @references Stephan Mertens, \emph{Random Number Generators: A Survival Guide
 #'   for Large Scale Simulations}, 2009,
-#'   \url{http://adsabs.harvard.edu/abs/2009arXiv0905.4238M}
+#'   \url{https://ui.adsabs.harvard.edu/abs/2009arXiv0905.4238M}
 #'
 #' @useDynLib rTRNG, .registration=TRUE
 #' @import methods

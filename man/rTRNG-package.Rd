@@ -62,11 +62,11 @@ cases.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.23.1, \url{https://github.com/rabauke/trng4/tree/v4.23.1/doc/trng.pdf}.
+4.23.1, \url{https://github.com/rabauke/trng4/blob/v4.23.1/doc/trng.pdf}.
 
 Stephan Mertens, \emph{Random Number Generators: A Survival Guide
   for Large Scale Simulations}, 2009,
-  \url{http://adsabs.harvard.edu/abs/2009arXiv0905.4238M}
+  \url{https://ui.adsabs.harvard.edu/abs/2009arXiv0905.4238M}
 }
 \seealso{
 Useful links:

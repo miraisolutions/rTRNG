@@ -20,7 +20,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   if (gh_only) {
     gh_base_url <- "https://github.com/rabauke/trng4"
     libURL <- sprintf("%s/archive/v%s.tar.gz", gh_base_url, version)
-    docURL <- sprintf("%s/tree/v%s/doc/trng.pdf", gh_base_url, version)
+    docURL <- sprintf("%s/blob/v%s/doc/trng.pdf", gh_base_url, version)
   } else {
     libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
     docURL <- "https://numbercrunch.de/trng/trng.pdf"
