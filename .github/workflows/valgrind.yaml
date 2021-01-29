@@ -9,7 +9,7 @@ jobs:
     # Always run only on master, otherwise only if "[valgrind-check]" appears
     # in the commit comment. An empty commit can be used as follows:
     #   git commit --allow-empty -m 'Trigger [valgrind-check]'
-    if: contains(github.event.head_commit.message, '[valgrind-check]') || github.ref == 'refs/heads/master' || github.base_ref == 'refs/heads/master'
+    if: contains(github.event.head_commit.message, '[valgrind-check]') || github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
 
     runs-on: ubuntu-latest
 
