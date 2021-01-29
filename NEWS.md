@@ -1,8 +1,10 @@
-# rTRNG (development version)
+# rTRNG 4.23.1-1
 
-- Underlying TRNG C++ library upgraded to version 4.23.1 (#20). This maintenance release, mainly including: Enhanced numerical accuracy of several special mathematical functions; Re-implementation of the discard method of the lagged Fibonacci generators with logarithmic asymptotic complexity. The release also fixes the uninitialized-memory problems reported as `valgrind` issues in the CRAN package checks for rTRNG 4.20-1 (#16).
-- Continuous integration is now based on GitHub Actions and covers R-release, R-oldrel and R-devel on Ubuntu, macOS and Windows (#14), as well as running checks with `valgrind` (#16).
-- Unit tests for "invalid argument" errors are now robust to systems where the error class does not propagate correctly to R, such as R 3.6.3 on macOS (#15).
+## Maintenance release
+
+- Underlying TRNG C++ library upgraded to version 4.23.1 (#20). This is a maintenance release, mainly including: Enhanced numerical accuracy of several special mathematical functions; Re-implementation of the discard method of the lagged Fibonacci generators with logarithmic asymptotic complexity. The release also fixes the uninitialized-memory problems reported as `valgrind` issues in the CRAN package checks for rTRNG 4.20-1 (#16).
+- Unit tests for "invalid argument" errors are now robust to systems where the error class does not propagate correctly to R, such as R 3.6.3 on macOS (#15). This addresses the errors running tests in the CRAN package checks on macOS.
+- Continuous integration is now based on GitHub Actions and covers R-release, R-oldrel and R-devel on Ubuntu, macOS and Windows (#14), as well as running checks with `valgrind` (#20).
 
 # rTRNG 4.22-1
 
