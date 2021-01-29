@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2019, Heiko Bauke
+// Copyright (c) 2000-2020, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -103,24 +103,13 @@ namespace trng {
     using ::std::acosh;
     using ::std::atanh;
 
-    inline float asech(float x) { return ::std::log((1.0f + ::std::sqrt(1.0f - x * x)) / x); }
-    inline double asech(double x) { return ::std::log((1.0 + ::std::sqrt(1.0 - x * x)) / x); }
-    inline long double asech(long double x) {
-      return ::std::log((1.0l + ::std::sqrt(1.0l - x * x)) / x);
-    }
+    inline float asech(float x) { return ::std::acosh(1.0f / x); }
+    inline double asech(double x) { return ::std::acosh(1.0 / x); }
+    inline long double asech(long double x) { return ::std::acosh(1.0l / x); }
 
-    inline float acsch(float x) {
-      const float t = 1.0f / x;
-      return ::std::log(t + ::std::sqrt(1.0f + t * t));
-    }
-    inline double acsch(double x) {
-      const double t = 1.0 / x;
-      return ::std::log(t + ::std::sqrt(1.0 + t * t));
-    }
-    inline long double acsch(long double x) {
-      const long double t = 1.0l / x;
-      return ::std::log(t + ::std::sqrt(1.0l + t * t));
-    }
+    inline float acsch(float x) { return ::std::asinh(1.0f / x); }
+    inline double acsch(double x) { return ::std::asinh(1.0 / x); }
+    inline long double acsch(long double x) { return ::std::asinh(1.0l / x); }
 
     inline float acoth(float x) { return 0.5f * ::std::log((x + 1.0f) / (x - 1.0f)); }
     inline double acoth(double x) { return 0.5 * ::std::log((x + 1.0) / (x - 1.0)); }
@@ -148,30 +137,6 @@ namespace trng {
     using ::std::frexp;
     using ::std::ldexp;
     using ::std::log;
-
-    template<typename T>
-    inline T log2_floor(T x) {
-      T y(0);
-      while (x > 0) {
-        x >>= 1;
-        ++y;
-      }
-      --y;
-      return y;
-    }
-
-    template<typename T>
-    inline T log2_ceil(T x) {
-      T y(log2_floor(x));
-      if ((T(1) << y) < x)
-        ++y;
-      return y;
-    }
-
-    template<typename T>
-    inline T pow2(T x) {
-      return T(1) << x;
-    }
 
     TRNG_CUDA_ENABLE
     inline float ln(float x) { return log(x); }
@@ -227,6 +192,10 @@ namespace trng {
       long double dummy;
       return ::std::modf(x, &dummy);
     }
+
+    using ::std::isfinite;
+    using ::std::isnan;
+    using ::std::isnormal;
 
   }  // namespace math
 

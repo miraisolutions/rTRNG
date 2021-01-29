@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2019, Heiko Bauke
+// Copyright (c) 2000-2020, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,65 +35,56 @@
 #define TRNG_LAGFIB2PLUS_HPP
 
 #include <trng/limits.hpp>
+#include <trng/utility.hpp>
+#include <trng/minstd.hpp>
+#include <trng/int_types.hpp>
+#include <trng/linear_algebra.hpp>
 #include <climits>
 #include <stdexcept>
 #include <ostream>
 #include <istream>
 #include <sstream>
-#include <trng/utility.hpp>
-#include <trng/minstd.hpp>
-#include <trng/int_types.hpp>
 #include <ciso646>
 
 namespace trng {
 
   template<typename integer_type, unsigned int A, unsigned int B>
-  class lagfib2plus;
-
-  template<typename integer_type, unsigned int A, unsigned int B>
   class lagfib2plus {
   public:
     // Uniform random number generator concept
-    typedef integer_type result_type;
+    using result_type = integer_type;
     result_type operator()() {
       step();
       return S.r[S.index];
     }
 
   private:
-    static const result_type min_ = 0;
-    static const result_type max_ = ~result_type(0);
+    static constexpr result_type min_ = 0;
+    static constexpr result_type max_ = ~result_type(0);
 
   public:
     static constexpr result_type min() { return min_; }
     static constexpr result_type max() { return max_; }
 
     // Parameter and status classes
-    class status_type;
-
     class status_type {
-      result_type r[utility::ceil2<B>::result];
-      unsigned int index;
-      static unsigned int size() { return utility::ceil2<B>::result; }
+      result_type r[int_math::ceil2(B)]{};
+      unsigned int index{0};
+      static constexpr unsigned int size() { return int_math::ceil2(B); }
 
     public:
-      status_type() {
-        for (unsigned int i = 0; i < size(); ++i)
-          r[i] = 0;
-        index = 0;
-      };
-
       friend class lagfib2plus;
 
       // Equality comparable concept
       friend bool operator==(const status_type &a, const status_type &b) {
         if (a.index != b.index)
           return false;
-        for (unsigned int i = 0; i < a.size(); ++i)
+        for (unsigned int i{0}; i < a.size(); ++i)
           if (a.r[i] != b.r[i])
             return false;
         return true;
       }
+
       friend bool operator!=(const status_type &a, const status_type &b) { return not(a == b); }
 
       // Streamable concept
@@ -103,7 +94,7 @@ namespace trng {
         std::ios_base::fmtflags flags(out.flags());
         out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
         out << '(' << S.index;
-        for (unsigned int i = 0; i < S.size(); ++i)
+        for (unsigned int i{0}; i < S.size(); ++i)
           out << ' ' << S.r[i];
         out << ')';
         out.flags(flags);
@@ -117,7 +108,7 @@ namespace trng {
         std::ios_base::fmtflags flags(in.flags());
         in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
         in >> utility::delim('(') >> S_new.index;
-        for (unsigned int i = 0; i < S.size(); ++i)
+        for (unsigned int i{0}; i < S.size(); ++i)
           in >> utility::delim(' ') >> S_new.r[i];
         in >> utility::delim(')');
         if (in)
@@ -128,12 +119,12 @@ namespace trng {
     };
 
     // Random number engine concept
-    lagfib2plus() : S() { seed(); }
+    lagfib2plus() { seed(); }
 
-    explicit lagfib2plus(unsigned long s) : S() { seed(s); }
+    explicit lagfib2plus(unsigned long s) { seed(s); }
 
     template<typename gen>
-    explicit lagfib2plus(gen &g) : S() {
+    explicit lagfib2plus(gen &g) {
       seed(g);
     }
 
@@ -146,9 +137,9 @@ namespace trng {
 
     template<typename gen>
     void seed(gen &g) {
-      for (unsigned int i = 0; i < B; ++i) {
-        result_type r = 0;
-        for (int j = 0; j < std::numeric_limits<result_type>::digits; ++j) {
+      for (unsigned int i{0}; i < B; ++i) {
+        result_type r{0};
+        for (int j{0}; j < std::numeric_limits<result_type>::digits; ++j) {
           r <<= 1;
           if (g() - gen::min() > gen::max() / 2)
             ++r;
@@ -159,7 +150,31 @@ namespace trng {
     }
 
     void discard(unsigned long long n) {
-      for (unsigned long long i(0); i < n; ++i)
+      const unsigned int matrix_size = B;
+      using matrix_type = matrix<result_type, matrix_size>;
+      using vector_type = vector<result_type, matrix_size>;
+      using size_type = typename matrix_type::size_type;
+      const unsigned long long n_pivot{int_math::log2_ceil(n) * B * B * B};
+      constexpr auto mask = int_math::mask(B);
+      if (n > n_pivot) {
+        const unsigned long long n_partial{n - matrix_size};
+        matrix_type M;
+        for (size_type i{0}; i < matrix_size - 1; ++i)
+          M(i, i + 1) = 1;
+        M(matrix_size - 1, matrix_size - B) = 1;
+        M(matrix_size - 1, matrix_size - A) = 1;
+        M = power(M, n_partial);
+        vector_type V;
+        for (size_type i{0}; i < matrix_size; ++i)
+          V(matrix_size - 1 - i) = S.r[(S.index - i) & mask];
+        V = M * V;
+        S.index += n_partial;
+        S.index &= mask;
+        for (size_type i{0}; i < matrix_size; ++i)
+          S.r[(S.index - i) & mask] = V(matrix_size - 1 - i);
+        n -= n_partial;
+      }
+      for (unsigned long long i{0}; i < n; ++i)
         step();
     }
 
@@ -220,10 +235,10 @@ namespace trng {
     status_type S;
 
     void step() {
-      S.index++;
-      S.index &= utility::mask<B>::result;
-      S.r[S.index] = S.r[(S.index - A) & utility::mask<B>::result] +
-                     S.r[(S.index - B) & utility::mask<B>::result];
+      ++S.index;
+      S.index &= int_math::mask(B);
+      S.r[S.index] =
+          S.r[(S.index - A) & int_math::mask(B)] + S.r[(S.index - B) & int_math::mask(B)];
     }
   };
 

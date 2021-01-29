@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2019, Heiko Bauke
+// Copyright (c) 2000-2020, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,10 +34,10 @@
 #if !(defined TRNG_UNIFORMXX_HPP)
 #define TRNG_UNIFORMXX_HPP
 
-#include <cstddef>
-#include <cfloat>
 #include <trng/cuda.hpp>
 #include <trng/limits.hpp>
+#include <cstddef>
+#include <cfloat>
 #include <ciso646>
 
 namespace trng {
@@ -46,24 +46,24 @@ namespace trng {
 
     template<unsigned long long top, unsigned int count = 0>
     struct Bits {
-      enum { result = Bits<top / 2, count + 1>::result };
+      static constexpr unsigned int result = Bits<top / 2, count + 1>::result;
     };
 
     template<unsigned int count>
-    struct Bits<0ULL, count> {
-      enum { result = count };
+    struct Bits<0ull, count> {
+      static constexpr unsigned int result = count;
     };
 
     //------------------------------------------------------------------
 
     template<unsigned long long top, unsigned int count = 0>
     struct Holes {
-      enum { result = Holes<top / 2, count + (~top & 1)>::result };
+      static constexpr unsigned int result = Holes<top / 2, count + (~top & 1u)>::result;
     };
 
     template<unsigned int count>
-    struct Holes<0ULL, count> {
-      enum { result = count };
+    struct Holes<0ull, count> {
+      static constexpr unsigned int result = count;
     };
 
     //------------------------------------------------------------------
@@ -77,7 +77,7 @@ namespace trng {
 #if !(defined __CUDA_ARCH__)
       static
 #endif
-          float
+          constexpr float
           val() {
         return FLT_EPSILON;
       }
@@ -89,7 +89,7 @@ namespace trng {
 #if !(defined __CUDA_ARCH__)
       static
 #endif
-          double
+          constexpr double
           val() {
         return DBL_EPSILON;
       }
@@ -101,7 +101,7 @@ namespace trng {
 #if !(defined __CUDA_ARCH__)
       static
 #endif
-          long double
+          constexpr long double
           val() {
         return LDBL_EPSILON;
       }
@@ -114,39 +114,40 @@ namespace trng {
     // They should also collapse the size (sizeof(u01xx_traits<...>) to 1.
     template<typename return_type, std::size_t requested_bits, typename prng_t>
     class u01xx_traits {
-      typedef return_type ret_t;
-      typedef typename prng_t::result_type result_type;
+      using ret_t = return_type;
+      using result_type = typename prng_t::result_type;
 
       // Casting up from "simpler" types may yield better low level code sequences.
-      static const result_type domain_max0 = prng_t::max() - prng_t::min();
-      static const unsigned int domain_bits = Bits<domain_max0>::result;
-      static const unsigned int domain_full_bits =
+      static constexpr result_type domain_max0 = prng_t::max() - prng_t::min();
+      static constexpr unsigned int domain_bits = Bits<domain_max0>::result;
+      static constexpr unsigned int domain_full_bits =
           domain_bits - (Holes<domain_max0>::result > 0);
-      static const bool int_ok =
+      static constexpr bool int_ok =
           domain_bits < static_cast<unsigned int>(math::numeric_limits<unsigned int>::digits);
-      static const bool long_ok =
+      static constexpr bool long_ok =
           domain_bits < static_cast<unsigned int>(math::numeric_limits<unsigned long>::digits);
-      static const bool long_long_ok =
+      static constexpr bool long_long_ok =
           domain_bits <
           static_cast<unsigned int>(math::numeric_limits<unsigned long long>::digits);
 
-      static const unsigned int ret_bits = math::numeric_limits<ret_t>::digits;
-      static const unsigned int bits0 = (requested_bits < ret_bits) ? requested_bits : ret_bits;
-      static const unsigned int bits = (bits0 < 1) ? 1 : bits0;
-      static const std::size_t calls_needed =
+      static constexpr unsigned int ret_bits = math::numeric_limits<ret_t>::digits;
+      static constexpr unsigned int bits0 =
+          (requested_bits < ret_bits) ? requested_bits : ret_bits;
+      static constexpr unsigned int bits = (bits0 < 1) ? 1 : bits0;
+      static constexpr std::size_t calls_needed =
           (bits / domain_full_bits) + ((bits % domain_full_bits) != 0);
 
       // a ((long long)(val >> 1)) cast may give us better performance (~4X using lcg on Core2
       // x86-64) the lost bit will not usually be missed as it is ~30dB down typically (53 bit
       // mantissa from a 63 rather than 64 bit integer variate)
-      static const bool use_ll_of_shifted =
-          not long_long_ok and (domain_max0 >> 1) == (~0ULL >> 1) and bits < domain_bits;
-      static const result_type domain_max =
-          use_ll_of_shifted ? (domain_max0 >> 1) : domain_max0;
+      static constexpr bool use_ll_of_shifted =
+          not long_long_ok and (domain_max0 >> 1u) == (~0ULL >> 1u) and bits < domain_bits;
+      static constexpr result_type domain_max =
+          use_ll_of_shifted ? (domain_max0 >> 1u) : domain_max0;
 
       TRNG_CUDA_ENABLE
       static ret_t addin(prng_t &r) {
-        result_type x = r() - prng_t::min();
+        const result_type x{r() - prng_t::min()};
         if (int_ok)
           return static_cast<ret_t>(static_cast<int>(x));
         else if (long_ok)
@@ -160,10 +161,10 @@ namespace trng {
       }
       TRNG_CUDA_ENABLE
       static ret_t variate_max() {
-        const ret_t scale_per_step(static_cast<ret_t>(domain_max) + 1);
-        const ret_t max_addin(static_cast<ret_t>(domain_max));
-        ret_t ret(max_addin);
-        for (std::size_t i(1); i < calls_needed; ++i)
+        const ret_t scale_per_step{static_cast<ret_t>(domain_max) + 1};
+        const ret_t max_addin{static_cast<ret_t>(domain_max)};
+        ret_t ret{max_addin};
+        for (std::size_t i{1}; i < calls_needed; ++i)
           ret = ret * scale_per_step + max_addin;
         return ret;
       }
@@ -171,15 +172,15 @@ namespace trng {
       static ret_t variate(prng_t &r) {
 #if !(defined __CUDA_ARCH__)
         static_assert(prng_t::min() >= 0 and prng_t::max() > prng_t::min(),
-                      "");  // min and/or max out of spec?
-        static_assert(prng_t::max() - prng_t::min() <= ~0ULL,
-                      "");  // Bits, Holes incorrect otherwise
-        static_assert(not math::numeric_limits<return_type>::is_integer, "");
-        static_assert(calls_needed > 0 and calls_needed <= bits, "");
+                      "min max out of range");  // min and/or max out of spec?
+        static_assert(prng_t::max() - prng_t::min() <= ~0ull,
+                      "min max have exotic values/types");  // Bits, Holes incorrect otherwise
+        static_assert(not math::numeric_limits<return_type>::is_integer, "not an integer");
+        static_assert(calls_needed > 0 and calls_needed <= bits, "illegal number of calls");
 #endif
         const ret_t scale_per_step(ret_t(domain_max) + 1);
-        ret_t ret(addin(r));
-        for (std::size_t i(1); i < calls_needed; ++i)
+        ret_t ret{addin(r)};
+        for (std::size_t i{1}; i < calls_needed; ++i)
           ret = ret * scale_per_step + addin(r);
         return ret;
       }
@@ -189,9 +190,9 @@ namespace trng {
         epsilon<ret_t> EPS;
         const ret_t native_eps(EPS.val());
 #else
-        const ret_t native_eps(epsilon<ret_t>::val());
+        const ret_t native_eps{epsilon<ret_t>::val()};
 #endif
-        const ret_t domain_eps(ret_t(1) / domain_max);
+        const ret_t domain_eps{ret_t(1) / domain_max};
         return native_eps >= domain_eps or requested_bits != 1 ? native_eps : domain_eps;
       }
       TRNG_CUDA_ENABLE
@@ -204,7 +205,7 @@ namespace trng {
     public:
       TRNG_CUDA_ENABLE
       static return_type cc(prng_t &r) {
-        const bool division_required(variate_max() * cc_norm() != 1);
+        const bool division_required{variate_max() * cc_norm() != 1};
         return division_required ? variate(r) / variate_max() : variate(r) * cc_norm();
       }
       TRNG_CUDA_ENABLE

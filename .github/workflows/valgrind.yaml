@@ -1,0 +1,37 @@
+# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
+# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
+on: [push, pull_request]
+
+name: valgrind
+
+jobs:
+  valgrind-check:
+    # Always run only on master, otherwise only if "[valgrind-check]" appears
+    # in the commit comment. An empty commit can be used as follows:
+    #   git commit --allow-empty -m 'Trigger [valgrind-check]'
+    if: contains(github.event.head_commit.message, '[valgrind-check]') || github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
+
+    runs-on: ubuntu-latest
+
+    name: valgrind-check
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check with valgrind
+        run: bash inst/tools/valgrind-check.sh
+
+      - name: Detect valgrind issues
+        working-directory: valgrind-check
+        run: |
+          if grep -iv "ERROR SUMMARY: 0 errors" valgrind-summary; then
+            echo "::error ::Found valgrind errors"
+            exit 1
+          fi
+
+      - name: Upload valgrind results
+        if: always()
+        uses: actions/upload-artifact@main
+        with:
+          name: valgrind-results
+          path: valgrind-check

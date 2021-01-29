@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2019, Heiko Bauke
+// Copyright (c) 2000-2020, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -89,17 +89,17 @@ namespace trng {
 
     TRNG_CUDA_ENABLE
     inline float ln_binomial(float n, float m) {
-      return ln_Gamma(n + 1.f) - ln_Gamma(m + 1.f) - ln_Gamma(n - m + 1.f);
+      return ln_Gamma(n + 1) - ln_Gamma(m + 1) - ln_Gamma(n - m + 1);
     }
 
     TRNG_CUDA_ENABLE
     inline double ln_binomial(double n, double m) {
-      return ln_Gamma(n + 1.) - ln_Gamma(m + 1.) - ln_Gamma(n - m + 1.);
+      return ln_Gamma(n + 1) - ln_Gamma(m + 1) - ln_Gamma(n - m + 1);
     }
 
 #if !(defined __CUDA_ARCH__)
     inline long double ln_binomial(long double n, long double m) {
-      return ln_Gamma(n + 1.l) - ln_Gamma(m + 1.l) - ln_Gamma(n - m + 1.l);
+      return ln_Gamma(n + 1) - ln_Gamma(m + 1) - ln_Gamma(n - m + 1);
     }
 #endif
 
@@ -127,24 +127,29 @@ namespace trng {
       //
       //  P(a, x) = gamma(a, x) / Gamma(a)
       //
-      // by series expansion
+      // by series expansion, see "Numerical Recipes" by W. H. Press et al., 3rd edition
       template<typename T, bool by_Gamma_a>
       TRNG_CUDA_ENABLE T GammaP_ser(T a, T x) {
-        const int itmax = 32;
-        const T eps = T(4) * numeric_limits<T>::epsilon();
+        const int itmax{32};
+        const T eps{4 * numeric_limits<T>::epsilon()};
         if (x < eps)
-          return T(0);
-        T xx(T(1) / a), n(a), sum(xx);
-        int i(0);
+          return T{0};
+        T xx{1 / a}, n{a}, sum{xx};
+        int i{0};
         do {
           ++n;
           ++i;
           xx *= x / n;
           sum += xx;
         } while (abs(xx) > eps * abs(sum) and i < itmax);
+#if __cplusplus >= 201703L
+        if constexpr (by_Gamma_a)
+#else
         if (by_Gamma_a)
-          return exp(-x + a * ln(x) - math::ln_Gamma(a)) * sum;
-        return exp(-x + a * ln(x)) * sum;
+#endif
+          return exp(-x + a * ln(x) - ln_Gamma(a)) * sum;
+        else
+          return exp(-x + a * ln(x)) * sum;
       }
 
       // compute complementary incomplete Gamma function
@@ -155,61 +160,76 @@ namespace trng {
       //
       //  Q(a, x) = Gamma(a, x) / Gamma(a) = 1 - P(a, x)
       //
-      // by continued fraction
+      // by continued fraction, see "Numerical Recipes" by W. H. Press et al., 3rd edition
       template<typename T, bool by_Gamma_a>
       TRNG_CUDA_ENABLE T GammaQ_cf(T a, T x) {
-        const T itmax = T(32);
-        const T eps = T(4) * numeric_limits<T>::epsilon();
-        const T min = T(4) * numeric_limits<T>::min();
-        // set up for evaluating continued fraction by modied Lentz's method
-        T del, bi(x + T(1) - a), ci(T(1) / min), di(T(1) / bi), h(di), i(T(0));
+        const T itmax{32};
+        const T eps{4 * numeric_limits<T>::epsilon()};
+        const T min{4 * numeric_limits<T>::min()};
+        // set up for evaluating continued fraction by modified Lentz's method
+        T del, bi{x + 1 - a}, ci{1 / min}, di{1 / bi}, h{di}, i{0};
         do {  // iterate
           ++i;
-          T ai = -i * (i - a);
-          bi += T(2);
+          T ai{-i * (i - a)};
+          bi += 2;
           di = ai * di + bi;
           if (abs(di) < min)
             di = min;
           ci = bi + ai / ci;
           if (abs(ci) < min)
             ci = min;
-          di = T(1) / di;
+          di = 1 / di;
           del = di * ci;
           h *= del;
-        } while ((abs(del - T(1)) > eps) and i < itmax);
+        } while ((abs(del - 1) > eps) and i < itmax);
+#if __cplusplus >= 201703L
+        if constexpr (by_Gamma_a)
+#else
         if (by_Gamma_a)
-          return exp(-x + a * ln(x) - math::ln_Gamma(a)) * h;
-        return exp(-x + a * ln(x)) * h;
+#endif
+          return exp(-x + a * ln(x) - ln_Gamma(a)) * h;
+        else
+          return exp(-x + a * ln(x)) * h;
       }
 
       // P(a, x) and gamma(a, x)
       template<typename T, bool by_Gamma_a>
       TRNG_CUDA_ENABLE T GammaP(T a, T x) {
-        if (x < T(0) or a <= T(0))
+        if (x < 0 or a <= 0)
           return numeric_limits<T>::signaling_NaN();
+#if __cplusplus >= 201703L
+        if constexpr (by_Gamma_a) {
+#else
         if (by_Gamma_a) {
-          if (x < a + T(1))
+#endif
+          if (x < a + 1)
             return GammaP_ser<T, true>(a, x);
-          return T(1) - GammaQ_cf<T, true>(a, x);
+          return 1 - GammaQ_cf<T, true>(a, x);
+        } else {
+          if (x < a + 1)
+            return GammaP_ser<T, false>(a, x);
+          return Gamma(a) - GammaQ_cf<T, false>(a, x);
         }
-        if (x < a + T(1))
-          return GammaP_ser<T, false>(a, x);
-        return math::Gamma(a) - GammaQ_cf<T, false>(a, x);
       }
 
       // Q(a, x) and Gamma(a, x)
       template<typename T, bool by_Gamma_a>
       TRNG_CUDA_ENABLE T GammaQ(T a, T x) {
-        if (x < T(0) or a <= T(0))
+        if (x < 0 or a <= 0)
           return numeric_limits<T>::signaling_NaN();
+#if __cplusplus >= 201703L
+        if constexpr (by_Gamma_a) {
+#else
         if (by_Gamma_a) {
-          if (x < a + T(1))
-            return T(1) - GammaP_ser<T, true>(a, x);
+#endif
+          if (x < a + 1)
+            return T{1} - GammaP_ser<T, true>(a, x);
           return GammaQ_cf<T, true>(a, x);
+        } else {
+          if (x < a + 1)
+            return Gamma(a) - GammaP_ser<T, false>(a, x);
+          return GammaQ_cf<T, false>(a, x);
         }
-        if (x < a + T(1))
-          return math::Gamma(a) - GammaP_ser<T, false>(a, x);
-        return GammaQ_cf<T, false>(a, x);
       }
 
     }  // namespace detail
@@ -255,51 +275,56 @@ namespace trng {
 
     // Gamma(x, a)
     TRNG_CUDA_ENABLE
-    inline float cinc_gamma(float a, float x) { return detail::GammaQ<float, false>(a, x); }
+    inline float inc_Gamma(float a, float x) { return detail::GammaQ<float, false>(a, x); }
 
     TRNG_CUDA_ENABLE
-    inline double cinc_gamma(double a, double x) { return detail::GammaQ<double, false>(a, x); }
+    inline double inc_Gamma(double a, double x) { return detail::GammaQ<double, false>(a, x); }
 
 #if !(defined __CUDA_ARCH__)
-    inline long double cinc_gamma(long double a, long double x) {
+    inline long double inc_Gamma(long double a, long double x) {
       return detail::GammaQ<long double, false>(a, x);
     }
 #endif
 
     namespace detail {
 
+      // compute inverse of the incomplete Gamma function p = P(a, x), see "Numerical Recipes"
+      // by W. H. Press et al., 3rd edition
       template<typename T>
       TRNG_CUDA_ENABLE T inv_GammaP(T a, T p) {
-        const T eps = sqrt(numeric_limits<T>::epsilon()), a1 = a - T(1),
-                glna = math::ln_Gamma(a), lna1 = ln(a1), afac = exp(a1 * (lna1 - T(1)) - glna);
-        T x, t;
+        const T eps{sqrt(numeric_limits<T>::epsilon())};
+        T a1{a - 1};
+        T glna{ln_Gamma(a)};
+        T lna1{ln(a1)};
+        T afac{exp(a1 * (lna1 - 1) - glna)};
+        T x;
         // initial guess
-        if (a > T(1)) {
-          const T pp = p < T(1) / T(2) ? p : T(1) - p;
-          t = sqrt(-T(2) * ln(pp));
-          x = static_cast<T>((2.30753 + t * 0.27061) / (1.0 + t * (0.99229 + t * 0.04481)) - t);
-          x = p < T(1) / T(2) ? -x : x;
-          x = utility::max(T(1) / T(1000),
-                           a * pow(T(1) - T(1) / (T(9) * a) - x / (T(3) * sqrt(a)), T(3)));
+        if (a > T{1}) {
+          const T pp{p < T{1} / T{2} ? p : 1 - p};
+          const T t = {sqrt(-2 * ln(pp))};
+          x = (T{2.30753} + t * T{0.27061}) / (1 + t * (T{0.99229} + t * T{0.04481})) - t;
+          x = p < T{1} / T{2} ? -x : x;
+          x = utility::max(T{1} / T{1000}, a * pow(1 - 1 / (9 * a) - x / (3 * sqrt(a)), T{3}));
         } else {
-          t = static_cast<T>(1.0 - a * (0.253 + a * 0.12));
-          x = p < t ? (pow(p / t, T(1) / a)) : (T(1) - ln(T(1) - (p - t) / (T(1) - t)));
+          const T t{1 - a * (T{0.253} + a * T{0.12})};
+          x = p < t ? pow(p / t, 1 / a) : 1 - ln1p(-(p - t) / (1 - t));
         }
         // refinement by Halley's method
-        for (int i = 0; i < 16; ++i) {
-          if (x < T(0)) {
-            x = T(0);
+        for (int i{0}; i < 16; ++i) {
+          if (x <= 0) {
+            x = 0;
             break;
           }
-          const T err = GammaP<T, true>(a, x) - p;
-          if (a > T(1))
+          const T err{GammaP<T, true>(a, x) - p};
+          T t;
+          if (a > 1)
             t = afac * exp(-(x - a1) + a1 * (ln(x) - lna1));
           else
             t = exp(-x + a1 * ln(x) - glna);
-          const T u = err / t;
-          t = u / (T(1) - utility::min(T(1), u * ((a - T(1)) / x - T(1))) / T(2));
+          const T u{err / t};
+          t = u / (1 - utility::min(T{1}, u * ((a - 1) / x - 1)) / 2);
           x -= t;
-          x = x <= T(0) ? (x + t) / T(2) : x;
+          x = x <= 0 ? (x + t) / 2 : x;
           if (abs(t) < eps * x)
             break;
         }
@@ -337,16 +362,16 @@ namespace trng {
 #endif
           return numeric_limits<T>::quiet_NaN();
         }
-        const T eps = 4 * numeric_limits<T>::epsilon();
-        T psq = p + q, cx = 1 - x;
-        const bool flag = (p < psq * x);
+        const T eps{4 * numeric_limits<T>::epsilon()};
+        T psq{p + q}, cx{1 - x};
+        const bool flag{p < psq * x};
         if (flag) {
-          // use  I(x, p, q) = 1-I(1-x, q, p)
+          // use  I(x, p, q) = 1 - I(1 - x, q, p)
           utility::swap(x, cx);
           utility::swap(p, q);
         }
-        T term = 1, i = 1, y = 1, rx = x / cx, temp = q - i;
-        int s = static_cast<int>(q + cx * psq);
+        T term{1}, i{1}, y{1}, rx{x / cx}, temp{q - i};
+        int s{static_cast<int>(q + cx * psq)};
         if (s == 0)
           rx = x;
         while (true) {
@@ -355,8 +380,8 @@ namespace trng {
           temp = abs(term);
           if (temp <= eps and temp <= eps * y)
             break;
-          i++;
-          s--;
+          ++i;
+          --s;
           if (s >= 0) {
             temp = q - i;
             if (s == 0)
@@ -408,25 +433,36 @@ namespace trng {
 
       template<typename T>
       TRNG_CUDA_ENABLE inline T inv_Beta_I(T x, T p, T q, T norm) {
-        if (x < math::numeric_limits<T>::epsilon())
+        if (x < numeric_limits<T>::epsilon())
           return 0;
-        if (1 - x < math::numeric_limits<T>::epsilon())
+        if (1 - x < numeric_limits<T>::epsilon())
           return 1;
         // solve via Newton method
-        T y(T(1) / T(2));
+        T y{0};
         if (2 * p >= 1 and 2 * q >= 1)
           y = (3 * p - 1) / (3 * p + 3 * q - 2);  // the approximate median
-        for (int i = 0; i < math::numeric_limits<T>::digits; ++i) {
-          const T f(math::Beta_I(y, p, q, norm) - x);
-          const T df(math::pow(1 - y, q - 1) * math::pow(y, p - 1) / norm);
+        else {
+          // following initial guess given in "Numerical Recipes" by W. H. Press et al., 3rd
+          // edition
+          const T lnp{ln(p / (p + q))};
+          const T lnq{ln(q / (p + q))};
+          const T t{exp(p * lnp) / p};
+          const T u{exp(q * lnq) / q};
+          const T w{t + u};
+          if (x < t / w)
+            y = pow(p * w * x, 1 / p);
+          else
+            y = 1 - pow(q * w * (1 - x), 1 / q);
+        }
+        for (int i{0}; i < numeric_limits<T>::digits; ++i) {
+          const T f{Beta_I(y, p, q, norm) - x};
+          const T df{pow(1 - y, q - 1) * pow(y, p - 1) / norm};
           T dy(f / df);
-          if (math::abs(dy) < 2 * math::numeric_limits<T>::epsilon())
+          if (abs(f / y) < 2 * numeric_limits<T>::epsilon())
             break;
           // avoid overshooting
-          while (y - dy < 0 or y - dy > 1) {
-            dy *= 3;
-            dy /= 4;
-          }
+          while (y - dy <= 0 or y - dy >= 1)
+            dy *= T{3} / T{4};
           y -= dy;
         }
         return y;
@@ -465,261 +501,177 @@ namespace trng {
     }
 #endif
 
-    // --- error function ----------------------------------------------
+    // --- error function and complementary error function--------------
 
-    TRNG_CUDA_ENABLE
-    inline float erf(float x) { return ::std::erf(x); }
-
-    TRNG_CUDA_ENABLE
-    inline double erf(double x) { return ::std::erf(x); }
-
-#if !(defined __CUDA_ARCH__)
-    inline long double erf(long double x) { return ::std::erf(x); }
-#endif
-
-    // --- complementary error function --------------------------------
-
-    TRNG_CUDA_ENABLE
-    inline float erfc(float x) { return ::std::erfc(x); }
-
-    TRNG_CUDA_ENABLE
-    inline double erfc(double x) { return ::std::erfc(x); }
-
-#if !(defined __CUDA_ARCH__)
-    inline long double erfc(long double x) { return std::erfc(x); }
-#endif
+    using ::std::erf;
+    using ::std::erfc;
 
     // --- normal distribution function  -------------------------------
 
     TRNG_CUDA_ENABLE
     inline float Phi(float x) {
-      return 0.5f + 0.5f * erf(constants<float>::one_over_sqrt_2() * x);
+      x *= constants<float>::one_over_sqrt_2;
+      if (x < -0.6744897501960817f * constants<float>::one_over_sqrt_2)
+        return 0.5f * erfc(-x);
+      if (x > +0.6744897501960817f * constants<float>::one_over_sqrt_2)
+        return 1.0f - 0.5f * erfc(x);
+      return 0.5f + 0.5f * erf(x);
     }
 
     TRNG_CUDA_ENABLE
     inline double Phi(double x) {
-      return 0.5 + 0.5 * erf(constants<double>::one_over_sqrt_2() * x);
+      x *= constants<double>::one_over_sqrt_2;
+      if (x < -0.6744897501960817 * constants<double>::one_over_sqrt_2)
+        return 0.5 * erfc(-x);
+      if (x > +0.6744897501960817 * constants<double>::one_over_sqrt_2)
+        return 1.0 - 0.5 * erfc(x);
+      return 0.5 + 0.5 * erf(x);
     }
 
     inline long double Phi(long double x) {
-      return 0.5l + 0.5l * erf(constants<long double>::one_over_sqrt_2() * x);
+      x *= constants<long double>::one_over_sqrt_2;
+      if (x < -0.6744897501960817l * constants<long double>::one_over_sqrt_2)
+        return 0.5 * erfc(-x);
+      if (x > +0.6744897501960817l * constants<long double>::one_over_sqrt_2)
+        return 1.0l - 0.5l * erfc(x);
+      return 0.5l + 0.5l * erf(x);
     }
 
     // --- inverse of normal distribution function  --------------------
 
     // this function is based on an approximation by Peter J. Acklam
-    // see http://home.online.no/~pjacklam/notes/invnorm/ for details
+    // see http://home.online.no/~pjacklam/notes/invnorm/ or
+    // https://web.archive.org/web/20151030215612/http://home.online.no/~pjacklam/notes/invnorm/
+    // for details
 
     namespace detail {
 
       template<typename T>
-      struct inv_Phi_traits;
-
-      template<>
-      struct inv_Phi_traits<float> {
-        TRNG_CUDA_ENABLE
-        static float a(int i) noexcept {
-          const float a_[] = {-3.969683028665376e+01f, 2.209460984245205e+02f,
-                              -2.759285104469687e+02f, 1.383577518672690e+02f,
-                              -3.066479806614716e+01f, 2.506628277459239e+00f};
-          return a_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static float b(int i) noexcept {
-          const float b_[] = {-5.447609879822406e+01f, 1.615858368580409e+02f,
-                              -1.556989798598866e+02f, 6.680131188771972e+01f,
-                              -1.328068155288572e+01f};
-          return b_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static float c(int i) noexcept {
-          const float c_[] = {-7.784894002430293e-03f, -3.223964580411365e-01f,
-                              -2.400758277161838e+00f, -2.549732539343734e+00f,
-                              4.374664141464968e+00f,  2.938163982698783e+00f};
-          return c_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static float d(int i) noexcept {
-          const float d_[] = {7.784695709041462e-03f, 3.224671290700398e-01f,
-                              2.445134137142996e+00f, 3.754408661907416e+00f};
-          return d_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static float x_low() noexcept { return 0.02425f; }
-        TRNG_CUDA_ENABLE
-        static float x_high() noexcept { return 1.0f - 0.02425f; }
-        TRNG_CUDA_ENABLE
-        static float zero() noexcept { return 0.0f; }
-        TRNG_CUDA_ENABLE
-        static float one() noexcept { return 1.0f; }
-        TRNG_CUDA_ENABLE
-        static float one_half() noexcept { return 0.5f; }
-        TRNG_CUDA_ENABLE
-        static float minus_two() noexcept { return -2.0f; }
-      };
-
-      template<>
-      struct inv_Phi_traits<double> {
-        TRNG_CUDA_ENABLE
-        static double a(int i) noexcept {
-          const double a_[] = {-3.969683028665376e+01, 2.209460984245205e+02,
-                               -2.759285104469687e+02, 1.383577518672690e+02,
-                               -3.066479806614716e+01, 2.506628277459239e+00};
-          return a_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static double b(int i) noexcept {
-          const double b_[] = {-5.447609879822406e+01, 1.615858368580409e+02,
-                               -1.556989798598866e+02, 6.680131188771972e+01,
-                               -1.328068155288572e+01};
-          return b_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static double c(int i) noexcept {
-          const double c_[] = {-7.784894002430293e-03, -3.223964580411365e-01,
-                               -2.400758277161838e+00, -2.549732539343734e+00,
-                               4.374664141464968e+00,  2.938163982698783e+00};
-          return c_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static double d(int i) noexcept {
-          const double d_[] = {7.784695709041462e-03, 3.224671290700398e-01,
-                               2.445134137142996e+00, 3.754408661907416e+00};
-          return d_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static double x_low() noexcept { return 0.02425; }
-        TRNG_CUDA_ENABLE
-        static double x_high() noexcept { return 1.0 - 0.02425; }
-        TRNG_CUDA_ENABLE
-        static double zero() noexcept { return 0.0; }
-        TRNG_CUDA_ENABLE
-        static double one() noexcept { return 1.0; }
-        TRNG_CUDA_ENABLE
-        static double one_half() noexcept { return 0.5; }
-        TRNG_CUDA_ENABLE
-        static double minus_two() noexcept { return -2.0; }
-      };
-
-      template<>
-      struct inv_Phi_traits<long double> {
-        TRNG_CUDA_ENABLE
-        static long double a(int i) noexcept {
-          const long double a_[] = {-3.969683028665376e+01l, 2.209460984245205e+02l,
-                                    -2.759285104469687e+02l, 1.383577518672690e+02l,
-                                    -3.066479806614716e+01l, 2.506628277459239e+00l};
-          return a_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static long double b(int i) noexcept {
-          const long double b_[] = {-5.447609879822406e+01l, 1.615858368580409e+02l,
-                                    -1.556989798598866e+02l, 6.680131188771972e+01l,
-                                    -1.328068155288572e+01l};
-          return b_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static long double c(int i) noexcept {
-          const long double c_[] = {-7.784894002430293e-03l, -3.223964580411365e-01l,
-                                    -2.400758277161838e+00l, -2.549732539343734e+00l,
-                                    4.374664141464968e+00l,  2.938163982698783e+00l};
-          return c_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static long double d(int i) noexcept {
-          const long double d_[] = {7.784695709041462e-03l, 3.224671290700398e-01l,
-                                    2.445134137142996e+00l, 3.754408661907416e+00l};
-          return d_[i];
-        }
-        TRNG_CUDA_ENABLE
-        static long double x_low() noexcept { return 0.02425l; }
-        TRNG_CUDA_ENABLE
-        static long double x_high() noexcept { return 1.0l - 0.02425l; }
-        TRNG_CUDA_ENABLE
-        static long double zero() noexcept { return 0.0l; }
-        TRNG_CUDA_ENABLE
-        static long double one() noexcept { return 1.0l; }
-        TRNG_CUDA_ENABLE
-        static long double one_half() noexcept { return 0.5l; }
-        TRNG_CUDA_ENABLE
-        static long double minus_two() noexcept { return -2.0l; }
+      struct inv_Phi_traits {
+        static constexpr T a[6]{
+            static_cast<T>(-3.969683028665376e+01l), static_cast<T>(2.209460984245205e+02l),
+            static_cast<T>(-2.759285104469687e+02l), static_cast<T>(1.383577518672690e+02l),
+            static_cast<T>(-3.066479806614716e+01l), static_cast<T>(2.506628277459239e+00l)};
+        static constexpr T b[5]{
+            static_cast<T>(-5.447609879822406e+01l), static_cast<T>(1.615858368580409e+02l),
+            static_cast<T>(-1.556989798598866e+02l), static_cast<T>(6.680131188771972e+01l),
+            static_cast<T>(-1.328068155288572e+01l)};
+        static constexpr T c[6]{
+            static_cast<T>(-7.784894002430293e-03l), static_cast<T>(-3.223964580411365e-01l),
+            static_cast<T>(-2.400758277161838e+00l), static_cast<T>(-2.549732539343734e+00l),
+            static_cast<T>(4.374664141464968e+00l),  static_cast<T>(2.938163982698783e+00l)};
+        static constexpr T d[4]{
+            static_cast<T>(7.784695709041462e-03l), static_cast<T>(3.224671290700398e-01l),
+            static_cast<T>(2.445134137142996e+00l), static_cast<T>(3.754408661907416e+00l)};
+        static constexpr T x_low = static_cast<T>(0.02425l);
+        static constexpr T x_high = static_cast<T>(1.0l - 0.02425l);
+        static constexpr T one_half = static_cast<T>(0.5l);
       };
 
       template<typename T>
-      TRNG_CUDA_ENABLE T inv_Phi(T x) {
-        if (x < inv_Phi_traits<T>::zero() or x > inv_Phi_traits<T>::one()) {
+      constexpr T inv_Phi_traits<T>::a[6];
+
+      template<typename T>
+      constexpr T inv_Phi_traits<T>::b[5];
+
+      template<typename T>
+      constexpr T inv_Phi_traits<T>::c[6];
+
+      template<typename T>
+      constexpr T inv_Phi_traits<T>::d[4];
+
+      // ---------------------------------------------------------------
+
+      template<typename T>
+      TRNG_CUDA_ENABLE T inv_Phi_approx(T x) {
+        using traits = inv_Phi_traits<T>;
+        if (x < 0 or x > 1) {
 #if !(defined __CUDA_ARCH__)
           errno = EDOM;
 #endif
           return numeric_limits<T>::quiet_NaN();
         }
-        if (x == inv_Phi_traits<T>::zero())
+        if (x == 0)
           return -numeric_limits<T>::infinity();
-        if (x == inv_Phi_traits<T>::one())
+        if (x == 1)
           return numeric_limits<T>::infinity();
         T t, q;
-        if (x < inv_Phi_traits<T>::x_low()) {
+        if (x < traits::x_low) {
           // Rational approximation for lower region
-          q = sqrt(inv_Phi_traits<T>::minus_two() * ln(x));
-          t = (((((inv_Phi_traits<T>::c(0) * q + inv_Phi_traits<T>::c(1)) * q +
-                  inv_Phi_traits<T>::c(2)) *
-                     q +
-                 inv_Phi_traits<T>::c(3)) *
+          q = sqrt(-2 * ln(x));
+          t = (((((traits::c[0] * q + traits::c[1]) * q + traits::c[2]) * q + traits::c[3]) *
                     q +
-                inv_Phi_traits<T>::c(4)) *
+                traits::c[4]) *
                    q +
-               inv_Phi_traits<T>::c(5)) /
-              ((((inv_Phi_traits<T>::d(0) * q + inv_Phi_traits<T>::d(1)) * q +
-                 inv_Phi_traits<T>::d(2)) *
-                    q +
-                inv_Phi_traits<T>::d(3)) *
-                   q +
-               inv_Phi_traits<T>::one());
-        } else if (x < inv_Phi_traits<T>::x_high()) {
+               traits::c[5]) /
+              ((((traits::d[0] * q + traits::d[1]) * q + traits::d[2]) * q + traits::d[3]) * q +
+               1);
+        } else if (x < traits::x_high) {
           // Rational approximation for central region
-          q = x - inv_Phi_traits<T>::one_half();
+          q = x - traits::one_half;
           T r = q * q;
-          t = (((((inv_Phi_traits<T>::a(0) * r + inv_Phi_traits<T>::a(1)) * r +
-                  inv_Phi_traits<T>::a(2)) *
-                     r +
-                 inv_Phi_traits<T>::a(3)) *
+          t = (((((traits::a[0] * r + traits::a[1]) * r + traits::a[2]) * r + traits::a[3]) *
                     r +
-                inv_Phi_traits<T>::a(4)) *
+                traits::a[4]) *
                    r +
-               inv_Phi_traits<T>::a(5)) *
+               traits::a[5]) *
               q /
-              (((((inv_Phi_traits<T>::b(0) * r + inv_Phi_traits<T>::b(1)) * r +
-                  inv_Phi_traits<T>::b(2)) *
-                     r +
-                 inv_Phi_traits<T>::b(3)) *
+              (((((traits::b[0] * r + traits::b[1]) * r + traits::b[2]) * r + traits::b[3]) *
                     r +
-                inv_Phi_traits<T>::b(4)) *
+                traits::b[4]) *
                    r +
-               inv_Phi_traits<T>::one());
+               1);
         } else {
           // Rational approximation for upper region
-          q = sqrt(inv_Phi_traits<T>::minus_two() * ln(1 - x));
-          t = -(((((inv_Phi_traits<T>::c(0) * q + inv_Phi_traits<T>::c(1)) * q +
-                   inv_Phi_traits<T>::c(2)) *
-                      q +
-                  inv_Phi_traits<T>::c(3)) *
+          q = sqrt(-2 * ln1p(-x));
+          t = -(((((traits::c[0] * q + traits::c[1]) * q + traits::c[2]) * q + traits::c[3]) *
                      q +
-                 inv_Phi_traits<T>::c(4)) *
+                 traits::c[4]) *
                     q +
-                inv_Phi_traits<T>::c(5)) /
-              ((((inv_Phi_traits<T>::d(0) * q + inv_Phi_traits<T>::d(1)) * q +
-                 inv_Phi_traits<T>::d(2)) *
-                    q +
-                inv_Phi_traits<T>::d(3)) *
-                   q +
-               inv_Phi_traits<T>::one());
-        }
-        // refinement by Halley rational method
-        if (numeric_limits<T>::epsilon() < 1e-9) {
-          T e(Phi(t) - x);
-          T u(e * constants<T>::sqrt_2pi() * exp(t * t * inv_Phi_traits<T>::one_half()));
-          t -= u / (inv_Phi_traits<T>::one() + t * u * inv_Phi_traits<T>::one_half());
+                traits::c[5]) /
+              ((((traits::d[0] * q + traits::d[1]) * q + traits::d[2]) * q + traits::d[3]) * q +
+               1);
         }
         return t;
+      }
+
+      template<typename T>
+      TRNG_CUDA_ENABLE T inv_Phi(T x) {
+        using traits = inv_Phi_traits<T>;
+        T y{inv_Phi_approx(x)};
+        if (isfinite(y)) {  // refinement by Halley rational method
+          const T e{(Phi(y) - x)};
+          const T u{e * constants<T>::sqrt_2pi * exp(y * y * traits::one_half)};
+          y -= u / (1 + y * u * traits::one_half);
+        }
+        return y;
+      }
+
+      template<typename T>
+      TRNG_CUDA_ENABLE T inv_erf(T x) {
+        T y{inv_Phi_approx((x + 1) / 2) * constants<T>::one_over_sqrt_2};
+        if (isfinite(y)) {  // refinement by Halley rational method
+          const T e{erf(y) - x};
+          const T u{e * (constants<T>::sqrt_pi_over_2) * exp(y * y)};
+          y -= u / (1 + y * u);
+        }
+        return y;
+      }
+
+      template<typename T>
+      TRNG_CUDA_ENABLE T inv_erfc(T x) {
+        // step size in the Halley step is proportiaonal to erfc, use symmetry to increase
+        // numerical accuracy
+        const bool flag{x > 1};
+        if (flag)
+          x = -(x - 1) + 1;
+        T y{-inv_Phi_approx(x / 2) * constants<T>::one_over_sqrt_2};
+        if (isfinite(y)) {  // refinement by Halley rational method
+          const T e{erfc(y) - x};
+          const T u{-e * (constants<T>::sqrt_pi_over_2) * exp(y * y)};
+          y -= u / (1 + y * u);
+        }
+        return flag ? -y : y;
       }
 
     }  // namespace detail
@@ -736,60 +688,26 @@ namespace trng {
 
     // --- inverse of error function  ----------------------------------
 
-    // see http://mathworld.wolfram.com/InverseErf.html
-    // see The On-Line Encyclopedia of Integer Sequences!
-    // http://www.research.att.com/~njas/sequences/A007019
-    // http://www.research.att.com/~njas/sequences/A092676
+    TRNG_CUDA_ENABLE
+    inline float inv_erf(float x) { return detail::inv_erf(x); }
 
     TRNG_CUDA_ENABLE
-    inline float inv_erf(float x) {
-      if (abs(x) < 1.0f / 8.0f) {
-        x *= 0.886226925452758013649085f;  // sqrt(pi)/2
-        float x2 = x * x, x3 = x2 * x, x4 = x2 * x2;
-        return x + (1.0f / 3.0f + 7.0f / 30.0f * x2 + 127.0f / 630.0f * x4) * x3;
-      }
-      return inv_Phi(0.5f * (x + 1.0f)) * constants<float>::one_over_sqrt_2();
-    }
-
-    TRNG_CUDA_ENABLE
-    inline double inv_erf(double x) {
-      if (abs(x) < 1.0 / 20.0) {
-        x *= 0.886226925452758013649085;  // sqrt(pi)/2
-        double x2 = x * x, x3 = x2 * x, x4 = x2 * x2, x5 = x3 * x2;
-        return x + (1.0 / 3.0 + 127.0 / 630.0 * x4) * x3 +
-               (7.0 / 30.0 + 4369.0 / 22680.0 * x4) * x5;
-      }
-      return inv_Phi(0.5 * (x + 1.0)) * constants<double>::one_over_sqrt_2();
-    }
+    inline double inv_erf(double x) { return detail::inv_erf(x); }
 
 #if !(defined __CUDA_ARCH__)
-    inline long double inv_erf(long double x) {
-      if (abs(x) < 1.0l / 24.0l) {
-        x *= 0.886226925452758013649085l;  // sqrt(pi)/2
-        long double x2 = x * x, x3 = x2 * x, x4 = x2 * x2, x5 = x3 * x2, x7 = x3 * x4;
-        return x + 1.0l / 3.0l * x3 + 7.0l / 30.0l * x5 + 127.0l / 630.0l * x7 +
-               4369.0l / 22680.0l * x4 * x5 + 34807.0l / 178200.0l * x4 * x7;
-      }
-      return inv_Phi(0.5l * (x + 1.0l)) * constants<long double>::one_over_sqrt_2();
-    }
+    inline long double inv_erf(long double x) { return detail::inv_erf(x); }
 #endif
 
     // --- inverse of complementary error function  --------------------
 
     TRNG_CUDA_ENABLE
-    inline float inv_erfc(float x) {
-      return -inv_Phi(0.5f * x) * constants<float>::one_over_sqrt_2();
-    }
+    inline float inv_erfc(float x) { return detail::inv_erfc(x); }
 
     TRNG_CUDA_ENABLE
-    inline double inv_erfc(double x) {
-      return -inv_Phi(0.5 * x) * constants<double>::one_over_sqrt_2();
-    }
+    inline double inv_erfc(double x) { return detail::inv_erfc(x); }
 
 #if !(defined __CUDA_ARCH__)
-    inline long double inv_erfc(long double x) {
-      return -inv_Phi(0.5l * x) * constants<long double>::one_over_sqrt_2();
-    }
+    inline long double inv_erfc(long double x) { return detail::inv_erfc(x); }
 #endif
 
   }  // namespace math

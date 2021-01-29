@@ -1,14 +1,30 @@
-# source("inst/tools/upgradeTRNG.R")
-# upgradeTRNG(version = "4.22")
-# # off-line:
-# upgradeTRNG(version = "4.22", sprintf("file://%s", normalizePath("~/Downloads")))
+if (FALSE) {
+  source("inst/tools/upgradeTRNG.R")
+  upgradeTRNG(version = "4.23.1", year = "2021")
+  # with patch, packported from trng4 @22cc3b6:
+  patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
+  system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
+  upgradeTRNG(version = "4.23", patch = patch_file)
+  # off-line:
+  upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+}
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
+                        year = "0000",
+                        patch = NULL,
                         cleanTmp = TRUE) {
 
   pre_4.22 <- package_version(version) < package_version("4.22")
+  gh_only <- package_version(version) >= package_version("4.23")
   lib.tar.gz <- sprintf("trng-%s.tar.gz", version)
-  libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
+  if (gh_only) {
+    gh_base_url <- "https://github.com/rabauke/trng4"
+    libURL <- sprintf("%s/archive/v%s.tar.gz", gh_base_url, version)
+    docURL <- sprintf("%s/tree/v%s/doc/trng.pdf", gh_base_url, version)
+  } else {
+    libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
+    docURL <- "https://numbercrunch.de/trng/trng.pdf"
+  }
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)
 
@@ -22,6 +38,19 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     src.dir
   )
   stopifnot(dir.exists(lib.src.path))
+  version_info <- version
+  if (!is.null(patch)) {
+    message("Apply patch ", patch)
+    patch_file <- normalizePath(patch)
+    stopifnot(
+      0 == system(paste("cd", dirname(lib.src.path),  "&& git apply -v", patch_file))
+    )
+    # add a patch component to the version, and include an explicit information
+    # in `TRNG.Version()` about this being a version patched inside rTRNG
+    version <- paste(version, "1", sep = ".")
+    version_info <- paste(version, "(patched in rTRNG)")
+    message("  >> using patch version: ", version_info)
+  }
 
   .message <- function(msg, dir, files) {
     message(
@@ -72,7 +101,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   message("Update ", version.file, " source file")
   version.code <- sub(
     "(return\\(\")([^\"]+)(\"\\))",
-    paste0("\\1", version, "\\3"),
+    paste0("\\1", version_info, "\\3"),
     readLines(version.file)
   )
   writeLines(version.code, version.file)
@@ -81,7 +110,22 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
   message("Update DESCRIPTION with version ", rTRNG.version)
   description.text <- sub("(Version: ).*$", paste0("\\1", rTRNG.version),
                           readLines("DESCRIPTION"))
+  message("Update DESCRIPTION with documentation year ", year)
+  description.text <- sub("Bauke \\(\\d{4}\\)$",
+                          sprintf("Bauke (%s)", year),
+                          description.text)
+  message("Update DESCRIPTION with documentation URL <", docURL, ">")
+  description.text <- sub("<.*/trng[.]pdf>",
+                          sprintf("<%s>", docURL),
+                          description.text)
   writeLines(description.text, "DESCRIPTION")
+
+  message("Update TRNG reference URL <", docURL, ">")
+  reference.text <- sub("url\\{.*trng[.]pdf\\}",
+                        sprintf("url{%s}", docURL),
+                        readLines("man-roxygen/references-TRNG.R"))
+  writeLines(reference.text, "man-roxygen/references-TRNG.R")
+
 
   invisible()
 
