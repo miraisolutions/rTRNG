@@ -1,6 +1,6 @@
 if (FALSE) {
   source("inst/tools/upgradeTRNG.R")
-  upgradeTRNG(version = "4.23")
+  upgradeTRNG(version = "4.23.1")
   # with patch, packported from trng4 @22cc3b6:
   patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
   system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
@@ -14,7 +14,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
                         cleanTmp = TRUE) {
 
   pre_4.22 <- package_version(version) < package_version("4.22")
-  gh_only <- package_version(version) == package_version("4.23")
+  gh_only <- package_version(version) >= package_version("4.23")
   lib.tar.gz <- sprintf("trng-%s.tar.gz", version)
   if (gh_only) {
     gh_base_url <- "https://github.com/rabauke/trng4/archive"
