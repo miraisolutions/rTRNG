@@ -1,3 +1,5 @@
+# rTRNG (development version)
+
 # rTRNG 4.23.1-1
 
 ## Maintenance release
