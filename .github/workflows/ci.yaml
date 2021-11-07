@@ -41,8 +41,19 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@v1
+        # this gets often stuck (esp. on macOS) for the default 6h timeout
+        timeout-minutes: 5
         with:
           r-version: ${{ matrix.config.r }}
+
+      - name: Ensure symlinks to the installed R and Rscript on macOS
+        # work around https://github.com/r-lib/actions/issues/412
+        if: runner.os == 'macOS'
+        run: |
+          sudo ln -sf $R_HOME/bin/R /usr/local/bin
+          sudo ln -sf $R_HOME/bin/Rscript /usr/local/bin
+        env:
+          R_HOME: /Library/Frameworks/R.framework/Resources
 
       - uses: r-lib/actions/setup-pandoc@v1
 
