@@ -59,7 +59,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages("remotes", INSTALL_opts = "${{ matrix.config.multiarch }}")
+          install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -82,8 +82,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE, INSTALL_opts = "${{ matrix.config.multiarch }}")
-          remotes::install_cran("rcmdcheck", INSTALL_opts = "${{ matrix.config.multiarch }}")
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
       - name: Check
@@ -106,6 +106,6 @@ jobs:
       - name: Test coverage
         if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
         run: |
-          remotes::install_cran("covr", INSTALL_opts = "${{ matrix.config.multiarch }}")
+          remotes::install_cran("covr")
           covr::codecov(type = "all")
         shell: Rscript {0}
