@@ -24,7 +24,7 @@ jobs:
         config:
           - {os: windows-latest, r: 'oldrel'}
           - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel', multiarch: '--no-multiarch'}
+          - {os: windows-latest, r: 'devel'}
           - {os: macOS-latest, r: 'oldrel'}
           - {os: macOS-latest, r: 'release'}
           - {os: macOS-latest, r: 'devel'}
@@ -89,11 +89,7 @@ jobs:
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: |
-          rcmdcheck::rcmdcheck(
-            args = c("--no-manual", "--as-cran", "${{ matrix.config.multiarch }}"),
-            error_on = "warning", check_dir = "check"
-          )
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
