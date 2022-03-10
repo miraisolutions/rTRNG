@@ -8,7 +8,7 @@
 \description{
 Tina's Random Number Generator Library (\pkg{TRNG}) is a state-of-the-art C++
 pseudo-random number generator library for sequential and parallel Monte
-Carlo simulations (\url{https://numbercrunch.de/trng/}). It provides a variety
+Carlo simulations (\url{https://www.numbercrunch.de/trng/}). It provides a variety
 of random number engines (pseudo-random number generators) and distributions.
 In particular, \emph{parallel} random number engines provided by TRNG support
 techniques such as \emph{block-splitting} and \emph{leapfrogging} suitable
