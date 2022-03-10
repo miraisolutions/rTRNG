@@ -1,5 +1,7 @@
 # rTRNG (development version)
 
+- Continuous integration GitHub Actions workflow maintenance (#26, #24).
+
 # rTRNG 4.23.1-1
 
 ## Maintenance release

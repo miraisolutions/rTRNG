@@ -1,5 +1,5 @@
-# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
-# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 
 # Trigger the workflow...
 on:
@@ -24,88 +24,44 @@ jobs:
         config:
           - {os: windows-latest, r: 'oldrel'}
           - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel', multiarch: '--no-multiarch'}
+          - {os: windows-latest, r: 'devel', http-user-agent: 'release'}
           - {os: macOS-latest, r: 'oldrel'}
           - {os: macOS-latest, r: 'release'}
-          - {os: macOS-latest, r: 'devel'}
-          - {os: ubuntu-20.04, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: macOS-latest, r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest, r: 'oldrel'}
+          - {os: ubuntu-latest, r: 'release'}
+          - {os: ubuntu-latest, r: 'devel', http-user-agent: 'release'}
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
         # this gets often stuck (esp. on macOS) for the default 6h timeout
+        # (see r-lib/actions#435)
         timeout-minutes: 5
         with:
           r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
 
-      - name: Ensure symlinks to the installed R and Rscript on macOS
-        # work around https://github.com/r-lib/actions/issues/412
-        if: runner.os == 'macOS'
-        run: |
-          sudo ln -sf $R_HOME/bin/R /usr/local/bin
-          sudo ln -sf $R_HOME/bin/Rscript /usr/local/bin
-        env:
-          R_HOME: /Library/Frameworks/R.framework/Resources
-
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - name: Query dependencies
-        run: |
-          install.packages("remotes", INSTALL_opts = "${{ matrix.config.multiarch }}")
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          extra-packages: any::rcmdcheck
+          needs: check
 
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE, INSTALL_opts = "${{ matrix.config.multiarch }}")
-          remotes::install_cran("rcmdcheck", INSTALL_opts = "${{ matrix.config.multiarch }}")
-        shell: Rscript {0}
-
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: |
-          rcmdcheck::rcmdcheck(
-            args = c("--no-manual", "--as-cran", "${{ matrix.config.multiarch }}"),
-            error_on = "warning", check_dir = "check"
-          )
-        shell: Rscript {0}
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
+      - uses: r-lib/actions/check-r-package@v2
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          upload-snapshots: true
 
       - name: Test coverage
         if: success() && runner.os == 'Linux' && matrix.config.r == 'release'
         run: |
-          remotes::install_cran("covr", INSTALL_opts = "${{ matrix.config.multiarch }}")
+          pak::pkg_install("any::covr")
           covr::codecov(type = "all")
         shell: Rscript {0}
