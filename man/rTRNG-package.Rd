@@ -15,7 +15,7 @@ techniques such as \emph{block-splitting} and \emph{leapfrogging} suitable
 for parallel algorithms. See \sQuote{References} for an introduction to the
 concepts and details around (parallel) random number generation.
 
-\if{html}{\figure{rTRNG.svg}{options: height="150px" alt="rTRNG"}}
+\if{html}{\figure{rTRNG.svg}{options: height="150" alt="rTRNG"}}
 
 Package \pkg{rTRNG} provides the \R users with access to the functionality of
 the underlying TRNG C++ library in different ways and at different levels.
