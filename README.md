@@ -5,12 +5,15 @@
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 
+<!-- badges: start -->
+
 [![CRAN
 status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 [![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
 [![valgrind](https://github.com/miraisolutions/rTRNG/workflows/valgrind/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3Avalgrind)
 [![Codecov
 coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://app.codecov.io/gh/miraisolutions/rTRNG/branch/master)
+<!-- badges: end -->
 
 **[TRNG](https://www.numbercrunch.de/trng/)** (Tina’s Random Number
 Generator) is a state-of-the-art C++ pseudo-random number generator
