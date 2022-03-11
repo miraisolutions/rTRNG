@@ -2,7 +2,7 @@
 
 - Continuous integration GitHub Actions workflow maintenance (#26, #24).
 - Fix invalid image height property attribute in the documentation (#25).
-- Fix redirected URLs in documentation and unnecessary LazyData in DESCRIPTION (#28).
+- Fix redirected URLs in documentation and remove unnecessary LazyData in DESCRIPTION (#28).
 
 # rTRNG 4.23.1-1
 
