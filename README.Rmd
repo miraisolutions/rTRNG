@@ -5,19 +5,19 @@ output: github_document
 # Make sure you have added an executable pre-commit hook in your local checkout 
 #   .git/hooks/pre-commit
 # to prevent accidental commits of README.Rmd not re-knitted to README.md.
-# If not, you can copy the hook from inst/tools
-#   $ cp inst/tools/pre-commit .git/hooks
+# You can copy the hook from inst/tools using R via
+# usethis::use_git_hook("pre-commit", readLines("inst/tools/pre-commit", encoding="UTF-8"))
 ################################################################################
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
-```{r, echo = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
   R.options = list(digits = 6, width = 60) # fit 5 elements per row
 )
 ```
@@ -38,12 +38,14 @@ stop_if_no_vignette <- function(topic, package = "rTRNG") {
 
 # rTRNG: R package providing access and examples to TRNG C++ library
 
+<!-- badges: start -->
 [![CRAN status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
 [![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
  [![valgrind](https://github.com/miraisolutions/rTRNG/workflows/valgrind/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3Avalgrind)
-[![Codecov coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://codecov.io/gh/miraisolutions/rTRNG?branch=master)
+[![Codecov coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://app.codecov.io/gh/miraisolutions/rTRNG/branch/master)
+<!-- badges: end -->
 
-**[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
+**[TRNG](https://www.numbercrunch.de/trng/)** (Tina's Random Number Generator) is a
 state-of-the-art C++ pseudo-random number generator library for sequential and
 parallel Monte Carlo simulations. It provides a variety of random number engines
 (pseudo-random number generators) and distributions. In particular, *parallel*

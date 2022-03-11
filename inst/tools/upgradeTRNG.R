@@ -23,7 +23,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     docURL <- sprintf("%s/blob/v%s/doc/trng.pdf", gh_base_url, version)
   } else {
     libURL <- sprintf("%s/%s", base_url, lib.tar.gz)
-    docURL <- "https://numbercrunch.de/trng/trng.pdf"
+    docURL <- "https://www.numbercrunch.de/trng/trng.pdf"
   }
   tmpDir <- tempdir()
   lib.tar.gz.path <- file.path(tmpDir, lib.tar.gz)

@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // C_runif_trng
 NumericVector C_runif_trng(const int n, const double min, const double max, S4 engine, const long parallelGrain);
 RcppExport SEXP _rTRNG_C_runif_trng(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP, SEXP engineSEXP, SEXP parallelGrainSEXP) {

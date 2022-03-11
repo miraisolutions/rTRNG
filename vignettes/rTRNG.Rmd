@@ -29,7 +29,7 @@ results are independent of the architecture, parallelization techniques and
 number of parallel processes.
 
 **rTRNG** is an R package for advanced parallel Random Number Generation in
-R. It relies on **[TRNG](https://numbercrunch.de/trng/)** (Tina's Random Number
+R. It relies on **[TRNG](https://www.numbercrunch.de/trng/)** (Tina's Random Number
 Generator), a state-of-the-art C++ pseudo-random number generator library for
 sequential and parallel Monte Carlo simulations.  In particular, *parallel*
 random number engines provided by TRNG can be manipulated by `jump` and `split`
