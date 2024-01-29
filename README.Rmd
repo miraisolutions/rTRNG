@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 ```
 ```{r, check-vignette, include = FALSE}
 # make sure a vignette with a given name exists, you may have to run
-# devtools::install(build_vignettes = TRUE) in case of errors
+# remotes::install_local(build_vignettes = TRUE) in case of errors
 stop_if_no_vignette <- function(topic, package = "rTRNG") {
   invisible( # prevents opening the vignette
     withCallingHandlers(
@@ -40,8 +40,7 @@ stop_if_no_vignette <- function(topic, package = "rTRNG") {
 
 <!-- badges: start -->
 [![CRAN status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
-[![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
- [![valgrind](https://github.com/miraisolutions/rTRNG/workflows/valgrind/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3Avalgrind)
+[![R-CMD-check](https://github.com/miraisolutions/rTRNG/actions/workflows/ci.yaml/badge.svg)](https://github.com/miraisolutions/rTRNG/actions/workflows/ci.yaml) [![valgrind](https://github.com/miraisolutions/rTRNG/actions/workflows/valgrind.yaml/badge.svg)](https://github.com/miraisolutions/rTRNG/actions/workflows/valgrind.yaml)
 [![Codecov coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://app.codecov.io/gh/miraisolutions/rTRNG/branch/master)
 <!-- badges: end -->
 
