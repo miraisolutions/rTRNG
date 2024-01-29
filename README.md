@@ -9,8 +9,8 @@
 
 [![CRAN
 status](http://www.r-pkg.org/badges/version/rTRNG)](https://cran.r-project.org/package=rTRNG)
-[![R-CMD-check](https://github.com/miraisolutions/rTRNG/workflows/R-CMD-check/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3AR-CMD-check)
-[![valgrind](https://github.com/miraisolutions/rTRNG/workflows/valgrind/badge.svg)](https://github.com/miraisolutions/rTRNG/actions?query=workflow%3Avalgrind)
+[![R-CMD-check](https://github.com/miraisolutions/rTRNG/actions/workflows/ci.yaml/badge.svg)](https://github.com/miraisolutions/rTRNG/actions/workflows/ci.yaml)
+[![valgrind](https://github.com/miraisolutions/rTRNG/actions/workflows/valgrind.yaml/badge.svg)](https://github.com/miraisolutions/rTRNG/actions/workflows/valgrind.yaml)
 [![Codecov
 coverage](https://codecov.io/gh/miraisolutions/rTRNG/branch/master/graph/badge.svg)](https://app.codecov.io/gh/miraisolutions/rTRNG/branch/master)
 <!-- badges: end -->
@@ -82,7 +82,7 @@ remotes::install_github("miraisolutions/rTRNG", build_vignettes = TRUE)
 
 If you try to build the package yourself from source and run
 `Rcpp::compileAttributes()` during the process, you need to use a
-version of **Rcpp &gt;= 0.12.11.2**. Earlier versions like 0.12.11 will
+version of **Rcpp \>= 0.12.11.2**. Earlier versions like 0.12.11 will
 not generate the desired `_rcpp_module_boot_trng` symbol in
 *RcppExports.cpp*.
 
@@ -146,7 +146,7 @@ identical(x_serial, x_parallel)
 The TRNG C++ library is made available by **rTRNG** to standalone C++
 code compiled with `Rcpp::sourceCpp` thanks to the `Rcpp::depends`
 attribute, with `Rcpp::plugins(cpp11)` enforcing the C++11 standard
-required by TRNG &gt;= 4.22:
+required by TRNG \>= 4.22:
 
 ``` cpp
 // [[Rcpp::depends(rTRNG)]]
@@ -179,18 +179,17 @@ exampleCpp()
 Creating an R package with C++ code using the TRNG library and headers
 through **rTRNG** is achieved by
 
--   adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION
-    file
--   importing one symbol in the NAMESPACE:
-    `importFrom(rTRNG, TRNG.Version)`
--   enforcing compilation using C++11 in Makevars\[.win\] via
-    `CXX_STD = CXX11`
--   setting the relevant linker flags in Makevars\[.win\] via
-    `rTRNG::LdFlags()`
-    -   Makevars:
-        `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
-    -   Makevars.win:
-        `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
+- adding `Imports: rTRNG` and `LinkingTo: rTRNG` to the DESCRIPTION file
+- importing one symbol in the NAMESPACE:
+  `importFrom(rTRNG, TRNG.Version)`
+- enforcing compilation using C++11 in Makevars\[.win\] via
+  `CXX_STD = CXX11`
+- setting the relevant linker flags in Makevars\[.win\] via
+  `rTRNG::LdFlags()`
+  - Makevars:
+    `PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "rTRNG::LdFlags()")`
+  - Makevars.win:
+    `PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "rTRNG::LdFlags()")`
 
 ### Note about C++ code on macOS
 
