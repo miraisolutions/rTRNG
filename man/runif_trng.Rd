@@ -31,10 +31,10 @@ Random number generation for the uniform distribution
  When a positive value of argument
   \code{parallelGrain} is supplied, random variates are simulated in
   parallel, provided a \emph{parallel} random number \code{engine} is
-  selected. This is done using \pkg{\link{RcppParallel}} via
+  selected. This is done using \pkg{\link[RcppParallel]{RcppParallel}} via
   \code{parallelFor}, which uses the supplied \code{parallelGrain} to control
   the grain size (the number of threads being controlled by
-  \code{\link{setThreadOptions}}). The grain size can greatly affect the overhead of
+  \code{\link[RcppParallel]{setThreadOptions}}). The grain size can greatly affect the overhead of
   performing the required \emph{block splitting} \code{jump} operations and
   should be selected carefully. Note that TRNG guarantees the outcome of such
   parallel execution to be equivalent to a purely sequential simulation.
