@@ -31,7 +31,7 @@ as part of other projects combining R with C++.
 
 An [introduction to
 **rTRNG**](https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r)
-\[[pdf](http://schd.ws/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)\]
+\[[pdf](https://static.sched.com/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf)\]
 was given at the useR!2017 conference, and is also available as package
 vignette:
 
