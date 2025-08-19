@@ -1,6 +1,6 @@
 # rTRNG 4.23.1-3
 
-## Patch release
+## Patch release (GitHub only)
 
 - Fix missing package anchors in the documentation (#33).
 - Fix obsolete URLs in the README (#34).
