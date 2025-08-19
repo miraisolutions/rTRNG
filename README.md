@@ -146,7 +146,7 @@ identical(x_serial, x_parallel)
 
 The TRNG C++ library is made available by **rTRNG** to standalone C++
 code compiled with `Rcpp::sourceCpp` thanks to the `Rcpp::depends`
-attribute
+attribute:
 
 ``` cpp
 // [[Rcpp::depends(rTRNG)]]
