@@ -1,7 +1,10 @@
-# rTRNG (development version)
+# rTRNG 4.23.1-3
+
+## Patch release
 
 - Fix missing package anchors in the documentation (#33).
 - Fix Mirai.rTRNG.useR2017.pdf URL in the README (#34).
+- Maintenance of Continuous Integration GitHub Actions workflow (#29, #30, #31, #32).
 
 # rTRNG 4.23.1-2
 
