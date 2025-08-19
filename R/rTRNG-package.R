@@ -32,7 +32,7 @@
 #'     \itemize{
 #'     \item
 #'       Standalone C++ code sourced via \code{\link[Rcpp]{sourceCpp}} can rely
-#'       on the \code{\link[=dependsAttribute]{Rcpp::depends}} attribute to
+#'       on the \code{\link[Rcpp:dependsAttribute]{Rcpp::depends}} attribute to
 #'       correctly set up building against \pkg{rTRNG}, with
 #'       \code{Rcpp::plugins(cpp11)} enforcing the C++11 standard required by
 #'       TRNG >= 4.22:
