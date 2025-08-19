@@ -19,6 +19,13 @@ This submission addresses an explicit request by the CRAN Team to fix by 2025-09
   Specified C++11: please drop specification unless essential
     * C++11 is required by the underlying TRNG C++ library
 
+One win-builder R-release and R-devel, there is an additional NOTE
+
+* checking CRAN incoming feasibility ... NOTE
+  Found the following (possibly) invalid URLs:
+  URL: https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-
+    * This is a false positive, the URL is valid
+
 ## Reverse dependencies
 
 The package has no reverse dependencies.
