@@ -48,9 +48,10 @@ vignette("mcMat", "rTRNG")
 ```
 
 A full applied example of using **rTRNG** for the simulation of credit
-defaults was presented at the [R/Finance
-2017](http://past.rinfinance.com/agenda/2017/talk/RiccardoPorreca.pdf)
-conference. The underlying code and data are hosted on
+defaults was presented at the [R/Finance 2017
+conference](https://www.osqf.org/archive/2017/)
+\[[pdf](https://rinfinance.s3.amazonaws.com/past.rinfinance.com/agenda/2017/talk/RiccardoPorreca.pdf)\].
+The underlying code and data are hosted on
 [GitHub](https://github.com/miraisolutions/PortfolioRiskMC), as is the
 corresponding [R Markdown
 output](https://rawgit.com/miraisolutions/PortfolioRiskMC/master/RinFinance2017/PortfolioSimAndRiskBig.html).
