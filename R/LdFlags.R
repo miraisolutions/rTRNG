@@ -59,7 +59,6 @@ asBuildPath <- function(path) {
 
 sourceCpp_minimal_code <- '
 // [[Rcpp::depends(rTRNG)]]
-// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
 #include <trng/yarn2.hpp>
 // [[Rcpp::export]]

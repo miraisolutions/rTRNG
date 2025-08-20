@@ -7,8 +7,6 @@ using namespace Rcpp;
 using namespace RcppParallel;
 
 // [[Rcpp::depends(rTRNG, RcppParallel)]]
-// TRNG >= 4.22 requires C++11
-// [[Rcpp::plugins(cpp11)]]
 
 
 // ----- mcMatRcppParallel

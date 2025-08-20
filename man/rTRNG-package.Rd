@@ -35,18 +35,15 @@ the underlying TRNG C++ library in different ways and at different levels.
     \item
       Standalone C++ code sourced via \code{\link[Rcpp]{sourceCpp}} can rely
       on the \code{\link[Rcpp:dependsAttribute]{Rcpp::depends}} attribute to
-      correctly set up building against \pkg{rTRNG}, with
-      \code{Rcpp::plugins(cpp11)} enforcing the C++11 standard required by
-      TRNG >= 4.22:
+      correctly set up building against \pkg{rTRNG}:
       \preformatted{
-// [[Rcpp::depends(rTRNG)]]
-// [[Rcpp::plugins(cpp11)]]}
+// [[Rcpp::depends(rTRNG)]]}
     \item
       Creating an \R package with C++ code using the TRNG library is achieved
       by \code{LinkingTo: rTRNG} in the DESCRIPTION file, adding
       \code{importFrom(rTRNG, TRNG.Version)} in the NAMESPACE file, and
-      setting relevant linker flags (via \code{\link[rTRNG]{LdFlags}}) and
-      C++11 compilation (\code{CXX_STD = CXX11}) in Makevars[.win].
+      setting relevant linker flags (via \code{\link[rTRNG]{LdFlags}}) in
+      Makevars[.win].
     \item
       Note that C++ code using the TRNG library (sourced via
       \code{Rcpp::sourceCpp} or part of an \R package) might fail on certain
