@@ -54,7 +54,7 @@ conference](https://www.osqf.org/archive/2017/)
 The underlying code and data are hosted on
 [GitHub](https://github.com/miraisolutions/PortfolioRiskMC), as is the
 corresponding [R Markdown
-output](https://rawgit.com/miraisolutions/PortfolioRiskMC/master/RinFinance2017/PortfolioSimAndRiskBig.html).
+output](https://mirai-solutions.ch/PortfolioRiskMC/RinFinance2017/PortfolioSimAndRiskBig.html).
 
 For more information and references, you can consult the package
 documentation page via `help("rTRNG-package")`.

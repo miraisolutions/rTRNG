@@ -1,6 +1,6 @@
 ## CRAN submission request
 
-This submission addresses an explicit request by the CRAN Team to fix by 2026-03-02 the R-devel WARNINGs about "ciso646 is not a standard header since C++20".
+This submission addresses an explicit request by the CRAN Team to fix by 2026-03-02 the R-devel WARNINGs about "ciso646 is not a standard header since C++20". A broken link in the README is also fixed.
 
 ## Test environments
 
