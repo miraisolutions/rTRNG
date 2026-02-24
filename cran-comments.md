@@ -16,6 +16,15 @@ This submission addresses an explicit request by the CRAN Team to fix by 2026-03
 
 0 ERRORs | 0 WARNINGs | 0 NOTEs
 
+On win-builder, there are URLs in the README occasionally reported as possibly invalid in an additional NOTE:
+
+* checking CRAN incoming feasibility ... NOTE
+  Found the following (possibly) invalid URLs:
+  URL: https://static.sched.com/hosted_files/user2017/93/Mirai.rTRNG.useR2017.pdf
+  URL: https://user2017.sched.com/event/Axpj/rtrng-advanced-parallel-random-number-generation-in-r
+
+These are false positives, as the URLs are valid.
+
 ## Reverse dependencies
 
 The package has no reverse dependencies.
