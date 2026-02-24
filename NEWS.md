@@ -4,7 +4,7 @@
 
 - Specify C++ 17 as the required C++ standard, to avoid the R CMD check WARNING on R-devel `<ciso646> is not a standard header since C++20` (#39). This is meant as an interim solution waiting for an upstream patch of the TRNG C++ library (<https://github.com/rabauke/trng4/issues/34>).
 - Fix broken link to R/Finance 2017 conference applied example (#40).
-- Maintenance of Continuous Integration GitHub Actions workflow (#37).
+- Maintenance of Continuous Integration GitHub Actions workflow (#37, #38).
 
 # rTRNG 4.23.1-4
 
