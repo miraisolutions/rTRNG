@@ -1,7 +1,7 @@
 ---
 output: github_document
 ################################################################################
-# NOTE: 
+# NOTE:
 # Make sure you have added an executable pre-commit hook in your local checkout 
 #   .git/hooks/pre-commit
 # to prevent accidental commits of README.Rmd not re-knitted to README.md.
@@ -82,7 +82,7 @@ was presented at the
 [[pdf](https://rinfinance.s3.amazonaws.com/past.rinfinance.com/agenda/2017/talk/RiccardoPorreca.pdf)].
 The underlying code and data are hosted on [GitHub](https://github.com/miraisolutions/PortfolioRiskMC),
 as is the corresponding
-[R Markdown output](https://rawgit.com/miraisolutions/PortfolioRiskMC/master/RinFinance2017/PortfolioSimAndRiskBig.html).
+[R Markdown output](https://mirai-solutions.ch/PortfolioRiskMC/RinFinance2017/PortfolioSimAndRiskBig.html).
 
 For more information and references, you can consult the package documentation
 page via `help("rTRNG-package")`.

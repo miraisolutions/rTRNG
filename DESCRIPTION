@@ -1,7 +1,7 @@
 Package: rTRNG
 Title: Advanced and Parallel Random Number Generation via 'TRNG'
-Version: 4.23.1-4
-Authors@R: 
+Version: 4.23.1-5
+Authors@R:
     c(person("Riccardo", "Porreca", role = c("aut", "cre"),
              email = "riccardo.porreca@mirai-solutions.com"),
       person("Roland", "Schmid", role = "aut",
@@ -21,7 +21,7 @@ License: GPL-3
 URL: https://github.com/miraisolutions/rTRNG#readme,
     https://mirai-solutions.ch
 BugReports: https://github.com/miraisolutions/rTRNG/issues
-SystemRequirements: GNU make
+SystemRequirements: GNU make, C++17
 Imports:
     methods,
     Rcpp (>= 0.11.6),

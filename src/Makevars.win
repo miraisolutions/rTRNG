@@ -1,3 +1,8 @@
+# https://github.com/miraisolutions/rTRNG/issues/39
+# => remove (also from SystemRequirements) when addressed in TRNG
+#    (https://github.com/rabauke/trng4/issues/34)
+CXX_STD = CXX17
+
 PKG_CXXFLAGS += -DRCPP_PARALLEL_USE_TBB=1
 
 PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" \

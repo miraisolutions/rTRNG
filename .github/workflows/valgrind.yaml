@@ -16,7 +16,7 @@ jobs:
     name: valgrind-check
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Check with valgrind
         run: bash inst/tools/valgrind-check.sh
