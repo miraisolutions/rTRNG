@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,9 @@
 #include <stdexcept>
 #include <ostream>
 #include <istream>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -65,7 +67,7 @@ namespace trng {
 
     public:
       status_type() = default;
-      explicit status_type(result_type r) : r{r} {};
+      explicit status_type(result_type r) : r{r} {}
 
       friend class minstd;
 
@@ -162,7 +164,7 @@ namespace trng {
   // Inline and template methods
 
   inline void minstd::step() {
-    uint64_t t{S.r * 16807};
+    uint64_t t{S.r * static_cast<uint64_t>(16807)};
     t = (t & 0x7fffffffu) + (t >> 31u);
     if (t >= 2147483647u)
       t -= 2147483647u;

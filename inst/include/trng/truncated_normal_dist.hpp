@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,9 @@
 #include <ostream>
 #include <istream>
 #include <iomanip>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -60,11 +62,11 @@ namespace trng {
 
       TRNG_CUDA_ENABLE
       void update_Phi() {
-        if (a_ != -math::numeric_limits<result_type>::infinity())
+        if (a_ > -math::numeric_limits<result_type>::infinity())
           Phi_a = math::Phi((a_ - mu_) / sigma_);
         else
           Phi_a = result_type(0);
-        if (b_ != math::numeric_limits<result_type>::infinity())
+        if (b_ < math::numeric_limits<result_type>::infinity())
           Phi_b = math::Phi((b_ - mu_) / sigma_);
         else
           Phi_b = result_type(1);
@@ -108,6 +110,18 @@ namespace trng {
       }
 
       friend class truncated_normal_dist;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.mu_ == P2.mu_ and P1.sigma_ == P2.sigma_ and P1.a_ == P2.a_ and
+               P1.b_ == P2.b_;
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -166,7 +180,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type max() const { return P.b(); }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &p_new) { P = p_new; }
     TRNG_CUDA_ENABLE
@@ -191,7 +205,7 @@ namespace trng {
       x -= P.mu();
       x /= P.sigma();
       return math::constants<result_type>::one_over_sqrt_2pi / P.sigma() *
-             math::exp(-0.5 * x * x) / (P.Phi_b - P.Phi_a);
+             math::exp(-x * x / 2) / (P.Phi_b - P.Phi_a);
     }
     // cumulative density function
     TRNG_CUDA_ENABLE
@@ -208,24 +222,6 @@ namespace trng {
       return math::inv_Phi(x) * P.sigma() + P.mu();
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator==(
-      const typename truncated_normal_dist<float_t>::param_type &P1,
-      const typename truncated_normal_dist<float_t>::param_type &P2) {
-    return P1.mu() == P2.mu() and P1.sigma() == P2.sigma() and P1.a() == P2.a() and
-           P1.b() == P2.b();
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator!=(
-      const typename truncated_normal_dist<float_t>::param_type &P1,
-      const typename truncated_normal_dist<float_t>::param_type &P2) {
-    return not(P1 == P2);
-  }
 
   // -------------------------------------------------------------------
 

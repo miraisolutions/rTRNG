@@ -30,44 +30,63 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "xoshiro256plus.hpp"
 #include "minstd.hpp"
 
 namespace trng {
 
-  // Parameter and status classes
-
   // Uniform random number generator concept
 
+  // Status class
+
   // Equality comparable concept
-  bool operator==(const minstd::status_type &S1, const minstd::status_type &S2) {
-    return S1.r == S2.r;
+  bool operator==(const xoshiro256plus::status_type &S1,
+                  const xoshiro256plus::status_type &S2) {
+    return S1.r[0] == S2.r[0] and S1.r[1] == S2.r[1] and S1.r[2] == S2.r[2] and
+           S1.r[3] == S2.r[3];
   }
 
-  bool operator!=(const minstd::status_type &S1, const minstd::status_type &S2) {
+  bool operator!=(const xoshiro256plus::status_type &S1,
+                  const xoshiro256plus::status_type &S2) {
     return not(S1 == S2);
   }
 
   // Random number engine concept
-  minstd::minstd() : S() {}
+  xoshiro256plus::xoshiro256plus() = default;
 
-  minstd::minstd(unsigned long s) { seed(s); }
+  xoshiro256plus::xoshiro256plus(unsigned long s) { seed(s); }
 
-  void minstd::seed() { (*this) = minstd(); }
+  xoshiro256plus::xoshiro256plus(result_type s0, result_type s1, result_type s2,
+                                 result_type s3) {
+    seed(s0, s1, s2, s3);
+  }
 
-  void minstd::seed(unsigned long s) {
-    S.r = s % 2147483647;
-    if (S.r == 0)
-      S.r = 1;
+  void xoshiro256plus::seed() { (*this) = xoshiro256plus(); }
+
+  void xoshiro256plus::seed(unsigned long s) {
+    minstd R(s);
+    seed(R);
+  }
+
+  void xoshiro256plus::seed(result_type s0, result_type s1, result_type s2, result_type s3) {
+    S.r[0] = static_cast<result_type>(s0);
+    S.r[1] = static_cast<result_type>(s1);
+    S.r[2] = static_cast<result_type>(s2);
+    S.r[3] = static_cast<result_type>(s3);
+    if (S.r[0] == 0 and S.r[1] == 0 and S.r[2] == 0 and S.r[3] == 0)
+      S.r[0] |= result_type(1) << 63u;
   }
 
   // Equality comparable concept
-  bool operator==(const minstd &R1, const minstd &R2) { return R1.S == R2.S; }
+  bool operator==(const xoshiro256plus &R1, const xoshiro256plus &R2) { return R1.S == R2.S; }
 
-  bool operator!=(const minstd &R1, const minstd &R2) { return not(R1 == R2); }
+  bool operator!=(const xoshiro256plus &R1, const xoshiro256plus &R2) { return not(R1 == R2); }
+
+  // Parallel random number generator concept
 
   // Other useful methods
-  const char *const minstd::name_str = "minstd";
+  const char *const xoshiro256plus::name_str = "xoshiro256plus";
 
-  const char *minstd::name() { return name_str; }
+  const char *xoshiro256plus::name() { return name_str; }
 
 }  // namespace trng

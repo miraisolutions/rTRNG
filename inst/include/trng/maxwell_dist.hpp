@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,9 @@
 #include <ostream>
 #include <istream>
 #include <iomanip>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -67,6 +69,17 @@ namespace trng {
       explicit param_type(result_type theta) : theta_{theta} {}
 
       friend class maxwell_dist;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.theta_ == P2.theta_;
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -122,7 +135,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type max() const { return math::numeric_limits<result_type>::infinity(); }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &P_new) { P = P_new; }
     TRNG_CUDA_ENABLE
@@ -146,7 +159,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type icdf(result_type x) const {
       if (x < 0 or x > 1) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
         errno = EDOM;
 #endif
         return math::numeric_limits<result_type>::quiet_NaN();
@@ -165,23 +178,6 @@ namespace trng {
       return y;
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator==(
-      const typename maxwell_dist<float_t>::param_type &P1,
-      const typename maxwell_dist<float_t>::param_type &P2) {
-    return P1.theta() == P2.theta();
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator!=(
-      const typename maxwell_dist<float_t>::param_type &P1,
-      const typename maxwell_dist<float_t>::param_type &P2) {
-    return not(P1 == P2);
-  }
 
   // -------------------------------------------------------------------
 

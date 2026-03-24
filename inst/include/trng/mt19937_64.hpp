@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -56,7 +56,9 @@
 #include <stdexcept>
 #include <ostream>
 #include <istream>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -231,14 +233,15 @@ namespace trng {
       int i{0};
       for (; i < mt19937_64::N - mt19937_64::M; ++i) {
         const result_type x{(S.mt[i] & mt19937_64::UM) | (S.mt[i + 1] & mt19937_64::LM)};
-        S.mt[i] = S.mt[i + mt19937_64::M] ^ (x >> 1u) ^ mag01[(int)(x & 1u)];
+        S.mt[i] = S.mt[i + mt19937_64::M] ^ (x >> 1u) ^ mag01[static_cast<int>(x & 1u)];
       }
       for (; i < mt19937_64::N - 1; ++i) {
         const result_type x{(S.mt[i] & mt19937_64::UM) | (S.mt[i + 1] & mt19937_64::LM)};
-        S.mt[i] = S.mt[i + (mt19937_64::M - mt19937_64::N)] ^ (x >> 1u) ^ mag01[(int)(x & 1u)];
+        S.mt[i] = S.mt[i + (mt19937_64::M - mt19937_64::N)] ^ (x >> 1u) ^
+                  mag01[static_cast<int>(x & 1u)];
       }
       const result_type x{(S.mt[mt19937_64::N - 1] & UM) | (S.mt[0] & LM)};
-      S.mt[N - 1] = S.mt[mt19937_64::M - 1] ^ (x >> 1u) ^ mag01[(int)(x & 1u)];
+      S.mt[N - 1] = S.mt[mt19937_64::M - 1] ^ (x >> 1u) ^ mag01[static_cast<int>(x & 1u)];
       S.mti = 0;
     }
     result_type x{S.mt[S.mti++]};

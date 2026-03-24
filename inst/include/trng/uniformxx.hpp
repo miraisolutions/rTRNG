@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,9 @@
 #include <trng/limits.hpp>
 #include <cstddef>
 #include <cfloat>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -64,47 +66,6 @@ namespace trng {
     template<unsigned int count>
     struct Holes<0ull, count> {
       static constexpr unsigned int result = count;
-    };
-
-    //------------------------------------------------------------------
-
-    template<typename F>
-    struct epsilon;
-
-    template<>
-    struct epsilon<float> {
-      TRNG_CUDA_ENABLE
-#if !(defined __CUDA_ARCH__)
-      static
-#endif
-          constexpr float
-          val() {
-        return FLT_EPSILON;
-      }
-    };
-
-    template<>
-    struct epsilon<double> {
-      TRNG_CUDA_ENABLE
-#if !(defined __CUDA_ARCH__)
-      static
-#endif
-          constexpr double
-          val() {
-        return DBL_EPSILON;
-      }
-    };
-
-    template<>
-    struct epsilon<long double> {
-      TRNG_CUDA_ENABLE
-#if !(defined __CUDA_ARCH__)
-      static
-#endif
-          constexpr long double
-          val() {
-        return LDBL_EPSILON;
-      }
     };
 
     //------------------------------------------------------------------
@@ -170,14 +131,12 @@ namespace trng {
       }
       TRNG_CUDA_ENABLE
       static ret_t variate(prng_t &r) {
-#if !(defined __CUDA_ARCH__)
         static_assert(prng_t::min() >= 0 and prng_t::max() > prng_t::min(),
                       "min max out of range");  // min and/or max out of spec?
         static_assert(prng_t::max() - prng_t::min() <= ~0ull,
                       "min max have exotic values/types");  // Bits, Holes incorrect otherwise
         static_assert(not math::numeric_limits<return_type>::is_integer, "not an integer");
         static_assert(calls_needed > 0 and calls_needed <= bits, "illegal number of calls");
-#endif
         const ret_t scale_per_step(ret_t(domain_max) + 1);
         ret_t ret{addin(r)};
         for (std::size_t i{1}; i < calls_needed; ++i)
@@ -186,12 +145,7 @@ namespace trng {
       }
       TRNG_CUDA_ENABLE
       static ret_t eps() {
-#if defined __CUDA_ARCH__
-        epsilon<ret_t> EPS;
-        const ret_t native_eps(EPS.val());
-#else
-        const ret_t native_eps{epsilon<ret_t>::val()};
-#endif
+        const ret_t native_eps{math::numeric_limits<ret_t>::epsilon()};
         const ret_t domain_eps{ret_t(1) / domain_max};
         return native_eps >= domain_eps or requested_bits != 1 ? native_eps : domain_eps;
       }

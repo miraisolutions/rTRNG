@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,9 @@
 #include <istream>
 #include <iomanip>
 #include <cerrno>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -73,6 +75,17 @@ namespace trng {
       explicit param_type(result_type mu, result_type sigma) : mu_{mu}, sigma_{sigma} {}
 
       friend class lognormal_dist;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.mu() == P2.mu() and P1.sigma() == P2.sigma();
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -128,7 +141,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type max() const { return math::numeric_limits<result_type>::infinity(); }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &P_new) { P = P_new; }
     TRNG_CUDA_ENABLE
@@ -153,14 +166,15 @@ namespace trng {
     result_type cdf(result_type x) const {
       if (x <= 0)
         return 0;
-      return math::erfc(math::constants<result_type>::one_over_sqrt_2 * (P.mu() - math::ln(x)) / P.sigma()) /
+      return math::erfc(math::constants<result_type>::one_over_sqrt_2 * (P.mu() - math::ln(x)) /
+                        P.sigma()) /
              2;
     }
     // inverse cumulative density function
     TRNG_CUDA_ENABLE
     result_type icdf(result_type x) const {
       if (x < 0 or x > 1) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
         errno = EDOM;
 #endif
         return math::numeric_limits<result_type>::quiet_NaN();
@@ -172,23 +186,6 @@ namespace trng {
       return math::exp(math::inv_Phi(x) * P.sigma() + P.mu());
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator==(
-      const typename lognormal_dist<float_t>::param_type &P1,
-      const typename lognormal_dist<float_t>::param_type &P2) {
-    return P1.mu() == P2.mu() and P1.sigma() == P2.sigma();
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator!=(
-      const typename lognormal_dist<float_t>::param_type &P1,
-      const typename lognormal_dist<float_t>::param_type &P2) {
-    return not(P1 == P2);
-  }
 
   // -------------------------------------------------------------------
 

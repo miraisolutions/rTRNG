@@ -43,7 +43,9 @@
 #include <iomanip>
 #include <vector>
 #include <algorithm>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -108,8 +110,8 @@ namespace trng {
     // random numbers
     template<typename R>
     int operator()(R &r) {
-      return P.x_min +
-             utility::discrete(utility::uniformoo<double>(r), P.P_.begin(), P.P_.end());
+      return P.x_min + static_cast<int>(utility::discrete(utility::uniformoo<double>(r),
+                                                          P.P_.begin(), P.P_.end()));
     }
     template<typename R>
     int operator()(R &r, const param_type &P) {
@@ -119,7 +121,7 @@ namespace trng {
     // property methods
     int min() const { return P.x_min; }
     int max() const { return P.x_max; }
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     void param(const param_type &P_new) { P = P_new; }
     int n() const { return P.n(); }
     void n(int n_new) { P.n(n_new); }
@@ -164,7 +166,8 @@ namespace trng {
                                                    const hypergeometric_dist::param_type &P) {
     std::ios_base::fmtflags flags(out.flags());
     out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-    out << '(' << std::setprecision(17) << P.n() << ' ' << P.m() << ' ' << P.d() << ')';
+    out << '(' << std::setprecision(math::numeric_limits<double>::digits10 + 1) << P.n() << ' '
+        << P.m() << ' ' << P.d() << ')';
     out.flags(flags);
     return out;
   }

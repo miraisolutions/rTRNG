@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,9 @@
 #include <istream>
 #include <iomanip>
 #include <cerrno>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -71,6 +73,17 @@ namespace trng {
       explicit param_type(result_type m, result_type d) : m_{m}, d_{d} {}
 
       friend class tent_dist;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.m_ == P2.m_ and P1.d_ == P2.d_;
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -132,7 +145,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type max() const { return P.m() + P.d(); }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &p_new) { P = p_new; }
     TRNG_CUDA_ENABLE
@@ -167,7 +180,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type icdf(result_type x) const {
       if (x < 0 or x > 1) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
         errno = EDOM;
 #endif
         return math::numeric_limits<result_type>::quiet_NaN();
@@ -175,21 +188,6 @@ namespace trng {
       return icdf_(x);
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator==(const typename tent_dist<float_t>::param_type &P1,
-                                          const typename tent_dist<float_t>::param_type &P2) {
-    return P1.m() == P2.m() and P1.d() == P2.d();
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator!=(const typename tent_dist<float_t>::param_type &P1,
-                                          const typename tent_dist<float_t>::param_type &P2) {
-    return not(P1 == P2);
-  }
 
   // -------------------------------------------------------------------
 

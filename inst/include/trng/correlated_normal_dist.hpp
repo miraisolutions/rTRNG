@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,9 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -117,7 +119,7 @@ namespace trng {
           std::basic_ostream<char_t, traits_t> &out, const param_type &P) {
         std::ios_base::fmtflags flags(out.flags());
         out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-        out << '(' << P.d_ << std::setprecision(17);
+        out << '(' << P.d_ << std::setprecision(math::numeric_limits<float_t>::digits10 + 1);
         for (unsigned int i{0}; i < P.d_ * P.d_; ++i)
           out << ' ' << P.H_[i];
         out << ')';
@@ -151,7 +153,7 @@ namespace trng {
 
   private:
     param_type P;
-    std::vector<result_type> normal;
+    std::vector<result_type> normal_;
 
   public:
     // constructor
@@ -159,14 +161,14 @@ namespace trng {
     explicit correlated_normal_dist(iter first, iter last) : P{first, last} {}
     explicit correlated_normal_dist(const param_type &P) : P{P} {}
     // reset internal state
-    void reset() { normal.clear(); }
+    void reset() { normal_.clear(); }
     // random numbers
     template<typename R>
     result_type operator()(R &r) {
-      normal.push_back(trng::math::inv_Phi(utility::uniformoo<result_type>(r)));
-      result_type y{P.H_times(normal)};
-      if (normal.size() == P.d())
-        normal.clear();
+      normal_.push_back(trng::math::inv_Phi(utility::uniformoo<result_type>(r)));
+      result_type y{P.H_times(normal_)};
+      if (normal_.size() == P.d())
+        normal_.clear();
       return y;
     }
     template<typename R>
@@ -177,7 +179,7 @@ namespace trng {
     // property methods
     result_type min() const { return -math::numeric_limits<result_type>::infinity(); }
     result_type max() const { return math::numeric_limits<result_type>::infinity(); }
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     void param(const param_type &P_new) { P = P_new; }
   };
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,9 @@
 #include <vector>
 #include <iterator>
 #include <type_traits>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -89,7 +91,7 @@ namespace trng {
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_str &d) {
-        char c{0};
+        char_t c{0};
         std::size_t len{std::strlen(d.str)}, i{0};
         while (i < len and not(in.get(c) and c != d.str[i])) {
           ++i;
@@ -108,7 +110,7 @@ namespace trng {
       template<typename char_t, typename traits_t>
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const delim_c &d) {
-        char c{0};
+        char_t c{0};
         if (not in.get(c).good() or c != d.c)
           in.setstate(std::ios::failbit);
         return in;
@@ -127,7 +129,7 @@ namespace trng {
       friend std::basic_istream<char_t, traits_t> &operator>>(
           std::basic_istream<char_t, traits_t> &in, const ignore_spaces_cl &) {
         while (in.good()) {
-          const int c(in.peek());
+          const auto c{in.peek()};
           if (c == traits_t::eof() or not(c == ' ' or c == '\t' or c == '\n'))
             break;
           in.get();

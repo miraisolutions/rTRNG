@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -36,22 +36,91 @@
 
 #include <trng/cuda.hpp>
 #include <trng/int_types.hpp>
+#include <trng/limits.hpp>
+#include <trng/utility.hpp>
 #include <cmath>
 #include <cassert>
 #include <algorithm>
 #include <stdexcept>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
   namespace int_math {
 
+    template<typename T>
+    TRNG_CUDA_ENABLE constexpr T pow2(const T x) {
+      return T(1) << x;
+    }
+
+    template<typename T>
+    TRNG_CUDA_ENABLE constexpr T log2_floor(const T x) {
+      return x <= T(1) ? T(0) : T(1) + log2_floor(x / T(2));
+    }
+
+    template<typename T>
+    TRNG_CUDA_ENABLE constexpr T log2_ceil(const T x) {
+      return pow2(log2_floor(x)) < x ? log2_floor(x) + 1 : log2_floor(x);
+    }
+
+    // round upwards to next power of 2
+    template<typename T>
+    TRNG_CUDA_ENABLE constexpr T ceil2(const T x) {
+      return x <= T(1) ? x : T(2) * ceil2((x + T(1)) / T(2));
+    }
+
+    // sets all bits below the argument's most significant bit to one
+    template<typename T>
+    TRNG_CUDA_ENABLE constexpr T mask(const T x) {
+      return (x == trng::math::numeric_limits<T>::max() and
+              trng::math::numeric_limits<T>::radix == 2)
+                 ? x
+                 : ceil2(x + T(1)) - T(1);
+    }
+
+    // ---------------------------------------------------------------
+
+    template<int n>
+    TRNG_CUDA_ENABLE void matrix_vec_mult(const int32_t (&a)[n * n], const int32_t (&b)[n],
+                                          int32_t (&c)[n], int32_t m) {
+      for (int j{0}; j < n; ++j) {
+        int64_t t{0};
+        for (int k{0}; k < n; ++k) {
+          t += (static_cast<int64_t>(a[j * n + k]) * static_cast<int64_t>(b[k])) % m;
+          if (t >= m)
+            t -= m;
+        }
+        c[j] = static_cast<int32_t>(t);
+      }
+    }
+
+    //------------------------------------------------------------------
+
+    template<int n>
+    TRNG_CUDA_ENABLE void matrix_mult(const int32_t (&a)[n * n], const int32_t (&b)[n * n],
+                                      int32_t (&c)[n * n], int32_t m) {
+      for (int i{0}; i < n; ++i)
+        for (int j{0}; j < n; ++j) {
+          int64_t t{0};
+          for (int k{0}; k < n; ++k) {
+            t += (static_cast<int64_t>(a[j * n + k]) * static_cast<int64_t>(b[k * n + i])) % m;
+            if (t >= m)
+              t -= m;
+          }
+          c[j * n + i] = static_cast<int32_t>(t);
+        }
+    }
+
+    // ---------------------------------------------------------------
+
     TRNG_CUDA_ENABLE
-    inline int32_t modulo_invers(int32_t a, int32_t m) {
-#if !(defined __CUDA_ARCH__)
+    inline int32_t modulo_inverse(int32_t a, int32_t m) {
+#if !(defined TRNG_CUDA)
       if (a <= 0 or m <= 1)
         utility::throw_this(
-            std::invalid_argument("invalid argument in trng::int_math::modulo_invers"));
+            std::invalid_argument("invalid argument in trng::int_math::modulo_inverse"));
 #endif
       int32_t flast{0}, f{1}, m1{m};
       while (a > 1) {
@@ -63,10 +132,9 @@ namespace trng {
         f = flast - q * f;
         flast = temp;
       }
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
       if (a == 0)
-        utility::throw_this(
-            std::runtime_error("no inversive in trng::int_math::modulo_invers"));
+        utility::throw_this(std::runtime_error("no inverse in trng::int_math::modulo_inverse"));
 #endif
       return f >= 0 ? f : f + m;
     }
@@ -74,7 +142,7 @@ namespace trng {
     //------------------------------------------------------------------
 
     template<int n>
-    TRNG_CUDA_ENABLE void gauss(int32_t a[n * n], int32_t b[n], int32_t m) {
+    TRNG_CUDA_ENABLE void gauss(int32_t (&a)[n * n], int32_t (&b)[n], int32_t m) {
       // initialize indices
       int rank{0};
       int32_t p[n];
@@ -85,11 +153,11 @@ namespace trng {
         // search for a pivot element
         if (a[n * p[i] + i] == 0) {
           // swap rows
-          int j = i + 1;
+          int j{i + 1};
           while (j < n and a[n * p[j] + i] == 0)
             j++;
           if (j < n) {
-            int32_t t = p[i];
+            const int32_t t{p[i]};
             p[i] = p[j];
             p[j] = t;
           }
@@ -98,7 +166,7 @@ namespace trng {
         if (a[n * p[i] + i] == 0)
           break;
         ++rank;
-        int32_t t = modulo_invers(a[n * p[i] + i], m);
+        int32_t t{modulo_inverse(a[n * p[i] + i], m)};
         for (int j{i}; j < n; ++j)
           a[n * p[i] + j] = static_cast<int32_t>(
               (static_cast<int64_t>(a[n * p[i] + j]) * static_cast<int64_t>(t)) % m);
@@ -106,7 +174,7 @@ namespace trng {
             static_cast<int32_t>((static_cast<int64_t>(b[p[i]]) * static_cast<int64_t>(t)) % m);
         for (int j{i + 1}; j < n; ++j) {
           if (a[n * p[j] + i] != 0) {
-            t = modulo_invers(a[n * p[j] + i], m);
+            t = modulo_inverse(a[n * p[j] + i], m);
             for (int k{i}; k < n; ++k) {
               a[n * p[j] + k] = static_cast<int32_t>(
                   (static_cast<int64_t>(a[n * p[j] + k]) * static_cast<int64_t>(t)) % m);
@@ -123,7 +191,7 @@ namespace trng {
         }
       }
       // test if a solution exists
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
       for (int i{rank}; i < n; ++i)
         if (b[p[i]] != 0)
           utility::throw_this(
@@ -146,68 +214,10 @@ namespace trng {
 
     //------------------------------------------------------------------
 
-    template<int n>
-    TRNG_CUDA_ENABLE void matrix_mult(const int32_t (&a)[n * n], const int32_t (&b)[n * n],
-                                      int32_t (&c)[n * n], int32_t m) {
-      for (int i{0}; i < n; ++i)
-        for (int j{0}; j < n; ++j) {
-          int64_t t{0};
-          for (int k{0}; k < n; ++k) {
-            t += (static_cast<int64_t>(a[j * n + k]) * static_cast<int64_t>(b[k * n + i])) % m;
-            if (t >= m)
-              t -= m;
-          }
-          c[j * n + i] = static_cast<int32_t>(t);
-        }
-    }
-
-    //------------------------------------------------------------------
-
-    template<int n>
-    TRNG_CUDA_ENABLE void matrix_vec_mult(const int32_t (&a)[n * n], const int32_t (&b)[n],
-                                          int32_t (&c)[n], int32_t m) {
-      for (int j{0}; j < n; ++j) {
-        int64_t t{0};
-        for (int k{0}; k < n; ++k) {
-          t += (static_cast<int64_t>(a[j * n + k]) * static_cast<int64_t>(b[k])) % m;
-          if (t >= m)
-            t -= m;
-        }
-        c[j] = static_cast<int32_t>(t);
-      }
-    }
-
-    // ---------------------------------------------------------------
-
-    template<typename T>
-    constexpr T pow2(const T x) {
-      return T(1) << x;
-    }
-
-    template<typename T>
-    constexpr T log2_floor(const T x) {
-      return x <= T(1) ? T(0) : T(1) + log2_floor(x / T(2));
-    }
-
-    template<typename T>
-    constexpr T log2_ceil(const T x) {
-      return pow2(log2_floor(x)) < x ? log2_floor(x) + 1 : log2_floor(x);
-    }
-
-    // round upwards to next power of 2
-    template<typename T>
-    constexpr T ceil2(const T x) {
-      return x <= T(1) ? x : T(2) * ceil2((x + T(1)) / T(2));
-    }
-
-    // sets all bits below the argument's most significant bit to one
-    template<typename T>
-    constexpr T mask(const T x) {
-      return ceil2(x + T(1)) - T(1);
-    }
-
-    // ---------------------------------------------------------------
-
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#endif
     template<int32_t m, int32_t r>
     class modulo_helper;
 
@@ -300,6 +310,9 @@ namespace trng {
         return static_cast<int32_t>(x % m);
       }
     };
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
     template<int32_t m, int32_t r>
     TRNG_CUDA_ENABLE inline int32_t modulo(uint64_t x) {

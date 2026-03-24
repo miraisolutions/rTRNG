@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,9 @@
 #include <istream>
 #include <iomanip>
 #include <vector>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -103,7 +105,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     int max() const { return INT_MAX; }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &P_new) { P = P_new; }
     TRNG_CUDA_ENABLE
@@ -143,7 +145,7 @@ namespace trng {
                                                    const geometric_dist::param_type &P) {
     std::ios_base::fmtflags flags(out.flags());
     out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-    out << '(' << std::setprecision(17) << P.p() << ')';
+    out << '(' << std::setprecision(math::numeric_limits<double>::digits10 + 1) << P.p() << ')';
     out.flags(flags);
     return out;
   }

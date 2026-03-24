@@ -1,6 +1,6 @@
 if (FALSE) {
   source("inst/tools/upgradeTRNG.R")
-  upgradeTRNG(version = "4.23.1", year = "2021")
+  upgradeTRNG(version = "4.28", year = "2026")
   # with patch, packported from trng4 @22cc3b6:
   patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
   system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
@@ -16,6 +16,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
 
   pre_4.22 <- package_version(version) < package_version("4.22")
   gh_only <- package_version(version) >= package_version("4.23")
+  post_generate_export_header <- package_version(version) >= package_version("4.25")
   lib.tar.gz <- sprintf("trng-%s.tar.gz", version)
   if (gh_only) {
     gh_base_url <- "https://github.com/rabauke/trng4"
@@ -68,7 +69,7 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     file.copy(files.to.copy, path)
   }
 
-  # Clean and copy. Assumption: all and only .cc and .hpp files are from the
+  # Clean and copy. Assumption: all and only .cc and .hpp files are needed from the
   # TRNG library
 
   # Clean and copy *.cc from src directory
@@ -81,6 +82,21 @@ upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
     file.path("inst", "include", "trng"), "\\.hpp$",
     lib.src.path, "TRNG header files"
   )
+  if (post_generate_export_header) {
+    # trng_export.hpp would be created by CMAKE's generate_export_header
+    # here we don't use a CMAKE build but we can use a minimal mock-up
+    trng_export.hpp.file <- file.path("inst", "include", "trng", "trng_export.hpp")
+    message("Createing ", trng_export.hpp.file)
+    trng_export.hpp.code <- c(
+      "#ifndef TRNG4_EXPORT_H",
+      "#define TRNG4_EXPORT_H",
+      "",
+      "#define TRNG4_EXPORT",
+      "",
+      "#endif /* TRNG4_EXPORT_H */"
+    )
+    writeLines(trng_export.hpp.code, trng_export.hpp.file)
+  }
 
   # Update copyright information
   rTRNG.copyright <- file.path("inst", "COPYRIGHTS")

@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,12 +34,17 @@
 
 #define TRNG_CUDA_HPP
 
-#if defined __CUDACC__
+#if defined __CUDACC__ && !(defined __HIPCC__)
 
 #define TRNG_CUDA 1
 #define TRNG_CUDA_ENABLE __device__ __host__
 
 #include <cuda.h>
+
+#elif defined __HIPCC__
+
+#define TRNG_CUDA 1
+#define TRNG_CUDA_ENABLE __device__ __host__
 
 #else
 

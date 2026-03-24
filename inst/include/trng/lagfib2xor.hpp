@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,9 @@
 #include <ostream>
 #include <istream>
 #include <sstream>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -174,7 +176,7 @@ namespace trng {
             sum ^= M(i, k) * V(k);
           W(i) = sum;
         }
-        S.index += n_partial;
+        S.index = static_cast<unsigned int>(S.index + n_partial);
         S.index &= mask;
         for (size_type i{0}; i < matrix_size; ++i)
           S.r[(S.index - i) & mask] = W(matrix_size - 1 - i);
@@ -237,10 +239,10 @@ namespace trng {
     status_type S;
 
     void step() {
+      constexpr auto mask_B{int_math::mask(static_cast<decltype(S.index)>(B))};
       ++S.index;
-      S.index &= int_math::mask(B);
-      S.r[S.index] =
-          S.r[(S.index - A) & int_math::mask(B)] ^ S.r[(S.index - B) & int_math::mask(B)];
+      S.index &= mask_B;
+      S.r[S.index] = S.r[(S.index - A) & mask_B] ^ S.r[(S.index - B) & mask_B];
     }
   };
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,9 @@
 #include <ostream>
 #include <istream>
 #include <type_traits>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -98,7 +100,46 @@ namespace trng {
       TRNG_CUDA_ENABLE
       explicit param_type(double p, const T &head, const T &tail)
           : p_{p}, head_{head}, tail_{tail} {}
+
       friend class bernoulli_dist;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.p_ == P2.p_ and P1.head_ == P2.head_ and P1.tail_ == P2.tail_;
+      }
+
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
+
+      // Streamable concept
+      template<typename char_t, typename traits_t>
+      friend std::basic_ostream<char_t, traits_t> &operator<<(
+          std::basic_ostream<char_t, traits_t> &out, const param_type &P) {
+        std::ios_base::fmtflags flags(out.flags());
+        out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
+        out << '(' << P.p() << ' ' << P.head() << ' ' << P.tail() << ')';
+        out.flags(flags);
+        return out;
+      }
+
+      template<typename char_t, typename traits_t>
+      friend std::basic_istream<char_t, traits_t> &operator>>(
+          std::basic_istream<char_t, traits_t> &in, param_type &P) {
+        double p;
+        T head, tail;
+        std::ios_base::fmtflags flags(in.flags());
+        in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
+        in >> utility::delim('(') >> p >> utility::delim(' ') >> head >> utility::delim(' ') >>
+            tail >> utility::delim(')');
+        if (in)
+          P = typename bernoulli_dist<T>::param_type(p, head, tail);
+        in.flags(flags);
+        return in;
+      }
     };
 
   private:
@@ -137,7 +178,7 @@ namespace trng {
       return P.head() > P.tail() ? P.head() : P.tail();
     }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &P_new) { P = P_new; }
     TRNG_CUDA_ENABLE
@@ -180,47 +221,6 @@ namespace trng {
       }
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename T>
-  TRNG_CUDA_ENABLE inline bool operator==(const typename bernoulli_dist<T>::param_type &P1,
-                                          const typename bernoulli_dist<T>::param_type &P2) {
-    return P1.p() == P2.p() and P1.head() == P2.head() and P1.tail() == P2.tail();
-  }
-  template<typename T>
-  TRNG_CUDA_ENABLE inline bool operator!=(const typename bernoulli_dist<T>::param_type &P1,
-                                          const typename bernoulli_dist<T>::param_type &P2) {
-    return not(P1 == P2);
-  }
-
-  // Streamable concept
-  template<typename char_t, typename traits_t, typename T>
-  std::basic_ostream<char_t, traits_t> &operator<<(
-      std::basic_ostream<char_t, traits_t> &out,
-      const typename bernoulli_dist<T>::param_type &P) {
-    std::ios_base::fmtflags flags(out.flags());
-    out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-    out << '(' << P.p() << ' ' << P.head() << ' ' << P.tail() << ')';
-    out.flags(flags);
-    return out;
-  }
-
-  template<typename char_t, typename traits_t, typename T>
-  std::basic_istream<char_t, traits_t> &operator>>(std::basic_istream<char_t, traits_t> &in,
-                                                   typename bernoulli_dist<T>::param_type &P) {
-    double p;
-    T head, tail;
-    std::ios_base::fmtflags flags(in.flags());
-    in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-    in >> utility::delim('(') >> p >> utility::delim(' ') >> head >> utility::delim(' ') >>
-        tail >> utility::delim(')');
-    if (in)
-      P = typename bernoulli_dist<T>::param_type(p, head, tail);
-    in.flags(flags);
-    return in;
-  }
 
   // -------------------------------------------------------------------
 

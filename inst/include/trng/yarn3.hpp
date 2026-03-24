@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@
 
 #define TRNG_YARN3_HPP
 
+#include <trng/trng_export.hpp>
 #include <trng/cuda.hpp>
 #include <trng/utility.hpp>
 #include <trng/int_types.hpp>
@@ -43,7 +44,9 @@
 #include <ostream>
 #include <istream>
 #include <stdexcept>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -59,19 +62,21 @@ namespace trng {
     static constexpr result_type gen = 123567893;
     static constexpr result_type min_ = 0;
     static constexpr result_type max_ = modulus - 1;
-    static const int_math::power<yarn3::modulus, yarn3::gen> g;
+    static TRNG4_EXPORT const int_math::power<yarn3::modulus, yarn3::gen> g;
 
   public:
+    TRNG_CUDA_ENABLE
     static constexpr result_type min() { return min_; }
+    TRNG_CUDA_ENABLE
     static constexpr result_type max() { return max_; }
 
     // Parameter and status classes
     using parameter_type = mrg_parameter<result_type, 3, yarn3>;
     using status_type = mrg_status<result_type, 3, yarn3>;
 
-    static const parameter_type LEcuyer1;
-    static const parameter_type LEcuyer2;
-    static const parameter_type LEcuyer3;
+    static TRNG4_EXPORT const parameter_type LEcuyer1;
+    static TRNG4_EXPORT const parameter_type LEcuyer2;
+    static TRNG4_EXPORT const parameter_type LEcuyer3;
 
     // Random number engine concept
     explicit yarn3(parameter_type = LEcuyer1);
@@ -168,7 +173,7 @@ namespace trng {
   TRNG_CUDA_ENABLE
   inline yarn3::result_type yarn3::operator()() {
     step();
-#if defined __CUDA_ARCH__
+#if defined TRNG_CUDA
     if (S.r[0] == 0)
       return 0;
     yarn3::result_type n = S.r[0];
@@ -193,12 +198,12 @@ namespace trng {
   // Parallel random number generator concept
   TRNG_CUDA_ENABLE
   inline void yarn3::split(unsigned int s, unsigned int n) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
     if (s < 1 or n >= s)
       utility::throw_this(std::invalid_argument("invalid argument for trng::yarn3::split"));
 #endif
     if (s > 1) {
-      jump(n + 1);
+      jump(n + 1ull);
       const int32_t q0{S.r[0]};
       jump(s);
       const int32_t q1{S.r[0]};
@@ -299,7 +304,7 @@ namespace trng {
         t += modulus;
       t = static_cast<result_type>(
           (static_cast<int64_t>(t) *
-           static_cast<int64_t>(int_math::modulo_invers(P.a[2], modulus))) %
+           static_cast<int64_t>(int_math::modulo_inverse(P.a[2], modulus))) %
           modulus);
     } else if (P.a[1] != 0) {
       t = S.r[1];
@@ -309,13 +314,13 @@ namespace trng {
         t += modulus;
       t = static_cast<result_type>(
           (static_cast<int64_t>(t) *
-           static_cast<int64_t>(int_math::modulo_invers(P.a[1], modulus))) %
+           static_cast<int64_t>(int_math::modulo_inverse(P.a[1], modulus))) %
           modulus);
     } else if (P.a[0] != 0) {
       t = S.r[2];
       t = static_cast<result_type>(
           (static_cast<int64_t>(t) *
-           static_cast<int64_t>(int_math::modulo_invers(P.a[0], modulus))) %
+           static_cast<int64_t>(int_math::modulo_inverse(P.a[0], modulus))) %
           modulus);
     } else
       t = 0;

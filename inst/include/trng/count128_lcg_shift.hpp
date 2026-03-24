@@ -11,7 +11,7 @@
 //   * Redistributions in binary form must reproduce the above
 //     copyright notice, this list of conditions and the following
 //     disclaimer in the documentation and/or other materials provided
-//     with the distribution.
+//     with the distribution
 //
 //   * Neither the name of the copyright holder nor the names of its
 //     contributors may be used to endorse or promote products derived
@@ -30,24 +30,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#if !(defined TRNG_COUNT128_LCG_SHIFT_HPP)
 
-// This is a 32-bit version of Mersenne Twister pseudorandom number
-// generator.
-//
-// References:
-// M. Matsumoto and T. Nishimura,
-//   ``Mersenne Twister: a 623-dimensionally equidistributed
-//     uniform pseudorandom number generator''
-//   ACM Transactions on Modeling and
-//   Computer Simulation 8. (Jan. 1998) 3--30.
+#define TRNG_COUNT128_LCG_SHIFT_HPP
 
-#if !(defined TRNG_MT19937_HPP)
-
-#define TRNG_MT19937_HPP
-
+#include <trng/trng_export.hpp>
+#include <trng/cuda.hpp>
 #include <trng/limits.hpp>
-#include <trng/int_types.hpp>
 #include <trng/utility.hpp>
+#include <trng/int_types.hpp>
+#include <trng/uint128.hpp>
 #include <trng/generate_canonical.hpp>
 #include <climits>
 #include <stdexcept>
@@ -59,33 +51,35 @@
 
 namespace trng {
 
-  class mt19937 {
+  class count128_lcg_shift {
   public:
     // Uniform random number generator concept
-    using result_type = uint32_t;
+    using result_type = uint64_t;
+    TRNG_CUDA_ENABLE
     result_type operator()();
 
   private:
     static constexpr result_type min_ = 0;
-    static constexpr result_type max_ = 4294967295u;
+    static constexpr result_type max_ = ~result_type(0);
 
   public:
+    TRNG_CUDA_ENABLE
     static constexpr result_type min() { return min_; }
+    TRNG_CUDA_ENABLE
     static constexpr result_type max() { return max_; }
-
-  private:
-    static constexpr int N = 624;
-    static constexpr int M = 397;
-    static constexpr result_type UM = 0x80000000u;  // most significant bit
-    static constexpr result_type LM = 0x7FFFFFFFu;  // least significant 31 bits
 
   public:
     // Parameter and status classes
     class parameter_type {
+      uint128 increment{0};
+      result_type a{0}, b{0};
+
     public:
       parameter_type() = default;
+      explicit parameter_type(uint128 increment, result_type a, result_type b)
+          : increment{increment}, a{a}, b{b} {}
 
-      friend class mt19937;
+      friend class count128_lcg_shift;
 
       // Equality comparable concept
       friend bool operator==(const parameter_type &, const parameter_type &);
@@ -94,10 +88,10 @@ namespace trng {
       // Streamable concept
       template<typename char_t, typename traits_t>
       friend std::basic_ostream<char_t, traits_t> &operator<<(
-          std::basic_ostream<char_t, traits_t> &out, const parameter_type &) {
+          std::basic_ostream<char_t, traits_t> &out, const parameter_type &P) {
         std::ios_base::fmtflags flags(out.flags());
         out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-        out << '(' << ')';
+        out << '(' << P.increment << ' ' << P.a << ' ' << P.b << ')';
         out.flags(flags);
         return out;
       }
@@ -108,7 +102,8 @@ namespace trng {
         parameter_type P_new;
         std::ios_base::fmtflags flags(in.flags());
         in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-        in >> utility::delim('(') >> utility::delim(')');
+        in >> utility::delim('(') >> P_new.increment >> utility::delim(' ') >> P_new.a >>
+            utility::delim(' ') >> P_new.b >> utility::delim(')');
         if (in)
           P = P_new;
         in.flags(flags);
@@ -117,13 +112,13 @@ namespace trng {
     };
 
     class status_type {
-      static constexpr int N{624};
-      int mti{0};
-      result_type mt[N]{};
+      uint128 r{0};
 
     public:
       status_type() = default;
-      friend class mt19937;
+      explicit status_type(uint128 r) : r{r} {}
+
+      friend class count128_lcg_shift;
 
       // Equality comparable concept
       friend bool operator==(const status_type &, const status_type &);
@@ -135,7 +130,7 @@ namespace trng {
           std::basic_ostream<char_t, traits_t> &out, const status_type &S) {
         std::ios_base::fmtflags flags(out.flags());
         out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-        out << '(' << S.mti << ' ' << utility::make_io_range(S.mt, S.mt + N, " ") << ')';
+        out << '(' << S.r << ')';
         out.flags(flags);
         return out;
       }
@@ -146,8 +141,7 @@ namespace trng {
         status_type S_new;
         std::ios_base::fmtflags flags(in.flags());
         in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-        in >> utility::delim('(') >> S_new.mti >> utility::delim(' ') >>
-            utility::make_io_range(S_new.mt, S_new.mt + N, " ") >> utility::delim(')');
+        in >> utility::delim('(') >> S_new.r >> utility::delim(')');
         if (in)
           S = S_new;
         in.flags(flags);
@@ -155,50 +149,59 @@ namespace trng {
       }
     };
 
+    static TRNG4_EXPORT const parameter_type Default;
+    static TRNG4_EXPORT const parameter_type LEcuyer1;
+    static TRNG4_EXPORT const parameter_type LEcuyer2;
+    static TRNG4_EXPORT const parameter_type LEcuyer3;
+
     // Random number engine concept
-    mt19937();
-    explicit mt19937(unsigned long);
+    explicit count128_lcg_shift(parameter_type = Default);
+    explicit count128_lcg_shift(unsigned long, parameter_type = Default);
+    explicit count128_lcg_shift(unsigned long long, parameter_type = Default);
 
     template<typename gen>
-    explicit mt19937(gen &g) {
+    explicit count128_lcg_shift(gen &g, parameter_type P = Default) : P{P} {
       seed(g);
     }
 
     void seed();
+    void seed(unsigned long);
     template<typename gen>
     void seed(gen &g) {
-      const unsigned long r(g());
-      seed(r);
+      uint128 r{0};
+      for (int i{0}; i < 4; ++i) {
+        r <<= 32u;
+        r += g();
+      }
+      S.r = r;
     }
-    void seed(unsigned long);
-
-    void discard(unsigned long long);
+    void seed(unsigned long long);
 
     // Equality comparable concept
-    friend bool operator==(const mt19937 &, const mt19937 &);
-    friend bool operator!=(const mt19937 &, const mt19937 &);
+    friend bool operator==(const count128_lcg_shift &, const count128_lcg_shift &);
+    friend bool operator!=(const count128_lcg_shift &, const count128_lcg_shift &);
 
     // Streamable concept
     template<typename char_t, typename traits_t>
     friend std::basic_ostream<char_t, traits_t> &operator<<(
-        std::basic_ostream<char_t, traits_t> &out, const mt19937 &R) {
+        std::basic_ostream<char_t, traits_t> &out, const count128_lcg_shift &R) {
       std::ios_base::fmtflags flags(out.flags());
       out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
-      out << '[' << mt19937::name() << ' ' << R.P << ' ' << R.S << ']';
+      out << '[' << count128_lcg_shift::name() << ' ' << R.P << ' ' << R.S << ']';
       out.flags(flags);
       return out;
     }
 
     template<typename char_t, typename traits_t>
     friend std::basic_istream<char_t, traits_t> &operator>>(
-        std::basic_istream<char_t, traits_t> &in, mt19937 &R) {
-      mt19937::parameter_type P_new;
-      mt19937::status_type S_new;
+        std::basic_istream<char_t, traits_t> &in, count128_lcg_shift &R) {
+      count128_lcg_shift::parameter_type P_new;
+      count128_lcg_shift::status_type S_new;
       std::ios_base::fmtflags flags(in.flags());
       in.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
       in >> utility::ignore_spaces();
-      in >> utility::delim('[') >> utility::delim(mt19937::name()) >> utility::delim(' ') >>
-          P_new >> utility::delim(' ') >> S_new >> utility::delim(']');
+      in >> utility::delim('[') >> utility::delim(count128_lcg_shift::name()) >>
+          utility::delim(' ') >> P_new >> utility::delim(' ') >> S_new >> utility::delim(']');
       if (in) {
         R.P = P_new;
         R.S = S_new;
@@ -207,49 +210,86 @@ namespace trng {
       return in;
     }
 
+    // Parallel random number generator concept
+    TRNG_CUDA_ENABLE
+    void split(unsigned int, unsigned int);
+    TRNG_CUDA_ENABLE
+    void jump2(unsigned int);
+    TRNG_CUDA_ENABLE
+    void jump(unsigned long long);
+    TRNG_CUDA_ENABLE
+    void discard(unsigned long long);
+
     // Other useful methods
     static const char *name();
+    TRNG_CUDA_ENABLE
     long operator()(long);
 
   private:
     parameter_type P;
     status_type S;
     static const char *const name_str;
+
+    TRNG_CUDA_ENABLE
+    void backward();
+    TRNG_CUDA_ENABLE
+    void step();
   };
 
   // Inline and template methods
 
-  inline mt19937::result_type mt19937::operator()() {
-    const result_type mag01[2]{0u, 0x9908b0dfu};
-    if (S.mti >= N) {  // generate N words at one time
-      int i{0};
-      for (; i < N - M; ++i) {
-        const result_type x{(S.mt[i] & mt19937::UM) | (S.mt[i + 1] & mt19937::LM)};
-        S.mt[i] = S.mt[i + M] ^ (x >> 1u) ^ mag01[x & 0x1u];
-      }
-      for (; i < N - 1; ++i) {
-        const result_type x{(S.mt[i] & mt19937::UM) | (S.mt[i + 1] & LM)};
-        S.mt[i] = S.mt[i + (M - N)] ^ (x >> 1u) ^ mag01[x & 0x1u];
-      }
-      const result_type x{(S.mt[N - 1] & mt19937::UM) | (S.mt[0] & mt19937::LM)};
-      S.mt[N - 1] = S.mt[M - 1] ^ (x >> 1u) ^ mag01[x & 0x1u];
-      S.mti = 0;
+  TRNG_CUDA_ENABLE
+  inline void count128_lcg_shift::step() {
+    S.r += P.increment;
+  }
+
+  TRNG_CUDA_ENABLE
+  inline count128_lcg_shift::result_type count128_lcg_shift::operator()() {
+    step();
+    const result_type t_hi{S.r.hi()};
+    const result_type t_lo{S.r.lo()};
+    result_type t{(t_lo ^ t_hi) * P.a + P.b};
+    t ^= (t >> 23u);
+    t ^= (t << 41u);
+    t ^= (t >> 18u);
+    return t;
+  }
+
+  TRNG_CUDA_ENABLE
+  inline long count128_lcg_shift::operator()(long x) {
+    return static_cast<long>(utility::uniformco<double, count128_lcg_shift>(*this) * x);
+  }
+
+  // Parallel random number generator concept
+
+  TRNG_CUDA_ENABLE
+  inline void count128_lcg_shift::split(unsigned int s, unsigned int n) {
+#if !(defined TRNG_CUDA)
+    if (s < 1 or n >= s)
+      utility::throw_this(
+          std::invalid_argument("invalid argument for trng::count128_shift_lcg::split"));
+#endif
+    if (s > 1) {
+      S.r += uint128{0, n} * P.increment;
+      S.r += P.increment;
+      P.increment *= uint128{0, s};
+      S.r -= P.increment;
     }
-    result_type x{S.mt[S.mti++]};
-    x ^= (x >> 11u);
-    x ^= (x << 7u) & 0x9d2c5680u;
-    x ^= (x << 15u) & 0xefc60000u;
-    x ^= (x >> 18u);
-    return x;
   }
 
-  inline void mt19937::discard(unsigned long long n) {
-    for (unsigned long long i{0}; i < n; ++i)
-      this->operator()();
+  TRNG_CUDA_ENABLE
+  inline void count128_lcg_shift::jump2(unsigned int s) {
+    S.r += (uint128{0, 1} << (s % 128)) * P.increment;
   }
 
-  inline long mt19937::operator()(long x) {
-    return static_cast<long>(utility::uniformco<double, mt19937>(*this) * x);
+  TRNG_CUDA_ENABLE
+  inline void count128_lcg_shift::jump(unsigned long long s) {
+    S.r += uint128{0, s} * P.increment;
+  }
+
+  TRNG_CUDA_ENABLE
+  inline void count128_lcg_shift::discard(unsigned long long n) {
+    jump(n);
   }
 
 }  // namespace trng

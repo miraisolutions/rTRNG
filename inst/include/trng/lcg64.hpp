@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@
 
 #define TRNG_LCG64_HPP
 
+#include <trng/trng_export.hpp>
 #include <trng/cuda.hpp>
 #include <trng/limits.hpp>
 #include <trng/utility.hpp>
@@ -43,7 +44,9 @@
 #include <stdexcept>
 #include <ostream>
 #include <istream>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -59,7 +62,9 @@ namespace trng {
     static constexpr result_type max_ = ~result_type(0);
 
   public:
+    TRNG_CUDA_ENABLE
     static constexpr result_type min() { return min_; }
+    TRNG_CUDA_ENABLE
     static constexpr result_type max() { return max_; }
 
   private:
@@ -83,7 +88,7 @@ namespace trng {
 
     public:
       parameter_type() = default;
-      explicit parameter_type(result_type a, result_type b) : a{a}, b{b} {};
+      explicit parameter_type(result_type a, result_type b) : a{a}, b{b} {}
 
       friend class lcg64;
 
@@ -122,7 +127,7 @@ namespace trng {
 
     public:
       status_type() = default;
-      explicit status_type(result_type r) : r{r} {};
+      explicit status_type(result_type r) : r{r} {}
 
       friend class lcg64;
 
@@ -155,10 +160,10 @@ namespace trng {
       }
     };
 
-    static const parameter_type Default;
-    static const parameter_type LEcuyer1;
-    static const parameter_type LEcuyer2;
-    static const parameter_type LEcuyer3;
+    static TRNG4_EXPORT const parameter_type Default;
+    static TRNG4_EXPORT const parameter_type LEcuyer1;
+    static TRNG4_EXPORT const parameter_type LEcuyer2;
+    static TRNG4_EXPORT const parameter_type LEcuyer3;
 
     // Random number engine concept
     explicit lcg64(parameter_type = Default);
@@ -314,12 +319,12 @@ namespace trng {
 
   TRNG_CUDA_ENABLE
   inline void lcg64::split(unsigned int s, unsigned int n) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
     if (s < 1 or n >= s)
       utility::throw_this(std::invalid_argument("invalid argument for trng::lcg64::split"));
 #endif
     if (s > 1) {
-      jump(n + 1);
+      jump(n + 1ull);
       P.b *= f(s, P.a);
       P.a = pow(P.a, s);
       backward();

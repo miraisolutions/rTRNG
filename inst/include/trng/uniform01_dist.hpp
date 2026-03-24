@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,9 @@
 #include <ostream>
 #include <istream>
 #include <cerrno>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -52,10 +54,18 @@ namespace trng {
 
     class param_type {
     public:
-      TRNG_CUDA_ENABLE
       param_type() = default;
 
       friend class uniform01_dist<float_t>;
+
+      // Equality comparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &, const param_type &) {
+        return true;
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &, const param_type &) {
+        return false;
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -84,7 +94,6 @@ namespace trng {
 
   public:
     // constructor
-    TRNG_CUDA_ENABLE
     uniform01_dist() = default;
     TRNG_CUDA_ENABLE
     explicit uniform01_dist(const param_type &) {}
@@ -130,7 +139,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type icdf(result_type x) const {
       if (x < 0 or x > 1) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
         errno = EDOM;
 #endif
         return math::numeric_limits<result_type>::quiet_NaN();
@@ -138,23 +147,6 @@ namespace trng {
       return x;
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // Equality comparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator==(
-      const typename uniform01_dist<float_t>::param_type &,
-      const typename uniform01_dist<float_t>::param_type &) {
-    return true;
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE inline bool operator!=(
-      const typename uniform01_dist<float_t>::param_type &,
-      const typename uniform01_dist<float_t>::param_type &) {
-    return false;
-  }
 
   // -------------------------------------------------------------------
 

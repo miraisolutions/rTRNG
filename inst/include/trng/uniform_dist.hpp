@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,9 @@
 #include <istream>
 #include <iomanip>
 #include <cerrno>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -78,6 +80,17 @@ namespace trng {
       explicit param_type(result_type a, result_type b) : a_(a), b_(b), d_(b - a) {}
 
       friend class uniform_dist<float_t>;
+
+      // EqualityComparable concept
+      friend TRNG_CUDA_ENABLE inline bool operator==(const param_type &P1,
+                                                     const param_type &P2) {
+        return P1.a_ == P2.a_ and P1.b_ == P2.b_ and P1.d_ == P2.d_;
+      }
+
+      friend TRNG_CUDA_ENABLE inline bool operator!=(const param_type &P1,
+                                                     const param_type &P2) {
+        return not(P1 == P2);
+      }
 
       // Streamable concept
       template<typename char_t, typename traits_t>
@@ -133,7 +146,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type max() const { return P.b(); }
     TRNG_CUDA_ENABLE
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     TRNG_CUDA_ENABLE
     void param(const param_type &p_new) { P = p_new; }
     TRNG_CUDA_ENABLE
@@ -148,8 +161,8 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type pdf(result_type x) const {
       if (x < P.a() or x >= P.b())
-        return 0.0;
-      return 1.0 / P.d();
+        return 0;
+      return 1 / P.d();
     }
     // cumulative density function
     TRNG_CUDA_ENABLE
@@ -164,7 +177,7 @@ namespace trng {
     TRNG_CUDA_ENABLE
     result_type icdf(result_type x) const {
       if (x < 0 or x > 1) {
-#if !(defined __CUDA_ARCH__)
+#if !(defined TRNG_CUDA)
         errno = EDOM;
 #endif
         return math::numeric_limits<result_type>::quiet_NaN();
@@ -172,21 +185,6 @@ namespace trng {
       return x * P.d() + P.a();
     }
   };
-
-  // -------------------------------------------------------------------
-
-  // EqualityComparable concept
-  template<typename float_t>
-  TRNG_CUDA_ENABLE bool operator==(const typename uniform_dist<float_t>::param_type &P1,
-                                   const typename uniform_dist<float_t>::param_type &P2) {
-    return P1.a() == P2.a() and P1.b() == P2.b();
-  }
-
-  template<typename float_t>
-  TRNG_CUDA_ENABLE bool operator!=(const typename uniform_dist<float_t>::param_type &P1,
-                                   const typename uniform_dist<float_t>::param_type &P2) {
-    return not(P1 == P2);
-  }
 
   // -------------------------------------------------------------------
 

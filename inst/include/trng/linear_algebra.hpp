@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,9 @@
 
 #include <vector>
 #include <cstddef>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 #include <iostream>
 #include <type_traits>
 #include <trng/utility.hpp>
@@ -238,7 +240,7 @@ namespace trng {
     explicit GF2(bool v = false) : value(v ? 1 : 0) {}
     explicit GF2(int v) : value(v != 0 ? 1 : 0) {}
 
-    explicit operator bool() { return value; }
+    explicit operator bool() const { return value; }
 
     friend bool operator==(const GF2 a, const GF2 b) { return a.value == b.value; }
     friend bool operator!=(const GF2 a, const GF2 b) { return a.value != b.value; }

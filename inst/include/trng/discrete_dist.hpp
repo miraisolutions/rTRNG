@@ -1,4 +1,4 @@
-// Copyright (c) 2000-2020, Heiko Bauke
+// Copyright (c) 2000-2026, Heiko Bauke
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,9 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#if defined _MSC_VER && __cplusplus <= 201703
 #include <ciso646>
+#endif
 
 namespace trng {
 
@@ -144,7 +146,7 @@ namespace trng {
     // property methods
     int min() const { return 0; }
     int max() const { return static_cast<int>(P.N_ - 1); }
-    param_type param() const { return P; }
+    const param_type &param() const { return P; }
     void param(const param_type &P_new) { P = P_new; }
     void param(int x, double p) {
       x += static_cast<int>(P.offset_);
@@ -165,7 +167,9 @@ namespace trng {
       if (x < 0)
         return 0.0;
       if (x < static_cast<int>(P.N_))
-        return std::accumulate(&P.P_[P.offset_], &P.P_[x + P.offset_ + 1], 0.0) / P.P_[0];
+        return std::accumulate(P.P_.begin() + P.offset_, P.P_.begin() + x + P.offset_ + 1,
+                               0.0) /
+               P.P_[0];
       return 1.0;
     }
   };
@@ -190,7 +194,7 @@ namespace trng {
     out.flags(std::ios_base::dec | std::ios_base::fixed | std::ios_base::left);
     out << '(' << P.N_ << ' ';
     for (std::vector<double>::size_type i{P.offset_}; i < P.P_.size(); ++i) {
-      out << std::setprecision(17) << P.P_[i];
+      out << std::setprecision(math::numeric_limits<double>::digits10 + 1) << P.P_[i];
       if (i + 1 < P.P_.size())
         out << ' ';
     }
