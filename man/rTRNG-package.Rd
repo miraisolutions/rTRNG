@@ -59,7 +59,7 @@ cases.
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.28, \url{https://github.com/rabauke/trng4/blob/v4.28/doc/trng.pdf}.
+4.28.1 (patched in rTRNG), \url{https://github.com/rabauke/trng4/blob/v4.28/doc/trng.pdf}.
 
 Stephan Mertens, \emph{Random Number Generators: A Survival Guide
   for Large Scale Simulations}, 2009,

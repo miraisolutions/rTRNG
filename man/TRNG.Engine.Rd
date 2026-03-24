@@ -303,7 +303,7 @@ TRNG.Random.seed(r$.Random.seed())
 }
 \references{
 Heiko Bauke, \emph{Tina's Random Number Generator Library}, Version
-4.28, \url{https://github.com/rabauke/trng4/blob/v4.28/doc/trng.pdf}.
+4.28.1 (patched in rTRNG), \url{https://github.com/rabauke/trng4/blob/v4.28/doc/trng.pdf}.
 }
 \seealso{
 \code{\link{ReferenceClasses}}, \code{\link{TRNG.Random}}.

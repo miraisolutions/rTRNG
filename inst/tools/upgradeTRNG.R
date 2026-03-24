@@ -1,12 +1,12 @@
 if (FALSE) {
   source("inst/tools/upgradeTRNG.R")
   upgradeTRNG(version = "4.28", year = "2026")
-  # with patch, packported from trng4 @22cc3b6:
-  patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.23.patch")
-  system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.23..22cc3b6 trng/utility.hpp > ", patch_file))
-  upgradeTRNG(version = "4.23", patch = patch_file)
+  # with patch, packported from trng4 @cc1b17:
+  patch_file <- file.path(getwd(), "inst", "tools", "fix_uninitialized-memory_read_access-backport-v4.28.patch")
+  system(paste0("cd ~/GitHubProjects/trng4/ && git diff v4.28..cc1b17 > ", patch_file))
+  upgradeTRNG(version = "4.28", year = "2026", patch = patch_file)
   # off-line:
-  upgradeTRNG(version = "4.23", sprintf("file://%s", normalizePath("~/Downloads")))
+  upgradeTRNG(version = "4.28", year = "2026", sprintf("file://%s", normalizePath("~/Downloads")))
 }
 
 upgradeTRNG <- function(version, base_url = "https://numbercrunch.de/trng",
