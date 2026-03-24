@@ -2,11 +2,13 @@
 % Please edit documentation in R/TRNG.Engine.R
 \name{TRNG.Engine}
 \alias{TRNG.Engine}
+\alias{count128_lcg_shift}
 \alias{lagfib2plus_19937_64}
 \alias{lagfib2xor_19937_64}
 \alias{lagfib4plus_19937_64}
 \alias{lagfib4xor_19937_64}
 \alias{lcg64}
+\alias{lcg64_count_shift}
 \alias{lcg64_shift}
 \alias{mrg2}
 \alias{mrg3}
@@ -16,6 +18,7 @@
 \alias{mrg5s}
 \alias{mt19937}
 \alias{mt19937_64}
+\alias{xoshiro256plus}
 \alias{yarn2}
 \alias{yarn3}
 \alias{yarn3s}
@@ -37,14 +40,31 @@ the optional argument \code{engine = r}.
 
 \describe{
   \item{\emph{Parallel} random number engines}{
-  \code{lcg64}, \code{lcg64_shift}, \code{mrg2}, \code{mrg3}, \code{mrg3s},
-  \code{mrg4}, \code{mrg5}, \code{mrg5s}, \code{yarn2}, \code{yarn3},
-  \code{yarn3s}, \code{yarn4}, \code{yarn5}, \code{yarn5s}.
+    \code{count128_lcg_shift},
+    \code{lcg64},
+    \code{lcg64_count_shift},
+    \code{lcg64_shift},
+    \code{mrg2},
+    \code{mrg3},
+    \code{mrg3s},
+    \code{mrg4},
+    \code{mrg5},
+    \code{mrg5s},
+    \code{yarn2},
+    \code{yarn3},
+    \code{yarn3s},
+    \code{yarn4},
+    \code{yarn5},
+    \code{yarn5s}.
   }
   \item{\emph{Conventional} random number engines}{
-  \code{lagfib2plus_19937_64}, \code{lagfib2xor_19937_64},
-  \code{lagfib4plus_19937_64}, \code{lagfib4xor_19937_64}, \code{mt19937_64},
-  \code{mt19937}.
+    \code{lagfib2plus_19937_64},
+    \code{lagfib2xor_19937_64},
+    \code{lagfib4plus_19937_64},
+    \code{lagfib4xor_19937_64},
+    \code{mt19937},
+    \code{mt19937_64},
+    \code{xoshiro256plus}.
   }
 }
 }
@@ -163,8 +183,17 @@ differences/details are worth being mentioned.
       Linear congruential generator with modulus \eqn{2^{64}}{2^64}.
     }
     \item{\code{lcg64_shift}}{
-      Linear congruential generator with modulus \eqn{2^{64}}{2^64} and
-      bit-shift transformation.
+      Linear congruential generator with modulus \eqn{2^{64}}{2^64} combined
+      with a bit-shift output transformation.
+    }
+    \item{\code{lcg64_count_shift}}{
+      Linear congruential generator with modulus \eqn{2^{64}}{2^64} combined
+      with an additional linear congruence and a bit-shift output
+      transformation.
+    }
+    \item{\code{count128_lcg_shift}}{
+      Counter-based generator with 128-bit counter and an additional output
+      transformation using linear congruences and bit-shift operations.
     }
     \item{\code{mrg2}, \code{mrg3}, \code{mrg4}, \code{mrg5}}{
       Multiple recurrence generators based on a linear feedback shift
@@ -194,6 +223,9 @@ differences/details are worth being mentioned.
     \item{\code{lagfib2xor_19937_64}, \code{lagfib4xor_19937_64}}{
       Lagged Fibonacci generator with \code{2} or \code{4} feedback taps and
       exclusive-or operation.
+    }
+    \item{\code{xoshiro256plus}}{
+      \code{xoshiro} (xor/shift/rotate) generator.
     }
     \item{\code{mt19937}}{
       Mersenne-Twister generating 32 random bit.

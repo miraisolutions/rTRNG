@@ -7,11 +7,13 @@
 namespace Rcpp {
 
   // no partial specialization of wrap => need full specialization
+  WRAP_DECLARE(count128_lcg_shift);
   WRAP_DECLARE(lagfib2plus_19937_64);
   WRAP_DECLARE(lagfib2xor_19937_64);
   WRAP_DECLARE(lagfib4plus_19937_64);
   WRAP_DECLARE(lagfib4xor_19937_64);
   WRAP_DECLARE(lcg64);
+  WRAP_DECLARE(lcg64_count_shift);
   WRAP_DECLARE(lcg64_shift);
   WRAP_DECLARE(mrg2);
   WRAP_DECLARE(mrg3);
@@ -21,6 +23,7 @@ namespace Rcpp {
   WRAP_DECLARE(mrg5s);
   WRAP_DECLARE(mt19937);
   WRAP_DECLARE(mt19937_64);
+  WRAP_DECLARE(xoshiro256plus);
   WRAP_DECLARE(yarn2);
   WRAP_DECLARE(yarn3);
   WRAP_DECLARE(yarn3s);

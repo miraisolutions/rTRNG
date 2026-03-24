@@ -1,18 +1,29 @@
-
-
-enginesH <- sort(c(sub("\\.cc$", "", list.files("src/trng", "(yarn|mrg|lcg|mt).*\\.cc$")),
+enginesH <- sort(c(sub("\\.cc$", "", list.files("src/trng", "(yarn|mrg|lcg|mt|xoshiro).*\\.cc$")),
                   sub("\\.hpp$", "", list.files("inst/include/trng", "lagfib.*\\.hpp$"))))
 engines <- sub("^(lagfib.*)$", "\\1_19937_64", enginesH)
-cat(engines)
-cat(deparse(engines))
-cat(paste(engines, collapse = ", "))
-cat(paste0("Rcpp_", engines, "-class"))
-cat(paste0("\\code{", engines, "}", collapse = ", "))
+# R/TRNG.Engine.R
+cat("#' @aliases ", engines)
+cat(paste0("#'     \\code{", engines, "}", collapse = ",\n"), ".", sep = "")
 cat(paste0("#' @export ", engines, collapse = "\n"))
+
+# man-roxygen/details-engines.R
+# => update manually based on TRNG docs
+
+# src/Engine_as_wrap.h
+cat(paste0("  WRAP_DECLARE(", engines, ");", collapse = "\n"))
+
+# src/Engine_as_wrap.cpp
+cat(paste0("WRAP_IMPLEMENT(", engines, ");", collapse = "\n"))
+
+# src/Engine.h
 cat(paste0("#include <trng/", enginesH, ".hpp>", collapse = "\n"))
-cat(paste0("typedef Engine<", engines, "> ", engines, "_Engine;", collapse = "\n"))
+# src/Engine.cpp
 cat(paste0("template class Engine<", engines, ">;", collapse = "\n"))
-cat(paste0("PARALLEL_ENGINE_MODULE(", engines, ");", collapse = "\n"))
-cat(paste0("PARALLEL_ENGINE_CASE(", engines, ")", collapse = "\n"))
-cat(paste0("#define ", engines, "_ID ", seq_along(engines)-1, collapse = "\n"))
-cat(paste0("engineIDMap[\"", engines, "\"] = ", engines, "_ID;", collapse = "\n"))
+# src/EngineModule.cpp
+cat(paste0("  PARALLEL_ENGINE_MODULE(", engines, ");", collapse = "\n"))
+
+# src/rdist.cpp
+cat(paste0("  PARALLEL_ENGINE_DISPATCH(", engines, ")", collapse = "\n"))
+
+# tests/testthat/test-TRNG.Engine.R
+cat(paste0("  ", engines, collapse = ",\n"))

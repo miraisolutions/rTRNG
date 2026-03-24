@@ -17,11 +17,13 @@ template<> SEXP Rcpp::wrap(const Engine<trng::engine>& obj) {    \
   return wrap<engine>(obj);                                      \
 }
 // no partial specialization of wrap => need full specialization
+WRAP_IMPLEMENT(count128_lcg_shift);
 WRAP_IMPLEMENT(lagfib2plus_19937_64);
 WRAP_IMPLEMENT(lagfib2xor_19937_64);
 WRAP_IMPLEMENT(lagfib4plus_19937_64);
 WRAP_IMPLEMENT(lagfib4xor_19937_64);
 WRAP_IMPLEMENT(lcg64);
+WRAP_IMPLEMENT(lcg64_count_shift);
 WRAP_IMPLEMENT(lcg64_shift);
 WRAP_IMPLEMENT(mrg2);
 WRAP_IMPLEMENT(mrg3);
@@ -31,6 +33,7 @@ WRAP_IMPLEMENT(mrg5);
 WRAP_IMPLEMENT(mrg5s);
 WRAP_IMPLEMENT(mt19937);
 WRAP_IMPLEMENT(mt19937_64);
+WRAP_IMPLEMENT(xoshiro256plus);
 WRAP_IMPLEMENT(yarn2);
 WRAP_IMPLEMENT(yarn3);
 WRAP_IMPLEMENT(yarn3s);

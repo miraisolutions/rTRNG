@@ -4,11 +4,13 @@
 
 
 #include <Rcpp.h>
+#include <trng/count128_lcg_shift.hpp>
 #include <trng/lagfib2plus.hpp>
 #include <trng/lagfib2xor.hpp>
 #include <trng/lagfib4plus.hpp>
 #include <trng/lagfib4xor.hpp>
 #include <trng/lcg64.hpp>
+#include <trng/lcg64_count_shift.hpp>
 #include <trng/lcg64_shift.hpp>
 #include <trng/mrg2.hpp>
 #include <trng/mrg3.hpp>
@@ -18,6 +20,7 @@
 #include <trng/mrg5s.hpp>
 #include <trng/mt19937.hpp>
 #include <trng/mt19937_64.hpp>
+#include <trng/xoshiro256plus.hpp>
 #include <trng/yarn2.hpp>
 #include <trng/yarn3.hpp>
 #include <trng/yarn3s.hpp>

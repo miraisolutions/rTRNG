@@ -5,8 +5,17 @@
 #'       Linear congruential generator with modulus \eqn{2^{64}}{2^64}.
 #'     }
 #'     \item{\code{lcg64_shift}}{
-#'       Linear congruential generator with modulus \eqn{2^{64}}{2^64} and
-#'       bit-shift transformation.
+#'       Linear congruential generator with modulus \eqn{2^{64}}{2^64} combined
+#'       with a bit-shift output transformation.
+#'     }
+#'     \item{\code{lcg64_count_shift}}{
+#'       Linear congruential generator with modulus \eqn{2^{64}}{2^64} combined
+#'       with an additional linear congruence and a bit-shift output
+#'       transformation.
+#'     }
+#'     \item{\code{count128_lcg_shift}}{
+#'       Counter-based generator with 128-bit counter and an additional output
+#'       transformation using linear congruences and bit-shift operations.
 #'     }
 #'     \item{\code{mrg2}, \code{mrg3}, \code{mrg4}, \code{mrg5}}{
 #'       Multiple recurrence generators based on a linear feedback shift
@@ -36,6 +45,9 @@
 #'     \item{\code{lagfib2xor_19937_64}, \code{lagfib4xor_19937_64}}{
 #'       Lagged Fibonacci generator with \code{2} or \code{4} feedback taps and
 #'       exclusive-or operation.
+#'     }
+#'     \item{\code{xoshiro256plus}}{
+#'       \code{xoshiro} (xor/shift/rotate) generator.
 #'     }
 #'     \item{\code{mt19937}}{
 #'       Mersenne-Twister generating 32 random bit.

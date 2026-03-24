@@ -2,11 +2,13 @@ context("TRNG.Engine")
 
 
 engineClasses <- list(
+  count128_lcg_shift,
   lagfib2plus_19937_64,
   lagfib2xor_19937_64,
   lagfib4plus_19937_64,
   lagfib4xor_19937_64,
   lcg64,
+  lcg64_count_shift,
   lcg64_shift,
   mrg2,
   mrg3,
@@ -16,10 +18,12 @@ engineClasses <- list(
   mrg5s,
   mt19937,
   mt19937_64,
+  xoshiro256plus,
   yarn2,
   yarn3,
   yarn3s,
-  yarn4, yarn5,
+  yarn4,
+  yarn5,
   yarn5s
 )
 # engineClasses <- list(lcg64)
@@ -200,7 +204,7 @@ test_that("$jump works for parallel engines", {
     e <- engineClass$new(SEED)
     f <- engineClass$new(SEED)
     steps <- 3L
-    if (grepl("(lagfib|mt)", engineClass)) {
+    if (grepl("(lagfib|mt|xoshiro)", engineClass)) {
       expect_error(
         f$jump(steps), "jump.*not.*valid",
         info = .name(engineClass)
@@ -224,7 +228,7 @@ test_that("$split works for parallel engines", {
     f <- engineClass$new(SEED)
     p <- 5L
     s <- 4L
-    if (grepl("(lagfib|mt)", engineClass)) {
+    if (grepl("(lagfib|mt|xoshiro)", engineClass)) {
       expect_error(
         f$split(p, s), "split.*not.*valid",
         info = .name(engineClass)
@@ -245,7 +249,7 @@ test_that("$split works for parallel engines", {
 test_that("$jump errors for negative argument values", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
-    if (!grepl("(lagfib|mt)", engineClass)) {
+    if (!grepl("(lagfib|mt|xoshiro)", engineClass)) {
       expect_error(
         e$jump(-1L), "negative",
         info = .name(engineClass)
@@ -260,7 +264,7 @@ test_that("$split errors for out-of-range subsequence indices", {
   for (engineClass in engineClasses) {
     e <- engineClass$new(SEED)
     p <- 5L
-    if (!grepl("(lagfib|mt)", engineClass)) {
+    if (!grepl("(lagfib|mt|xoshiro)", engineClass)) {
       expect_error(
         e$split(p, 0L), class = expected_invalid_argument_class, # 1-base indexing
         info = .name(engineClass)

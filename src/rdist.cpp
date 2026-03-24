@@ -103,11 +103,13 @@ if (engine.is("Rcpp_" #engine_class)) {                                     \
 template<typename D>
 NumericVector rdist_dispatch(const int n, D dist,
                              S4 engine, const long parallelGrain = 0) {
+  PARALLEL_ENGINE_DISPATCH(count128_lcg_shift)
   ENGINE_DISPATCH(lagfib2plus_19937_64)
   ENGINE_DISPATCH(lagfib2xor_19937_64)
   ENGINE_DISPATCH(lagfib4plus_19937_64)
   ENGINE_DISPATCH(lagfib4xor_19937_64)
   PARALLEL_ENGINE_DISPATCH(lcg64)
+  PARALLEL_ENGINE_DISPATCH(lcg64_count_shift)
   PARALLEL_ENGINE_DISPATCH(lcg64_shift)
   PARALLEL_ENGINE_DISPATCH(mrg2)
   PARALLEL_ENGINE_DISPATCH(mrg3)
@@ -117,6 +119,7 @@ NumericVector rdist_dispatch(const int n, D dist,
   PARALLEL_ENGINE_DISPATCH(mrg5s)
   ENGINE_DISPATCH(mt19937)
   ENGINE_DISPATCH(mt19937_64)
+  ENGINE_DISPATCH(xoshiro256plus)
   PARALLEL_ENGINE_DISPATCH(yarn2)
   PARALLEL_ENGINE_DISPATCH(yarn3)
   PARALLEL_ENGINE_DISPATCH(yarn3s)

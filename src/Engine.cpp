@@ -129,11 +129,13 @@ void Engine<R>::show(){
 // Declare all specializations of the class template Engine<R> to avoid linker
 // errors
 using namespace trng;
+template class Engine<count128_lcg_shift>;
 template class Engine<lagfib2plus_19937_64>;
 template class Engine<lagfib2xor_19937_64>;
 template class Engine<lagfib4plus_19937_64>;
 template class Engine<lagfib4xor_19937_64>;
 template class Engine<lcg64>;
+template class Engine<lcg64_count_shift>;
 template class Engine<lcg64_shift>;
 template class Engine<mrg2>;
 template class Engine<mrg3>;
@@ -143,6 +145,7 @@ template class Engine<mrg5>;
 template class Engine<mrg5s>;
 template class Engine<mt19937>;
 template class Engine<mt19937_64>;
+template class Engine<xoshiro256plus>;
 template class Engine<yarn2>;
 template class Engine<yarn3>;
 template class Engine<yarn3s>;

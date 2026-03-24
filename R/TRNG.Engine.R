@@ -10,22 +10,40 @@
 #'
 #' @name TRNG.Engine
 #'
-#' @aliases lagfib2plus_19937_64 lagfib2xor_19937_64 lagfib4plus_19937_64
-#' lagfib4xor_19937_64 lcg64 lcg64_shift mrg2 mrg3 mrg3s mrg4 mrg5 mrg5s mt19937
-#' mt19937_64 yarn2 yarn3 yarn3s yarn4 yarn5 yarn5s
+#' @aliases count128_lcg_shift lagfib2plus_19937_64 lagfib2xor_19937_64
+#'   lagfib4plus_19937_64 lagfib4xor_19937_64 lcg64 lcg64_count_shift
+#'   lcg64_shift mrg2 mrg3 mrg3s mrg4 mrg5 mrg5s mt19937 mt19937_64
+#'   xoshiro256plus yarn2 yarn3 yarn3s yarn4 yarn5 yarn5s
 #'
 #' @section Classes:
 #'
 #' \describe{
 #'   \item{\emph{Parallel} random number engines}{
-#'   \code{lcg64}, \code{lcg64_shift}, \code{mrg2}, \code{mrg3}, \code{mrg3s},
-#'   \code{mrg4}, \code{mrg5}, \code{mrg5s}, \code{yarn2}, \code{yarn3},
-#'   \code{yarn3s}, \code{yarn4}, \code{yarn5}, \code{yarn5s}.
+#'     \code{count128_lcg_shift},
+#'     \code{lcg64},
+#'     \code{lcg64_count_shift},
+#'     \code{lcg64_shift},
+#'     \code{mrg2},
+#'     \code{mrg3},
+#'     \code{mrg3s},
+#'     \code{mrg4},
+#'     \code{mrg5},
+#'     \code{mrg5s},
+#'     \code{yarn2},
+#'     \code{yarn3},
+#'     \code{yarn3s},
+#'     \code{yarn4},
+#'     \code{yarn5},
+#'     \code{yarn5s}.
 #'   }
 #'   \item{\emph{Conventional} random number engines}{
-#'   \code{lagfib2plus_19937_64}, \code{lagfib2xor_19937_64},
-#'   \code{lagfib4plus_19937_64}, \code{lagfib4xor_19937_64}, \code{mt19937_64},
-#'   \code{mt19937}.
+#'     \code{lagfib2plus_19937_64},
+#'     \code{lagfib2xor_19937_64},
+#'     \code{lagfib4plus_19937_64},
+#'     \code{lagfib4xor_19937_64},
+#'     \code{mt19937},
+#'     \code{mt19937_64},
+#'     \code{xoshiro256plus}.
 #'   }
 #' }
 #'
@@ -128,11 +146,13 @@
 #'
 #' @example man-roxygen/example-TRNG.Engine.R
 #'
+#' @export count128_lcg_shift
 #' @export lagfib2plus_19937_64
 #' @export lagfib2xor_19937_64
 #' @export lagfib4plus_19937_64
 #' @export lagfib4xor_19937_64
 #' @export lcg64
+#' @export lcg64_count_shift
 #' @export lcg64_shift
 #' @export mrg2
 #' @export mrg3
@@ -142,6 +162,7 @@
 #' @export mrg5s
 #' @export mt19937
 #' @export mt19937_64
+#' @export xoshiro256plus
 #' @export yarn2
 #' @export yarn3
 #' @export yarn3s

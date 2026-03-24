@@ -60,11 +60,13 @@ ENGINE_MODULE(R)                                                \
 RCPP_MODULE(trng){
   using namespace Rcpp;
   // only expose _19937_64 lagfib* generators
+  PARALLEL_ENGINE_MODULE(count128_lcg_shift);
   ENGINE_MODULE(lagfib2plus_19937_64);
   ENGINE_MODULE(lagfib2xor_19937_64);
   ENGINE_MODULE(lagfib4plus_19937_64);
   ENGINE_MODULE(lagfib4xor_19937_64);
   PARALLEL_ENGINE_MODULE(lcg64);
+  PARALLEL_ENGINE_MODULE(lcg64_count_shift);
   PARALLEL_ENGINE_MODULE(lcg64_shift);
   PARALLEL_ENGINE_MODULE(mrg2);
   PARALLEL_ENGINE_MODULE(mrg3);
@@ -74,6 +76,7 @@ RCPP_MODULE(trng){
   PARALLEL_ENGINE_MODULE(mrg5s);
   ENGINE_MODULE(mt19937);
   ENGINE_MODULE(mt19937_64);
+  ENGINE_MODULE(xoshiro256plus);
   PARALLEL_ENGINE_MODULE(yarn2);
   PARALLEL_ENGINE_MODULE(yarn3);
   PARALLEL_ENGINE_MODULE(yarn3s);
